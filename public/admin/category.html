@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<HTML>
+
+<HEAD>
+    <title>商品分类</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="lib/ztree/css/demo.css" type="text/css">
+    <link rel="stylesheet" href="lib/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <style type="text/css">
+    .ztree li span.button.add {
+        margin-left: 2px;
+        margin-right: -1px;
+        background-position: -144px 0;
+        vertical-align: top;
+        *vertical-align: middle
+    }
+    </style>
+</HEAD>
+
+<BODY>
+    <div>
+        <ul id="category" class="ztree"></ul>
+        <button id="saveBtn" type="button">保存</button>
+        <button id="resetBtn" type="button">重置</button>
+    </div>
+</BODY>
+<script type="text/javascript" src="lib/jQuery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="lib/ztree/js/jquery.ztree.core.min.js"></script>
+<script src="lib/ztree/js/jquery.ztree.exedit.min.js" type="text/javascript" charset="utf-8"></script>
+<SCRIPT LANGUAGE="JavaScript">
+var zNodes = [];
+var newCount = 1;
+// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+var setting = {
+    view: {
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+        selectedMulti: false
+    },
+    edit: {
+        enable: true,
+        drag: {
+            isCopy: false,
+            isMove: true
+        }
+    },
+
+    data: {
+        simpleData: {
+            enable: true
+        }
+    },
+    callback: {
+        beforeRemove: beforeRemove,
+        beforeRename: beforeRename,
+        onDrop: onDrop,
+    },
+    async: {
+        enable: true,
+        type: "get",
+        autoParam: ["id", "pId", "name"],
+        url: "/api/getCategory",
+        dataFilter: function(treeId, parentNode, responseData) {
+            if (!responseData.status) {
+                alert(responseData.msg);
+                return;
+            }
+            zNodes = responseData.data;
+            return responseData.data;
+        }
+    }
+};
+
+function onDrop(event, treeId, treeNodes, targetNode, moveType, isCopy) {
+    // console.log(treeId);
+    // console.log(treeNodes);
+    // console.log(targetNode);
+}
+
+function beforeRemove(treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("category");
+    zTree.selectNode(treeNode);
+    return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+}
+
+function beforeRename(treeId, treeNode, newName, isCancel) {
+    if (newName.length == 0) {
+        setTimeout(function() {
+            var zTree = $.fn.zTree.getZTreeObj("category");
+            zTree.cancelEditName();
+            alert("节点名称不能为空.");
+        }, 0);
+        return false;
+    }
+    return true;
+}
+
+function addHoverDom(treeId, treeNode) {
+    var sObj = $("#" + treeNode.tId + "_span");
+    if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
+    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId +
+        "' title='add node' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+    var btn = $("#addBtn_" + treeNode.tId);
+    if (btn) btn.bind("click", function() {
+        var zTree = $.fn.zTree.getZTreeObj("category");
+        zTree.addNodes(treeNode, {
+            id: new Date().getTime(),
+            pId: treeNode.id,
+            name: "new node" + (newCount++)
+        });
+        return false;
+    });
+};
+
+function removeHoverDom(treeId, treeNode) {
+    $("#addBtn_" + treeNode.tId).unbind().remove();
+};
+
+$(document).ready(function() {
+    var ztree;
+    var $category = $("#category");
+    ztree = $.fn.zTree.init($category, setting);
+    //保存数据，发给后台
+    $("#saveBtn").click(function() {
+        //将树形结构转换成数组
+        var nodes = ztree.transformToArray(ztree.getNodes());
+        var data = [];
+        // 数据预处理
+        $.each(nodes, function(i, item) {
+            var obj = {
+                id: item.id,
+                pId: item.pId,
+                name: item.name,
+                level: item.level,
+            };
+            data.push(obj);
+        });
+        //POST数据
+        $.ajax({
+            type: "post",
+            url: "/api/setCategory",
+            async: true,
+            data: {
+                categories: data
+            },
+            success: function(result) {
+                if (result.status) {
+                    alert(result.msg);
+                } else {
+                    alert(result.msg);
+                }
+            }
+        });
+        //              //ztree结构转换成json--递归
+        //              nodes = formateChildren(nodes);
+        //
+        //              function formateChildren(nodes) {
+        //                  var children = [];
+        //                  for(var i = 0; i < nodes.length; i++) {
+        //                      var obj = {};
+        //                      obj.tId = nodes[i].tId;
+        //                      obj.name = nodes[i].name;
+        //                      if(nodes[i].children) {
+        //                          obj.children = formateChildren(nodes[i].children)
+        //                      }
+        //                      children.push(obj);
+        //                  }
+        //                  return children;
+        //              }
+
+    });
+    //重置按钮
+    $("#resetBtn").click(function() {
+        // var zNodes = [
+        //     { id: 1, pId: 0, name: "父节点1" },
+        //     { id: 11, pId: 1, name: "子节点1" },
+        //     { id: 12, pId: 1, name: "子节点2" }
+        // ];
+        ztree = $.fn.zTree.init($category, setting, zNodes);
+    });
+});
+</SCRIPT>
+
+</HTML>
