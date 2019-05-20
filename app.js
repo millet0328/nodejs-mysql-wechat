@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const expressJwt = require('express-jwt');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -22,6 +23,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+//使用中间件验证token合法性
+app.use(expressJwt({ secret: 'secret' }).unless({
+    path: ['/api/user/token'] //除了这些地址，其他的URL都需要验证
+}));
 
 app.use('/api', index);
 app.use('/api', users);
