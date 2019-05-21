@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 21/05/2019 18:46:25
+ Date: 22/05/2019 01:26:16
 */
 
 SET NAMES utf8mb4;
@@ -95,7 +95,7 @@ CREATE TABLE `carts`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Table structure for categories
@@ -326,7 +326,7 @@ INSERT INTO `order_status` VALUES (10, 8, 'ORDER_CLOSED', '订单关闭');
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders`  (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL COMMENT '用户id',
+  `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `payment` double(20, 2) NULL DEFAULT NULL COMMENT '支付金额',
   `payment_type` tinyint(2) NULL DEFAULT NULL COMMENT '1-在线支付，1-货到付款',
   `pay_time` datetime NULL DEFAULT NULL COMMENT '支付时间',
@@ -349,9 +349,9 @@ CREATE TABLE `orders`  (
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES (7, 1, 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-22 09:59:58', NULL, NULL, NULL, 0, 1, NULL, NULL);
-INSERT INTO `orders` VALUES (6, 1, 3500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-21 20:34:28', NULL, NULL, NULL, 0, 1, NULL, NULL);
-INSERT INTO `orders` VALUES (16, 2, 5000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-23 15:52:56', NULL, NULL, NULL, 0, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (7, '1', 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-22 09:59:58', NULL, NULL, NULL, 0, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (6, '1', 3500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-21 20:34:28', NULL, NULL, NULL, 0, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (16, '2', 5000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-23 15:52:56', NULL, NULL, NULL, 0, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for role

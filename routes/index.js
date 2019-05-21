@@ -168,8 +168,7 @@ router.post('/cart/delete/', function(req, res) {
 router.post('/cart/increase/', function(req, res) {
 	let { id, gid, num } = req.body;
 	// 检查库存
-	let sql =
-		`SELECT goods_num FROM carts WHERE id = ?;
+	let sql = `SELECT goods_num FROM carts WHERE id = ?;
 	SELECT inventory FROM goods WHERE id = ?`;
 	db.query(sql, [id, gid], function(results, fields) {
 		let isEmpty = results[1][0].inventory - results[0][0].goods_num - num >= 0 ? false : true;
@@ -180,7 +179,7 @@ router.post('/cart/increase/', function(req, res) {
 			});
 			return;
 		}
-		let sql = `UPDATE carts SET goods_num = goods_num + ? , update_time = CURRENT_TIMESTAMP()  WHERE id = ?`;
+		let sql = `UPDATE carts SET goods_num = goods_num + ? WHERE id = ?`;
 		db.query(sql, [num, id], function(results, fields) {
 			//成功
 			res.json({
@@ -204,7 +203,7 @@ router.post('/cart/increase/', function(req, res) {
  */
 router.post('/cart/decrease/', function(req, res) {
 	let { id, num } = req.body;
-	let sql = `UPDATE carts SET goods_num = goods_num - ? , update_time = CURRENT_TIMESTAMP()  WHERE id = ?`;
+	let sql = `UPDATE carts SET goods_num = goods_num - ? WHERE id = ?`;
 	db.query(sql, [num, id], function(results, fields) {
 		//成功
 		res.json({
@@ -219,21 +218,21 @@ router.post('/cart/decrease/', function(req, res) {
  * @apiName SettleOrder
  * @apiGroup Order
  * 
- * @apiParam {Number} uid 用户id;
  * @apiParam {Number[]} goods 欲购买商品id，格式：[id1,id2,id3];
  * 
  * @apiSampleRequest /api/order/settle/
  */
 router.post('/order/settle/', function(req, res) {
-	let { uid, goods } = req.body;
+	let { goods } = req.body;
+	let { openid } = req.user;
 	// 多表查询
 	let data = {};
 	let sql = `SELECT * FROM addresses WHERE uid =? AND isDefault =1 LIMIT 1`;
-	db.query(sql, [uid], function(results, fields) {
+	db.query(sql, [openid], function(results, fields) {
 		data.address = results[0];
 		let sql =
 			`SELECT goods.id,goods.name,goods.price,goods.img_md,carts.goods_num FROM goods JOIN carts ON goods.id = carts.goods_id  WHERE carts.uid = ? AND carts.goods_id IN (?)`;
-		db.query(sql, [uid, goods], function(results, fields) {
+		db.query(sql, [openid, goods], function(results, fields) {
 			data.goods = results;
 			//成功
 			res.json({
@@ -250,7 +249,6 @@ router.post('/order/settle/', function(req, res) {
  * @apiName CreateOrder
  * @apiGroup Order
  * 
- * @apiParam {Number} uid 用户id;
  * @apiParam {Number} payment 支付金额,小数点至2位;
  * @apiParam {Number} addressId 收货地址id;
  * @apiParam {Object[]} goodsList 商品数组,包含每一个商品的id,数量，例：[{id:15,num:1},{id:16,num:2}];
@@ -262,7 +260,8 @@ router.post('/order/settle/', function(req, res) {
 router.post('/order/create/', function(req, res) {
 	// 准备查询的商品id,方便使用IN
 	let queryGid = [];
-	let { uid, addressId, payment, goodsList } = req.body;
+	let { addressId, payment, goodsList } = req.body;
+	let { openid } = req.user;
 	goodsList.forEach(function(item) {
 		queryGid.push(item.id);
 	});
@@ -308,7 +307,7 @@ router.post('/order/create/', function(req, res) {
 					}
 					// 订单表中生成新订单
 					let sql = `INSERT INTO orders (uid,payment,create_time) VALUES (?,?,CURRENT_TIMESTAMP())`;
-					connection.query(sql, [uid, payment], function(error, results, fields) {
+					connection.query(sql, [openid, payment], function(error, results, fields) {
 						// 提取新订单id
 						let { insertId, affectedRows } = results;
 						if (error || affectedRows <= 0) {
@@ -336,7 +335,7 @@ router.post('/order/create/', function(req, res) {
 									FROM carts JOIN goods ON goods.id = carts.goods_id 
 									WHERE carts.uid = ? AND carts.goods_id IN (?);
 									DELETE FROM carts WHERE carts.uid = ? AND goods_id IN (?)`;
-							connection.query(sql, [insertId, uid, queryGid, uid, queryGid], function(error, results,
+							connection.query(sql, [insertId, openid, queryGid, openid, queryGid], function(error, results,
 								fields) {
 								if (error) {
 									return connection.rollback(function() {
@@ -371,7 +370,6 @@ router.post('/order/create/', function(req, res) {
  * @apiName OrderList
  * @apiGroup Order
  * 
- * @apiParam {Number} uid 用户id;
  * @apiParam {Number} [pageSize] 一个页有多少个商品,默认4个;
  * @apiParam {Number} [pageIndex] 第几页,默认1;
  * @apiParam {Number=0,3,4,5} status 订单状态:0-待付款，3-待发货，4-待收货，5-待评价;
@@ -379,7 +377,8 @@ router.post('/order/create/', function(req, res) {
  * @apiSampleRequest /api/order/list/
  */
 router.post('/order/list/', function(req, res) {
-	let { uid, pageSize = 4, pageIndex = 1, status } = req.body;
+	let { pageSize = 4, pageIndex = 1, status } = req.body;
+	let { openid } = req.user;
 	let size = parseInt(pageSize);
 	let count = size * (pageIndex - 1);
 	// 查询订单信息
@@ -387,7 +386,7 @@ router.post('/order/list/', function(req, res) {
 		`SELECT o.id, o.create_time, o.payment, os.text AS status
 		 FROM orders o JOIN order_status os ON o.order_state = os.CODE
 		 WHERE o.uid = ? AND o.order_state = ? LIMIT ?, ?`;
-	db.query(sql, [uid, status, count, size], function(results, fields) {
+	db.query(sql, [openid, status, count, size], function(results, fields) {
 		// 查询订单商品信息
 		let data = results;
 		let sql =
@@ -395,7 +394,7 @@ router.post('/order/list/', function(req, res) {
 			 FROM orders o JOIN order_goods og ON o.id = og.order_id
 			 JOIN goods g ON g.id = og.goods_id
 			 WHERE o.uid = ? AND o.order_state = ?`;
-		db.query(sql, [uid, status], (results, fields) => {
+		db.query(sql, [openid, status], (results, fields) => {
 			data.forEach((order) => {
 				if (!order.goodsList) {
 					order.goodsList = [];
