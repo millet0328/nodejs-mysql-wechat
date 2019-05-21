@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 21/05/2019 01:53:28
+ Date: 21/05/2019 18:46:25
 */
 
 SET NAMES utf8mb4;
@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL COMMENT '用户id',
+  `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省',
@@ -33,12 +33,13 @@ CREATE TABLE `addresses`  (
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
   `isDefault` int(3) NULL DEFAULT 1 COMMENT '是否默认',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of addresses
 -- ----------------------------
-INSERT INTO `addresses` VALUES (20, 1, '黄小米', '15863008280', '山东', '青岛', '崂山', '滨海大道', '2006601', 1);
+INSERT INTO `addresses` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄渤', '15863008280', '山东', '青岛', '城阳区', '春阳路', '262621', 0);
+INSERT INTO `addresses` VALUES (2, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄渤', '15863008280', '山东', '青岛', '城阳区', '春阳路', '262621', 1);
 
 -- ----------------------------
 -- Table structure for admin
@@ -56,7 +57,7 @@ CREATE TABLE `admin`  (
   `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
   `login_count` bigint(255) NOT NULL DEFAULT 1 COMMENT '登录次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin
@@ -87,19 +88,14 @@ INSERT INTO `admin_role` VALUES (2, 2, 1);
 DROP TABLE IF EXISTS `carts`;
 CREATE TABLE `carts`  (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL COMMENT '用户id',
+  `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `goods_id` int(10) NOT NULL COMMENT '商品id',
   `goods_num` int(10) NOT NULL COMMENT '商品数量',
   `status` tinyint(4) NULL DEFAULT 1 COMMENT '1-正常，0-禁用，-1-删除',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Fixed;
-
--- ----------------------------
--- Records of carts
--- ----------------------------
-INSERT INTO `carts` VALUES (22, 1, 15, 1, 1, NULL, NULL);
+) ENGINE = MyISAM AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = Fixed;
 
 -- ----------------------------
 -- Table structure for categories
@@ -406,6 +402,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, 'China', 'Shandong', 'Qingdao', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'zAwdZYyoUI6NBn/95KpNeQ==');
+INSERT INTO `users` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, 'China', 'Shandong', 'Qingdao', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'IWHiLAwLxxFdQwbmguPMHA==');
 
 SET FOREIGN_KEY_CHECKS = 1;
