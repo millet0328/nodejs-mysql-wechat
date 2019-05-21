@@ -44,7 +44,7 @@ router.post('/user/token/', function(req, res) {
 			return;
 		}
 		// 生成token
-		let token = jwt.sign(data, 'secret', { expiresIn: '1h' });
+		let token = jwt.sign(data, 'secret', { expiresIn: '5h' });
 		// 查询数据库中是否有此openid
 		let sql = 'SELECT * FROM users WHERE openid = ?';
 		db.query(sql, [data.openid], function(results) {
@@ -73,9 +73,6 @@ router.post('/user/token/', function(req, res) {
 				}
 			});
 		});
-		// 解码token
-		var decoded = jwt.verify(token, 'secret');
-
 	});
 });
 /**
@@ -111,30 +108,29 @@ router.post("/user/info/upload", function(req, res) {
  * @apiName /address/add/
  * @apiGroup Address
  * 
- * @apiParam {Number} uid 用户id.
  * @apiParam {String} name 收货人姓名.
  * @apiParam {String} tel 电话.
  * @apiParam {String} province 省.
  * @apiParam {String} city 市.
  * @apiParam {String} area 区.
  * @apiParam {String} street 街道.
- * @apiParam {String} [code] 邮编.
- * @apiParam {Number} isDefault 是否默认 1-默认,0-否.
+ * @apiParam {String} code 邮编.
+ * @apiParam {Number=1,0} isDefault 是否默认 1-默认,0-否.
  * 
  * @apiSampleRequest /api/address/add/
  */
 router.post('/address/add', function(req, res) {
 	let sql;
-	let isDefault = req.body.isDefault;
+	let { name, tel, province, city, area, street, code, isDefault } = req.body;
+	let { openid } = req.user;
 	if (isDefault == '1') {
-		sql =`UPDATE addresses SET isDefault = 0 WHERE uid = ${req.body.uid};
+		sql =
+			`UPDATE addresses SET isDefault = 0 WHERE uid = '${openid}';
 		INSERT INTO addresses(uid,name,tel,province,city,area,street,code,isDefault) VALUES(?,?,?,?,?,?,?,?,?);`
 	} else {
 		sql = `INSERT INTO addresses(uid,name,tel,province,city,area,street,code,isDefault) VALUES(?,?,?,?,?,?,?,?,?)`
 	}
-	db.query(sql, [req.body.uid, req.body.name, req.body.tel, req.body.province, req.body.city, req.body.area, req.body.street,
-		req.body.code, req.body.isDefault
-	], function(results, fields) {
+	db.query(sql, [openid, name, tel, province, city, area, street, code, isDefault], function(results, fields) {
 		res.json({
 			status: true,
 			msg: "添加成功！"
@@ -166,34 +162,32 @@ router.post("/address/delete/", function(req, res) {
  * @apiGroup Address
  * 
  * @apiParam {Number} id 收货地址id.
- * @apiParam {Number} uid 用户id.
  * @apiParam {String} name 收货人姓名.
  * @apiParam {String} tel 电话.
  * @apiParam {String} province 省.
  * @apiParam {String} city 市.
  * @apiParam {String} area 区.
  * @apiParam {String} street 街道.
- * @apiParam {String} [code] 邮编.
- * @apiParam {Number} isDefault 是否默认.1-默认,0-否.
+ * @apiParam {String} code 邮编.
+ * @apiParam {Number=1,0} isDefault 是否默认.1-默认,0-否.
  * 
  * @apiSampleRequest /api/address/update/
  */
 router.post("/address/update/", function(req, res) {
 	let sql;
-	let isDefault = req.body.isDefault;
+	let { id, name, tel, province, city, area, street, code, isDefault } = req.body;
+	let { openid } = req.user;
 	if (isDefault == '1') {
 		sql =
 			`
-		UPDATE addresses SET isDefault = 0 WHERE uid = ${req.body.uid};
-		UPDATE addresses SET uid = ?,name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?;
+		UPDATE addresses SET isDefault = 0 WHERE uid = '${openid}';
+		UPDATE addresses SET name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?;
 		`
 	} else {
 		sql =
-			`UPDATE addresses SET uid = ?,name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?`
+			`UPDATE addresses SET name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?`
 	}
-	db.query(sql, [req.body.uid, req.body.name, req.body.tel, req.body.province, req.body.city, req.body.area, req.body.street,
-		req.body.code, req.body.isDefault, req.body.id
-	], function(results, fields) {
+	db.query(sql, [name, tel, province, city, area, street, code, isDefault, id], function(results, fields) {
 		res.json({
 			status: true,
 			msg: "修改成功！"
@@ -205,13 +199,12 @@ router.post("/address/update/", function(req, res) {
  * @apiName /address/list/
  * @apiGroup Address
  * 
- * @apiParam {Number} uid 用户id.
- * 
  * @apiSampleRequest /api/address/list/
  */
 router.get('/address/list', function(req, res) {
+	let { openid } = req.user;
 	var sql = `SELECT * FROM addresses WHERE uid = ? `
-	db.query(sql, [req.query.uid], function(results, fields) {
+	db.query(sql, [openid], function(results, fields) {
 		if (!results.length) {
 			res.json({
 				status: false,

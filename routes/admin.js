@@ -99,9 +99,7 @@ router.post('/user/register', function(req, res) {
 							role: 3,
 						}
 						// 生成token
-						let token = jwt.sign(payload, 'secret', {
-							expiresIn: '2h'
-						});
+						let token = jwt.sign(payload, 'secret', { expiresIn: '4h' });
 						// 存储成功
 						res.json({
 							status: true,
@@ -160,9 +158,7 @@ router.post('/user/login', function(req, res) {
 					role,
 				}
 				// 生成token
-				let token = jwt.sign(payload, 'secret', {
-					expiresIn: '2h'
-				});
+				let token = jwt.sign(payload, 'secret', { expiresIn: '4h' });
 				res.json({
 					status: true,
 					msg: "登录成功！",
@@ -659,7 +655,7 @@ router.post("/upload/editor", upload.single('file'), function(req, res) {
 	res.json({
 		errno: 0,
 		msg: "图片上传处理成功!",
-		data: [`${server.host}:3000`+ fileFolder + filename + extName]
+		data: [`${server.host}:3000` + fileFolder + filename + extName]
 	});
 });
 /**

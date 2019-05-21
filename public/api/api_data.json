@@ -10,13 +10,6 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id.</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "name",
@@ -60,13 +53,17 @@
           {
             "group": "Parameter",
             "type": "String",
-            "optional": true,
+            "optional": false,
             "field": "code",
             "description": "<p>邮编.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
+            "allowedValues": [
+              "1",
+              "0"
+            ],
             "optional": false,
             "field": "isDefault",
             "description": "<p>是否默认 1-默认,0-否.</p>"
@@ -145,19 +142,6 @@
     "title": "获取收货地址列表",
     "name": "_address_list_",
     "group": "Address",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id.</p>"
-          }
-        ]
-      }
-    },
     "sampleRequest": [
       {
         "url": "/api/address/list/"
@@ -182,13 +166,6 @@
             "optional": false,
             "field": "id",
             "description": "<p>收货地址id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id.</p>"
           },
           {
             "group": "Parameter",
@@ -235,7 +212,7 @@
           {
             "group": "Parameter",
             "type": "String",
-            "optional": true,
+            "optional": false,
             "field": "code",
             "description": "<p>邮编.</p>"
           },

@@ -82,25 +82,25 @@ router.get("/goods/detail/", function(req, res) {
  * @apiName AddCart
  * @apiGroup Cart
  * 
- * @apiParam {Number} uid 用户id;
  * @apiParam {Number} gid 商品id;
  * @apiParam {Number} num 商品数量,不能超过库存;
  * 
  * @apiSampleRequest /api/cart/add/
  */
 router.post('/cart/add/', function(req, res) {
-	let { uid, gid, num } = req.body;
+	let { gid, num } = req.body;
+	let { openid } = req.user;
 	// 检查购物车是否已经有此商品
 	let sql = `SELECT * FROM carts WHERE goods_id = ?`;
 	db.query(sql, [gid], function(results, fields) {
 		// 没有此商品,插入新纪录
 		sql =
 			`INSERT INTO carts ( uid , goods_id , goods_num , create_time )
-			VALUES ( ${uid} , ${gid} , ${num} ,CURRENT_TIMESTAMP())`;
+			VALUES ( '${openid}' , ${gid} , ${num} ,CURRENT_TIMESTAMP())`;
 		// 已有此商品，增加数量
 		if (results.length > 0) {
 			sql =
-				`UPDATE carts SET goods_num = goods_num + ${num} , update_time = CURRENT_TIMESTAMP()  WHERE goods_id = ${gid} AND uid = ${uid}`;
+				`UPDATE carts SET goods_num = goods_num + ${num} WHERE goods_id = ${gid} AND uid = '${openid}'`;
 		}
 		db.query(sql, function(results, fields) {
 			//成功
@@ -116,17 +116,15 @@ router.post('/cart/add/', function(req, res) {
  * @apiName CartList
  * @apiGroup Cart
  * 
- * @apiParam {Number} uid 用户id;
- * 
  * @apiSampleRequest /api/cart/
  */
 router.get('/cart/', function(req, res) {
-	let { uid } = req.query;
+	let { openid } = req.user;
 	let sql =
 		`SELECT carts.id, carts.goods_id, goods.img_md AS img, goods.name, goods.price, carts.goods_num 
 		FROM carts JOIN goods 
 		WHERE carts.uid = ? AND carts.goods_id = goods.id`;
-	db.query(sql, [uid], function(results, fields) {
+	db.query(sql, [openid], function(results, fields) {
 		//成功
 		res.json({
 			status: true,
