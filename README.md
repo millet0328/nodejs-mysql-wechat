@@ -1,4 +1,4 @@
-# nodejs-mysql-mall
+# nodejs-mysql-wechat
 基于nodejs+mySQL+express的商城后台
 
 ## 安装
