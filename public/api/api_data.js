@@ -219,6 +219,10 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "Number",
+            "allowedValues": [
+              "1",
+              "0"
+            ],
             "optional": false,
             "field": "isDefault",
             "description": "<p>是否默认.1-默认,0-否.</p>"
@@ -1082,31 +1086,11 @@ define({ "api": [
     "groupTitle": "Admin_Upload_Image"
   },
   {
-    "type": "get",
-    "url": "/api/user/list/",
-    "title": "获取用户列表",
-    "name": "UserList",
-    "group": "Admin_User",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "sampleRequest": [
-      {
-        "url": "/api/user/list"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin.js",
-    "groupTitle": "Admin_User"
-  },
-  {
     "type": "post",
-    "url": "/api/user/login/",
+    "url": "/api/admin/login",
     "title": "管理员登录",
     "description": "<p>登录成功， 返回token, 请在头部headers中设置Authorization: <code>Bearer ${token}</code>, 所有请求都必须携带token;</p>",
-    "name": "login",
+    "name": "AdminLogin",
     "group": "Admin_User",
     "permission": [
       {
@@ -1135,7 +1119,7 @@ define({ "api": [
     },
     "sampleRequest": [
       {
-        "url": "/api/user/login"
+        "url": "/api/admin/login"
       }
     ],
     "version": "0.0.0",
@@ -1199,10 +1183,10 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/user/register/",
+    "url": "/api/admin/register",
     "title": "管理员注册",
     "description": "<p>注册成功， 返回token, 请在头部headers中设置Authorization: <code>Bearer ${token}</code>,所有请求都必须携带token;</p>",
-    "name": "register",
+    "name": "AdminRegister",
     "group": "Admin_User",
     "permission": [
       {
@@ -1252,7 +1236,7 @@ define({ "api": [
     },
     "sampleRequest": [
       {
-        "url": "/api/user/register"
+        "url": "/api/admin/register"
       }
     ],
     "version": "0.0.0",
@@ -1315,6 +1299,26 @@ define({ "api": [
     }
   },
   {
+    "type": "get",
+    "url": "/api/user/list/",
+    "title": "获取用户列表",
+    "name": "UserList",
+    "group": "Admin_User",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "/api/user/list"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin.js",
+    "groupTitle": "Admin_User"
+  },
+  {
     "type": "post",
     "url": "/api/cart/add/",
     "title": "添加商品至购物车",
@@ -1323,13 +1327,6 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id;</p>"
-          },
           {
             "group": "Parameter",
             "type": "Number",
@@ -1362,19 +1359,6 @@ define({ "api": [
     "title": "获取购物车列表",
     "name": "CartList",
     "group": "Cart",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id;</p>"
-          }
-        ]
-      }
-    },
     "sampleRequest": [
       {
         "url": "/api/cart/"
@@ -1631,13 +1615,6 @@ define({ "api": [
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "uid",
-            "description": "<p>用户id;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
             "field": "payment",
             "description": "<p>支付金额,小数点至2位;</p>"
           },
@@ -1694,13 +1671,6 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
             "optional": true,
             "field": "pageSize",
             "description": "<p>一个页有多少个商品,默认4个;</p>"
@@ -1747,13 +1717,6 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "uid",
-            "description": "<p>用户id;</p>"
-          },
           {
             "group": "Parameter",
             "type": "Number[]",

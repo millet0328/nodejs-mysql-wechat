@@ -11,6 +11,8 @@ var upload = multer();
 var images = require("images");
 //uuid
 var uuidv1 = require('uuid/v1');
+// JSON Web Token
+var jwt = require("jsonwebtoken");
 /**
  * @apiDefine SuccessResponse
  * @apiSuccess { Boolean } status 请求状态.
@@ -34,9 +36,9 @@ var uuidv1 = require('uuid/v1');
  */
 
 /**
- * @api {post} /api/user/register 管理员注册
+ * @api {post} /api/admin/register 管理员注册
  * @apiDescription 注册成功， 返回token, 请在头部headers中设置Authorization: `Bearer ${token}`,所有请求都必须携带token;
- * @apiName register
+ * @apiName AdminRegister
  * @apiGroup Admin User
  * @apiPermission admin
  * 
@@ -48,9 +50,9 @@ var uuidv1 = require('uuid/v1');
  * 
  * @apiUse SuccessResponse
  * 
- * @apiSampleRequest /api/user/register
+ * @apiSampleRequest /api/admin/register
  */
-router.post('/user/register', function(req, res) {
+router.post('/admin/register', function(req, res) {
 	let { username, password, nickname, sex, tel } = req.body;
 	// 查询账户是否存在
 	let sql = `SELECT * FROM ADMIN WHERE username = ?`
@@ -119,10 +121,10 @@ router.post('/user/register', function(req, res) {
 });
 
 /**
- * @api {post} /api/user/login 管理员登录
+ * @api {post} /api/admin/login 管理员登录
  * @apiDescription 登录成功， 返回token, 请在头部headers中设置Authorization: `Bearer ${token}`, 所有请求都必须携带token;
- * @apiName login
- * @apiGroup Admin-User
+ * @apiName AdminLogin
+ * @apiGroup Admin User
  * @apiPermission admin
  * 
  * @apiParam {String} username 用户账户名.
@@ -130,10 +132,10 @@ router.post('/user/register', function(req, res) {
  * 
  * @apiUse SuccessResponse
  * 
- * @apiSampleRequest /api/user/login
+ * @apiSampleRequest /api/admin/login
  */
 
-router.post('/user/login', function(req, res) {
+router.post('/admin/login', function(req, res) {
 	let { username, password } = req.body;
 	let sql =
 		`SELECT a.*,r.id AS role FROM ADMIN a LEFT JOIN admin_role ar ON a.id = ar.admin_id LEFT JOIN role r ON r.id = ar.role_id  WHERE username = ? AND password = ?`;
@@ -297,7 +299,7 @@ router.get("/menu/sub/", function(req, res) {
  * 
  * @apiSampleRequest /api/user/list
  */
-router.get("/user/list", function(req, res) {
+router.get("/admin/list", function(req, res) {
 	//查询账户数据
 	let sql =
 		`SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ur.role_id`;
