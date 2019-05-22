@@ -2,7 +2,8 @@
 基于nodejs+mySQL+express的商城后台
 
 ## 安装
-`npm i apidoc -g`  
+`npm i apidoc -g`
+`cd {项目目录}`
 `$ npm i`
 ## 还原数据库
 1. 在mysql中创建wechat-mall数据库
