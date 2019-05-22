@@ -176,6 +176,62 @@ router.post('/admin/login', function(req, res) {
 	});
 });
 /**
+ * @api {get} /api/admin/list/ 获取admin用户列表
+ * @apiName AdminList
+ * @apiGroup Admin User
+ * @apiPermission admin
+ * 
+ * @apiSampleRequest /api/admin/list
+ */
+router.get("/admin/list", function(req, res) {
+	//查询账户数据
+	let sql =
+		`SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id`;
+	db.query(sql, [], function(results, fields) {
+		if (!results.length) {
+			res.json({
+				status: false,
+				msg: "获取失败！"
+			});
+			return false;
+		}
+		// 获取成功
+		res.json({
+			status: true,
+			msg: "获取成功！",
+			data: results
+		});
+	})
+});
+/**
+ * @api {get} /api/admin/info/ 获取admin个人资料
+ * @apiName AdminInfo
+ * @apiGroup Admin User
+ * 
+ * @apiParam {Number} uid admin用户id.
+ * 
+ * @apiSampleRequest /api/admin/info
+ */
+router.get("/admin/info", function(req, res) {
+  //查询账户数据
+  let sql = `SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
+  db.query(sql, [req.query.uid], function(results, fields) {
+    if (!results.length) {
+      res.json({
+        status: false,
+        msg: "获取失败！"
+      });
+      return false;
+    }
+    // 获取成功
+    res.json({
+      status: true,
+      msg: "获取成功！",
+      data: results[0]
+    });
+  })
+});
+/**
  * @api {get} /api/role/list 获取角色列表
  * @apiName RoleList
  * @apiGroup Admin-Role
@@ -291,34 +347,7 @@ router.get("/menu/sub/", function(req, res) {
 		});
 	});
 });
-/**
- * @api {get} /api/user/list/ 获取用户列表
- * @apiName UserList
- * @apiGroup Admin-User
- * @apiPermission admin
- * 
- * @apiSampleRequest /api/user/list
- */
-router.get("/admin/list", function(req, res) {
-	//查询账户数据
-	let sql =
-		`SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ur.role_id`;
-	db.query(sql, [], function(results, fields) {
-		if (!results.length) {
-			res.json({
-				status: false,
-				msg: "获取失败！"
-			});
-			return false;
-		}
-		// 获取成功
-		res.json({
-			status: true,
-			msg: "获取成功！",
-			data: results
-		});
-	})
-});
+
 /**
  * @api {get} /api/category/all/ 获取所有树形分类
  * @apiName category/all 获取所有树形分类

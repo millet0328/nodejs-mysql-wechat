@@ -24,9 +24,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //使用中间件验证token合法性
-app.use(expressJwt({ secret: 'secret' }).unless({
-    path: ['/api/user/token','/api/admin/register','/api/admin/login'] //除了这些地址，其他的URL都需要验证
-}));
+// app.use(expressJwt({ secret: 'secret' }).unless({
+//     path: ['/api/user/token','/api/admin/register','/api/admin/login'] //除了这些地址，其他的URL都需要验证
+// }));
 
 app.use('/api', index);
 app.use('/api', users);

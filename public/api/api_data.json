@@ -1086,6 +1086,54 @@
     "groupTitle": "Admin_Upload_Image"
   },
   {
+    "type": "get",
+    "url": "/api/admin/info/",
+    "title": "获取admin个人资料",
+    "name": "AdminInfo",
+    "group": "Admin_User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "uid",
+            "description": "<p>admin用户id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/admin/info"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin.js",
+    "groupTitle": "Admin_User"
+  },
+  {
+    "type": "get",
+    "url": "/api/admin/list/",
+    "title": "获取admin用户列表",
+    "name": "AdminList",
+    "group": "Admin_User",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "/api/admin/list"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin.js",
+    "groupTitle": "Admin_User"
+  },
+  {
     "type": "post",
     "url": "/api/admin/login",
     "title": "管理员登录",
@@ -1297,26 +1345,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "get",
-    "url": "/api/user/list/",
-    "title": "获取用户列表",
-    "name": "UserList",
-    "group": "Admin_User",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "sampleRequest": [
-      {
-        "url": "/api/user/list"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin.js",
-    "groupTitle": "Admin_User"
   },
   {
     "type": "post",
