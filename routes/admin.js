@@ -232,6 +232,33 @@ router.get("/admin/info", function(req, res) {
   })
 });
 /**
+ * @api { post } /api/admin/info/update/ 更新个人资料
+ * @apiName UpdateInfo
+ * @apiGroup Admin User
+ * 
+ * @apiParam {Number} uid 用户id.
+ * @apiParam {String} nickname 昵称.
+ * @apiParam {String} sex 性别.
+ * @apiParam {String} avatar 头像.
+ * @apiParam { String } tel 手机号码.
+ * @apiParam { String } role 用户角色id.
+ * 
+ * @apiSampleRequest /api/admin/info/update/
+ */
+router.post("/admin/info/update/", function(req, res) {
+  let {uid, nickname, sex, avatar, tel, role} = req.body;
+  let sql = `
+    UPDATE admin SET nickname = ?,sex = ?,avatar = ? ,tel = ? WHERE id = ?;
+    UPDATE admin_role SET role_id = ? WHERE admin_id = ?;
+    `
+  db.query(sql, [nickname, sex, avatar, tel, uid, role, uid], function(results, fields) {
+    res.json({
+      status: true,
+      msg: "修改成功！"
+    });
+  });
+});
+/**
  * @api {get} /api/role/list 获取角色列表
  * @apiName RoleList
  * @apiGroup Admin-Role
