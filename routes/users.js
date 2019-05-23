@@ -57,9 +57,9 @@ router.post('/user/token/', function(req, res) {
 							status: true,
 							token: token
 						});
-						return;
 					}
 				});
+				return;
 			}
 			// 如果有此openid，更新session_key的数据
 			let sql = 'UPDATE users SET session_key = ? WHERE openid = ?';
