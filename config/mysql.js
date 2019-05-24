@@ -6,7 +6,7 @@ var pool = mysql.createPool({
     password: 'root',
     database: 'wechat-mall',
     multipleStatements: true,
-	debug:true,
+	// debug:true,
 });
 //常规SQL
 let query = function(sql, arr = [], callback) {
