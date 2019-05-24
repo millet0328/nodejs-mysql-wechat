@@ -213,23 +213,24 @@ router.get("/admin/list", function(req, res) {
  * @apiSampleRequest /api/admin/info
  */
 router.get("/admin/info", function(req, res) {
-  //查询账户数据
-  let sql = `SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
-  db.query(sql, [req.query.uid], function(results, fields) {
-    if (!results.length) {
-      res.json({
-        status: false,
-        msg: "获取失败！"
-      });
-      return false;
-    }
-    // 获取成功
-    res.json({
-      status: true,
-      msg: "获取成功！",
-      data: results[0]
-    });
-  })
+	//查询账户数据
+	let sql =
+		`SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
+	db.query(sql, [req.query.uid], function(results, fields) {
+		if (!results.length) {
+			res.json({
+				status: false,
+				msg: "获取失败！"
+			});
+			return false;
+		}
+		// 获取成功
+		res.json({
+			status: true,
+			msg: "获取成功！",
+			data: results[0]
+		});
+	})
 });
 /**
  * @api { post } /api/admin/info/update/ 更新个人资料
@@ -246,17 +247,18 @@ router.get("/admin/info", function(req, res) {
  * @apiSampleRequest /api/admin/info/update/
  */
 router.post("/admin/info/update/", function(req, res) {
-  let {uid, nickname, sex, avatar, tel, role} = req.body;
-  let sql = `
+	let { uid, nickname, sex, avatar, tel, role } = req.body;
+	let sql =
+		`
     UPDATE admin SET nickname = ?,sex = ?,avatar = ? ,tel = ? WHERE id = ?;
     UPDATE admin_role SET role_id = ? WHERE admin_id = ?;
     `
-  db.query(sql, [nickname, sex, avatar, tel, uid, role, uid], function(results, fields) {
-    res.json({
-      status: true,
-      msg: "修改成功！"
-    });
-  });
+	db.query(sql, [nickname, sex, avatar, tel, uid, role, uid], function(results, fields) {
+		res.json({
+			status: true,
+			msg: "修改成功！"
+		});
+	});
 });
 /**
  * @api {get} /api/role/list 获取角色列表
@@ -408,8 +410,17 @@ router.get("/category/all", function(req, res) {
  * @apiSampleRequest /api/category/add/
  */
 router.post("/category/add", function(req, res) {
+	let { name, pId, level, img } = req.body;
+	// 图片img为空
+	if (!img) {
+		res.json({
+			status: false,
+			msg: "请上传分类图片!",
+		});
+		return;
+	}
 	let sql = `INSERT INTO CATEGORIES (name,pId,level,img) VALUES (?,?,?,?) `;
-	db.query(sql, [req.body.name, req.body.pId, req.body.level, req.body.img], function(results, fields) {
+	db.query(sql, [name, pId, level, img], function(results, fields) {
 		//成功
 		res.json({
 			status: true,
@@ -431,11 +442,20 @@ router.post("/category/add", function(req, res) {
  * @apiSampleRequest /api/category/delete/
  */
 router.post("/category/delete", function(req, res) {
-	let sql = `
-	SELECT img FROM categories WHERE id = ?;
-	DELETE FROM CATEGORIES WHERE id = ?`;
+	let sql = `SELECT img FROM categories WHERE id = ?;DELETE FROM CATEGORIES WHERE id = ?`;
 	db.query(sql, [req.body.id, req.body.id], function(results, fields) {
-		let src = '.' + results[0][0].img;
+		let src = results[0][0].img;
+		// 如果没有分类图片
+		if (!src) {
+			//成功
+			res.json({
+				status: true,
+				msg: "success!"
+			});
+			return;
+		}
+		// 有分类图片
+		src = '.' + results[0][0].img;
 		let realPath = path.resolve(__dirname, '../public/', src);
 		fs.unlink(realPath, function(err) {
 			if (err) {
