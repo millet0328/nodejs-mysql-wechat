@@ -850,7 +850,7 @@ router.post("/upload/avatar", upload.single('file'), function(req, res) {
 	var extName = "." + formate[formate.length - 1];
 	var filename = uuidv1();
 	//储存文件夹
-	var fileFolder = "/images/common/";
+	var fileFolder = "/images/avatar/";
 	//处理图片
 	images(req.file.buffer)
 		.save("public" + fileFolder + filename + extName, {
