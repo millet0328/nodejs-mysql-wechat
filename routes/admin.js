@@ -914,7 +914,7 @@ router.get("/admin/goods/list", function(req, res) {
 		if (cate_3rd) {
 			sql += `WHERE cate_3rd = ${cate_3rd}`;
 		}
-		sql += ` ORDER BY create_time DESC , price ${sortByPrice} LIMIT ${count},${size}`
+		sql += ` ORDER BY price ${sortByPrice},create_time DESC LIMIT ${count},${size}`
 		return sql;
 	}
 	db.query(produceSQL(req.query), [], function(results, fields) {
