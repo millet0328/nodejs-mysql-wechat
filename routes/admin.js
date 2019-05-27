@@ -791,6 +791,78 @@ router.post("/upload/common", upload.single('file'), function(req, res) {
 		src: fileFolder + filename + extName
 	});
 });
+/**
+ * @api {post} /api/upload/avatar/ admin用户头像上传API
+ * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，不限制尺寸，存储至avatar文件夹
+ * @apiName UploadAvatar
+ * @apiGroup Upload Image
+ * 
+ * 
+ * @apiParam {File} file File文件对象;
+ * 
+ * @apiSampleRequest /api/upload/avatar/
+ * 
+ * @apiSuccess {String} src 返回图片地址.
+ */
+router.post("/upload/avatar", upload.single('file'), function(req, res) {
+	//文件类型
+	var type = req.file.mimetype;
+	var size = req.file.size;
+	//判断是否为图片
+	var reg = /^image\/\w+$/;
+	var flag = reg.test(type);
+	if (!flag) {
+		res.json({
+			errno: 1,
+			msg: "格式错误，请选择一张图片!"
+		});
+		return;
+	}
+	//判断图片体积是否小于2M
+	if (size >= 2 * 1024 * 1024) {
+		res.json({
+			errno: 1,
+			msg: "图片体积太大，请压缩图片!"
+		});
+		return;
+	}
+	//判读图片尺寸
+	var width = images(req.file.buffer).width();
+	var height = images(req.file.buffer).height();
+	if (width != height) {
+		res.status(400).json({
+			status: false,
+			msg: "图片必须为正方形，请重新上传!"
+		});
+		return;
+	}
+	if (width < 300 || width > 1500) {
+		res.status(400).json({
+			status: false,
+			msg: "图片尺寸300-1500，请重新处理!"
+		});
+		return;
+	}
+	//处理原文件名
+	var originalName = req.file.originalname;
+	var formate = originalName.split(".");
+	//扩展名
+	var extName = "." + formate[formate.length - 1];
+	var filename = uuidv1();
+	//储存文件夹
+	var fileFolder = "/images/common/";
+	//处理图片
+	images(req.file.buffer)
+		.save("public" + fileFolder + filename + extName, {
+			quality: 70 //保存图片到文件,图片质量为70
+		});
+	//返回储存结果
+	res.json({
+		status: true,
+		msg: "图片上传处理成功!",
+		src: fileFolder + filename + extName
+	});
+});
 
 /**
  * @api {post} /api/goods/release/ 发布新商品
