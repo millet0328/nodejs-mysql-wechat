@@ -792,8 +792,8 @@ router.post("/upload/common", upload.single('file'), function(req, res) {
 	});
 });
 /**
- * @api {post} /api/upload/avatar/ admin用户头像上传API
- * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，不限制尺寸，存储至avatar文件夹
+ * @api {post} /api/upload/avatar/ 用户头像上传API
+ * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，尺寸（120~300）必须是正方形，存储至avatar文件夹
  * @apiName UploadAvatar
  * @apiGroup Upload Image
  * 
@@ -836,10 +836,10 @@ router.post("/upload/avatar", upload.single('file'), function(req, res) {
 		});
 		return;
 	}
-	if (width < 300 || width > 1500) {
+	if (width < 120 || width > 300) {
 		res.status(400).json({
 			status: false,
-			msg: "图片尺寸300-1500，请重新处理!"
+			msg: "图片尺寸120-300，请重新处理!"
 		});
 		return;
 	}
