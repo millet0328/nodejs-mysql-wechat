@@ -778,16 +778,16 @@ router.post("/upload/common", upload.single('file'), function(req, res) {
 	var reg = /^image\/\w+$/;
 	var flag = reg.test(type);
 	if (!flag) {
-		res.json({
-			errno: 1,
+		res.status(400).json({
+			status: false,
 			msg: "格式错误，请选择一张图片!"
 		});
 		return;
 	}
 	//判断图片体积是否小于2M
 	if (size >= 2 * 1024 * 1024) {
-		res.json({
-			errno: 1,
+		res.status(400).json({
+			status: false,
 			msg: "图片体积太大，请压缩图片!"
 		});
 		return;
@@ -833,16 +833,16 @@ router.post("/upload/avatar", upload.single('file'), function(req, res) {
 	var reg = /^image\/\w+$/;
 	var flag = reg.test(type);
 	if (!flag) {
-		res.json({
-			errno: 1,
+		res.status(400).json({
+			status: false,
 			msg: "格式错误，请选择一张图片!"
 		});
 		return;
 	}
 	//判断图片体积是否小于2M
 	if (size >= 2 * 1024 * 1024) {
-		res.json({
-			errno: 1,
+		res.status(400).json({
+			status: false,
 			msg: "图片体积太大，请压缩图片!"
 		});
 		return;
