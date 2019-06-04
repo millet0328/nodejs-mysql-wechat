@@ -7,17 +7,17 @@
     "api": "apidoc -i routes/ -o public/api/"
   },
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "debug": "~2.6.9",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "express-jwt": "^5.3.1",
     "images": "^3.0.2",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
-    "mysql": "^2.16.0",
+    "mysql": "^2.17.1",
     "request": "^2.88.0",
     "serve-favicon": "~2.4.5",
     "uuid": "^3.3.2"
