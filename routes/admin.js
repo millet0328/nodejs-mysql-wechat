@@ -1,18 +1,18 @@
-var express = require('express');
-var router = express.Router();
-var fs = require("fs");
-var path = require("path");
+const express = require('express');
+const router = express.Router();
+const fs = require("fs");
+const path = require("path");
 // 数据库
 let db = require('../config/mysql');
 //文件传输
-var multer = require('multer');
-var upload = multer();
+const multer = require('multer');
+const upload = multer();
 //图片处理
-var images = require("images");
+const images = require("images");
 //uuid
-var uuidv1 = require('uuid/v1');
+const uuidv1 = require('uuid/v1');
 // JSON Web Token
-var jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 /**
  * @apiDefine SuccessResponse
  * @apiSuccess { Boolean } status 请求状态.
@@ -39,7 +39,7 @@ var jwt = require("jsonwebtoken");
  * @api {post} /api/admin/register 管理员注册
  * @apiDescription 注册成功， 返回token, 请在头部headers中设置Authorization: `Bearer ${token}`,所有请求都必须携带token;
  * @apiName AdminRegister
- * @apiGroup Admin User
+ * @apiGroup admin User
  * @apiPermission admin
  *
  * @apiParam {String} username 用户账户名.
@@ -124,7 +124,7 @@ router.post('/admin/register', function (req, res) {
  * @api {post} /api/admin/login 管理员登录
  * @apiDescription 登录成功， 返回token, 请在头部headers中设置Authorization: `Bearer ${token}`, 所有请求都必须携带token;
  * @apiName AdminLogin
- * @apiGroup Admin User
+ * @apiGroup admin User
  * @apiPermission admin
  *
  * @apiParam {String} username 用户账户名.
@@ -178,7 +178,7 @@ router.post('/admin/login', function (req, res) {
 /**
  * @api {get} /api/admin/list/ 获取admin用户列表
  * @apiName AdminList
- * @apiGroup Admin User
+ * @apiGroup admin User
  * @apiPermission admin
  *
  * @apiSampleRequest /api/admin/list
@@ -206,7 +206,7 @@ router.get("/admin/list", function (req, res) {
 /**
  * @api {post} /api/admin/delete/ 删除admin用户
  * @apiName DeleteAdmin
- * @apiGroup Admin User
+ * @apiGroup admin User
  * @apiPermission admin
  *
  * @apiParam {Number} uid admin用户id.
@@ -227,7 +227,7 @@ router.post('/admin/delete', function (req, res) {
 /**
  * @api {get} /api/admin/info/ 获取admin个人资料
  * @apiName AdminInfo
- * @apiGroup Admin User
+ * @apiGroup admin User
  *
  * @apiParam {Number} uid admin用户id.
  *
@@ -256,7 +256,7 @@ router.get("/admin/info", function (req, res) {
 /**
  * @api { post } /api/admin/info/update/ 更新admin个人资料
  * @apiName UpdateInfo
- * @apiGroup Admin User
+ * @apiGroup admin User
  *
  * @apiParam {Number} uid 用户id.
  * @apiParam {String} nickname 昵称.
@@ -281,128 +281,11 @@ router.post("/admin/info/update/", function (req, res) {
         });
     });
 });
-/**
- * @api {get} /api/role/list 获取角色列表
- * @apiName RoleList
- * @apiGroup Admin-Role
- * @apiPermission admin
- *
- * @apiSampleRequest /api/role/list
- */
-router.get('/role/list', function (req, res) {
-    let sql = `SELECT * FROM role`;
-    db.query(sql, [], function (results) {
-        if (!results.length) {
-            res.json({
-                status: false,
-                msg: "获取失败！"
-            });
-            return false;
-        }
-        // 获取成功
-        res.json({
-            status: true,
-            msg: "获取成功！",
-            data: results
-        });
-    });
-});
-/**
- * @api {post} /api/menu/add/ 添加子菜单
- * @apiName MenuAdd
- * @apiGroup Admin-Role
- * @apiPermission admin
- *
- * @apiParam {String} name 分类名称.
- * @apiParam {Number} pId 父级id.
- * @apiParam {String} path 菜单url地址.
- * @apiParam {String} order 菜单显示顺序，按照数字从小到大排序，如2001.
- *
- * @apiSampleRequest /api/menu/add/
- */
-router.post("/menu/add", function (req, res) {
-    let {name, pId, path, order} = req.body;
-    let sql = `INSERT INTO MENU (name,pId,path,menu_order) VALUES (?,?,?,?) `;
-    db.query(sql, [name, pId, path, order], function (results, fields) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!",
-            data: {
-                id: results.insertId
-            }
-        });
-    });
-});
-/**
- * @api {post} /api/menu/delete/ 删除子菜单
- * @apiName MenuDelete
- * @apiGroup Admin-Role
- * @apiPermission admin
- *
- * @apiParam {Number} id 子菜单id.
- *
- * @apiSampleRequest /api/menu/delete/
- */
-router.post("/menu/delete", function (req, res) {
-    let sql = `DELETE FROM MENU WHERE id = ?`;
-    db.query(sql, [req.body.id], function (results, fields) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!"
-        });
-    });
-});
-/**
- * @api {post} /api/menu/update/ 更新子菜单
- * @apiName MenuUpdate
- * @apiGroup Admin-Role
- * @apiPermission admin
- *
- * @apiParam {Number} id 子菜单id.
- * @apiParam { String } name 子菜单名称.
- * @apiParam { String } path 子菜单url地址.
- *
- * @apiSampleRequest /api/menu/update/
- */
-router.post("/menu/update", function (req, res) {
-    let {name, path, id, order} = req.body;
-    let sql = `UPDATE MENU SET name = ? , path = ?, menu_order = ? WHERE id = ? `;
-    db.query(sql, [name, path, order, id], function (results, fields) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!"
-        });
-    });
-});
-/**
- * @api {get} /api/menu/sub/ 获取子级菜单
- * @apiName MenunSub
- * @apiGroup Admin-Role
- * @apiPermission admin
- *
- * @apiParam { Number } pId 父级菜单id。 注： 获取一级菜单pId = 1;
- *
- * @apiSampleRequest /api/menu/sub/
- */
-router.get("/menu/sub/", function (req, res) {
-    let sql = `SELECT id, name, path, menu_order AS 'order', pId FROM MENU WHERE pId = ? ORDER BY menu_order`;
-    db.query(sql, [req.query.pId], function (results, fields) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!",
-            data: results
-        });
-    });
-});
 
 /**
  * @api {get} /api/category/all/ 获取所有树形分类
  * @apiName category/all 获取所有树形分类
- * @apiGroup Admin-Category
+ * @apiGroup admin-Category
  * @apiPermission admin
  *
  * @apiSampleRequest /api/category/all/
@@ -421,7 +304,7 @@ router.get("/category/all", function (req, res) {
 /**
  * @api {post} /api/category/add/ 添加子分类
  * @apiName category/add 添加子分类
- * @apiGroup Admin-Category
+ * @apiGroup admin-Category
  * @apiPermission admin
  *
  * @apiParam {String} name 分类名称.
@@ -456,7 +339,7 @@ router.post("/category/add", function (req, res) {
 /**
  * @api {post} /api/category/delete/ 删除分类
  * @apiName category/delete 删除分类
- * @apiGroup Admin-Category
+ * @apiGroup admin-Category
  * @apiPermission admin
  *
  * @apiParam {Number} id 分类id.
@@ -494,7 +377,7 @@ router.post("/category/delete", function (req, res) {
 /**
  * @api {post} /api/category/update/ 更新分类
  * @apiName category/update 更新分类
- * @apiGroup Admin-Category
+ * @apiGroup admin-Category
  * @apiPermission admin
  *
  * @apiParam {Number} id 分类id.
@@ -537,7 +420,7 @@ router.get("/category/sub/", function (req, res) {
  * @api {post} /api/upload/goods/ 上传商品主图
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，尺寸（300~1500），存储至goods文件夹
  * @apiName upload/goods/
- * @apiGroup Admin Upload Image
+ * @apiGroup admin Upload Image
  * @apiPermission admin
  *
  * @apiParam {File} file File文件对象;
@@ -610,7 +493,7 @@ router.post("/upload/goods/", upload.single('file'), function (req, res) {
  * @api {post} /api/upload/delete/ 删除图片API
  * @apiDescription如果上传错误的图片，通过此API删除错误的图片
  * @apiName upload/delete/
- * @apiGroup Admin Upload Image
+ * @apiGroup admin Upload Image
  * @apiPermission admin
  *
  * @apiParam {String} src 图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;
@@ -634,7 +517,7 @@ router.post('/upload/delete/', function (req, res) {
  * @api {post} /api/upload/slider/ 轮播图上传API
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，尺寸（300~1500）必须是正方形，存储至goods文件夹
  * @apiName upload/slider/
- * @apiGroup Admin Upload Image
+ * @apiGroup admin Upload Image
  * @apiPermission admin
  *
  * @apiParam {File} file File文件对象;
@@ -707,7 +590,7 @@ router.post("/upload/slider", upload.single('file'), function (req, res) {
  * @api {post} /api/upload/editor/ 富文本编辑器图片上传
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，不限制尺寸，存储至details文件夹
  * @apiName UploadEditor
- * @apiGroup Admin Upload Image
+ * @apiGroup admin Upload Image
  * @apiPermission admin
  *
  * @apiParam {File} file File文件对象;
@@ -889,7 +772,7 @@ router.post("/upload/avatar", upload.single('file'), function (req, res) {
 /**
  * @api {post} /api/goods/release/ 发布新商品
  * @apiName goods/release/
- * @apiGroup Admin Goods
+ * @apiGroup admin Goods
  * @apiPermission admin
  *
  * @apiParam {Number} cate_1st 一级分类id;
@@ -932,7 +815,7 @@ router.post("/goods/release", function (req, res) {
 /**
  * @api {post} /api/goods/edit/ 编辑商品
  * @apiName goods/edit/
- * @apiGroup Admin Goods
+ * @apiGroup admin Goods
  * @apiPermission admin
  *
  * @apiParam {Number} id 商品id;
@@ -975,7 +858,7 @@ router.post("/goods/edit", function (req, res) {
  * @api {get} /api/admin/goods/list 获取商品列表
  * @apiDescription 具备商品分页功能，3个分类参数至多能传1个
  * @apiName AdminGoodsList 获取商品列表
- * @apiGroup Admin Goods
+ * @apiGroup admin Goods
  * @apiPermission admin
  *
  * @apiParam {Number} [pageSize] 一个页有多少个商品,默认4个;
@@ -1025,7 +908,7 @@ router.get("/admin/goods/list", function (req, res) {
 /**
  * @api {get} /api/admin/goods/detail/ 获取商品详情
  * @apiName GoodsDetail
- * @apiGroup Admin Goods
+ * @apiGroup admin Goods
  *
  * @apiParam {Number} id 商品id;
  *
@@ -1045,7 +928,7 @@ router.get("/admin/goods/detail/", function (req, res) {
 /**
  * @api {post} /api/goods/delete/ 删除商品
  * @apiName goods/delete/
- * @apiGroup Admin Goods
+ * @apiGroup admin Goods
  * @apiPermission admin
  *
  * @apiParam {Number} id 商品id;
@@ -1067,7 +950,7 @@ router.post("/goods/delete", function (req, res) {
  * @api {post} /api/admin/order/list/ 获取所有账户订单列表
  * @apiDescription 获取系统中的订单列表，根据订单状态获取列表，具备分页功能
  * @apiName AdminOrderList
- * @apiGroup Admin Order
+ * @apiGroup admin Order
  *
  * @apiParam {Number} [pageSize] 一个页有多少个商品,默认4个;
  * @apiParam {Number} [pageIndex] 第几页,默认1;

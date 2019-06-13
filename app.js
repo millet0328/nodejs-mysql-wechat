@@ -6,9 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var admin = require('./routes/admin');
+let index = require('./routes/index');
+let users = require('./routes/users');
+let admin = require('./routes/admin');
+let role = require('./routes/admin/role');
+let menu = require('./routes/admin/menu');
 
 var app = express();
 
@@ -33,6 +35,8 @@ app.use(expressJwt({ secret: 'secret' }).unless({
 app.use('/api', index);
 app.use('/api', users);
 app.use('/api', admin);
+app.use('/api', role);
+app.use('/api', menu);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
