@@ -11,7 +11,7 @@ let db = require('../../config/mysql');
  * @apiSampleRequest /api/role/list
  */
 router.get('/role/list', function (req, res) {
-    let sql = `SELECT * FROM role`;
+    let sql = `SELECT id, role_name AS name FROM role`;
     db.query(sql, [], function (results) {
         if (!results.length) {
             res.json({
@@ -95,5 +95,45 @@ router.post('/role/update', function (req, res) {
         });
     });
 });
+/**
+ * @api {get} /api/role/config 根据角色id获取菜单配置
+ * @apiName LoadRoleMenu
+ * @apiGroup admin-Role
+ * @apiPermission admin
+ *
+ * @apiParam { Number } id 角色id。
+ *
+ * @apiSampleRequest /api/role/config
+ */
+router.get("/role/config", function (req, res) {
+    //获取所有菜单
+    let sql = `SELECT id, name, path, menu_order AS 'order', pId FROM MENU ORDER BY menu_order;`;
+    db.query(sql, [], function (results, fields) {
+        //添加菜单选择状态
+        results.forEach(item => item.checked = false);
+        //筛选出一级菜单
+        let menu_1st = results.filter((item) => item.pId === 1 ? item : null);
+        //递归循环数据
+        parseToTree(menu_1st);
+        //递归函数
+        function parseToTree(array) {
+            array.forEach(function (parent) {
+                parent.children = [];
+                results.forEach(function (child) {
+                    if (child.pId === parent.id) {
+                        parent.children.push(child);
+                    }
+                });
+                parseToTree(parent.children);
+            });
+        }
 
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: menu_1st
+        });
+    });
+});
 module.exports = router;

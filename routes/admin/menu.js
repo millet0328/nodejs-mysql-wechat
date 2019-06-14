@@ -75,7 +75,7 @@ router.post("/menu/update", function (req, res) {
 });
 /**
  * @api {get} /api/menu/sub/ 获取子级菜单
- * @apiName MenunSub
+ * @apiName MenuSub
  * @apiGroup admin-Menu
  * @apiPermission admin
  *
