@@ -322,7 +322,6 @@ router.post('/order/create/', function(req, res) {
 							 FROM addresses WHERE id = ?`;
 						connection.query(sql, [insertId, addressId], function(error, results, fields) {
 							let { affectedRows } = results;
-							console.log(affectedRows);
 							if (error || affectedRows <= 0) {
 								return connection.rollback(function() {
 									throw error || `${affectedRows} rows affected!`;

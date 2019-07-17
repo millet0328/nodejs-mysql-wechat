@@ -106,15 +106,31 @@ router.post('/role/update', function (req, res) {
  * @apiSampleRequest /api/role/config
  */
 router.get("/role/config", function (req, res) {
+    let {id} = req.query;
     //获取所有菜单
     let sql = `SELECT id, name, path, menu_order AS 'order', pId FROM MENU ORDER BY menu_order;`;
-    db.query(sql, [], function (results, fields) {
+    db.query(sql, [], (results) => {
         //添加菜单选择状态
-        results.forEach(item => item.checked = false);
-        //筛选出一级菜单
-        let menu_1st = results.filter((item) => item.pId === 1 ? item : null);
-        //递归循环数据
-        parseToTree(menu_1st);
+        let sql = `SELECT m.* FROM MENU m JOIN role_menu rm ON rm.menu_id = m.id WHERE rm.role_id = ?`;
+        db.query(sql, [id], function (menu) {
+            results.forEach(item => {
+                let flag = menu.find(element => {
+                    return element.id === item.id;
+                });
+                item.checked = flag ? true : false;
+            });
+            //筛选出一级菜单
+            let menu_1st = results.filter((item) => item.pId === 1 ? item : null);
+            //递归循环数据
+            parseToTree(menu_1st);
+            //成功
+            res.json({
+                status: true,
+                msg: "success!",
+                data: menu_1st
+            });
+        });
+
         //递归函数
         function parseToTree(array) {
             array.forEach(function (parent) {
@@ -127,13 +143,51 @@ router.get("/role/config", function (req, res) {
                 parseToTree(parent.children);
             });
         }
+    });
+});
 
+/**
+ * @api {put} /api/role/menu 为指定角色添加菜单
+ * @apiName PutRoleMenu
+ * @apiGroup admin-Role
+ * @apiPermission admin
+ *
+ * @apiParam { Number } role_id 角色id。
+ * @apiParam { Number } menu_id 菜单id。
+ * @apiSampleRequest /api/role/menu
+ */
+router.put('/role/menu', function (req, res) {
+    let {role_id, menu_id} = req.body;
+    let sql = `INSERT INTO role_menu (role_id,menu_id) SELECT ?,? FROM DUAL WHERE NOT EXISTS (SELECT * FROM role_menu WHERE role_id = ? AND menu_id = ?)`;
+    db.query(sql, [role_id, menu_id, role_id, menu_id], function (results) {
         //成功
         res.json({
             status: true,
             msg: "success!",
-            data: menu_1st
         });
     });
 });
+
+/**
+ * @api {delete} /api/role/menu 为指定角色删除菜单
+ * @apiName DeleteRoleMenu
+ * @apiGroup admin-Role
+ * @apiPermission admin
+ *
+ * @apiParam { Number } role_id 角色id。
+ * @apiParam { Number } menu_id 菜单id。
+ * @apiSampleRequest /api/role/menu
+ */
+router.delete('/role/menu', function (req, res) {
+    let {role_id, menu_id} = req.query;
+    let sql = `DELETE FROM role_menu WHERE role_id = ? AND menu_id = ?`;
+    db.query(sql, [role_id, menu_id], function (results) {
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+        });
+    });
+});
+
 module.exports = router;
