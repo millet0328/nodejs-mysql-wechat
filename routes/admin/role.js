@@ -10,7 +10,7 @@ let db = require('../../config/mysql');
  *
  * @apiSampleRequest /api/role/list
  */
-router.get('/role/list', function (req, res) {
+router.get('/list', function (req, res) {
     let sql = `SELECT id, role_name AS name FROM role`;
     db.query(sql, [], function (results) {
         if (!results.length) {
@@ -38,7 +38,7 @@ router.get('/role/list', function (req, res) {
  *
  * @apiSampleRequest /api/role/add
  */
-router.post('/role/add', function (req, res) {
+router.post('/add', function (req, res) {
     let {name} = req.body;
     let sql = `INSERT INTO role (role_name) VALUES (?)`;
     db.query(sql, [name], function (results) {
@@ -53,16 +53,16 @@ router.post('/role/add', function (req, res) {
     });
 });
 /**
- * @api {post} /api/role/delete 删除角色
+ * @api {delete} /api/role 删除角色
  * @apiName RoleDelete
  * @apiGroup admin-Role
  * @apiPermission admin
  *
  * @apiParam {String} id 角色id.
  *
- * @apiSampleRequest /api/role/delete
+ * @apiSampleRequest /api/role
  */
-router.post('/role/delete', function (req, res) {
+router.delete('/', function (req, res) {
     let {id} = req.body;
     let sql = `DELETE FROM role WHERE id = ?`;
     db.query(sql, [id], function (results) {
@@ -74,7 +74,7 @@ router.post('/role/delete', function (req, res) {
     });
 });
 /**
- * @api {post} /api/role/update 更新角色
+ * @api {put} /api/role 更新角色
  * @apiName RoleUpdate
  * @apiGroup admin-Role
  * @apiPermission admin
@@ -82,9 +82,9 @@ router.post('/role/delete', function (req, res) {
  * @apiParam {String} id 角色id.
  * @apiParam {String} name 角色名称.
  *
- * @apiSampleRequest /api/role/update
+ * @apiSampleRequest /api/role
  */
-router.post('/role/update', function (req, res) {
+router.put('/', function (req, res) {
     let {id, name} = req.body;
     let sql = `UPDATE role SET role_name = ? WHERE id = ?`;
     db.query(sql, [name, id], function (results) {
@@ -105,7 +105,7 @@ router.post('/role/update', function (req, res) {
  *
  * @apiSampleRequest /api/role/config
  */
-router.get("/role/config", function (req, res) {
+router.get("/config", function (req, res) {
     let {id} = req.query;
     //获取所有菜单
     let sql = `SELECT id, name, path, menu_order AS 'order', pId FROM MENU ORDER BY menu_order;`;
@@ -147,7 +147,7 @@ router.get("/role/config", function (req, res) {
 });
 
 /**
- * @api {put} /api/role/menu 为指定角色添加菜单
+ * @api {post} /api/role/menu 为指定角色添加菜单
  * @apiName PutRoleMenu
  * @apiGroup admin-Role
  * @apiPermission admin
@@ -156,7 +156,7 @@ router.get("/role/config", function (req, res) {
  * @apiParam { Number } menu_id 菜单id。
  * @apiSampleRequest /api/role/menu
  */
-router.put('/role/menu', function (req, res) {
+router.post('/menu', function (req, res) {
     let {role_id, menu_id} = req.body;
     let sql = `INSERT INTO role_menu (role_id,menu_id) SELECT ?,? FROM DUAL WHERE NOT EXISTS (SELECT * FROM role_menu WHERE role_id = ? AND menu_id = ?)`;
     db.query(sql, [role_id, menu_id, role_id, menu_id], function (results) {
@@ -178,7 +178,7 @@ router.put('/role/menu', function (req, res) {
  * @apiParam { Number } menu_id 菜单id。
  * @apiSampleRequest /api/role/menu
  */
-router.delete('/role/menu', function (req, res) {
+router.delete('/menu', function (req, res) {
     let {role_id, menu_id} = req.query;
     let sql = `DELETE FROM role_menu WHERE role_id = ? AND menu_id = ?`;
     db.query(sql, [role_id, menu_id], function (results) {

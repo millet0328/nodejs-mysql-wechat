@@ -7,10 +7,21 @@ var bodyParser = require('body-parser');
 const expressJwt = require('express-jwt');
 
 let index = require('./routes/index');
-let users = require('./routes/users');
-let admin = require('./routes/admin');
+
+let order = require('./routes/mall/order');
+let user = require('./routes/mall/user');
+let address = require('./routes/mall/address');
+let goods = require('./routes/mall/goods');
+let cart = require('./routes/mall/cart');
+let userUpload = require('./routes/mall/upload');
+
 let role = require('./routes/admin/role');
 let menu = require('./routes/admin/menu');
+let admin = require('./routes/admin/admin');
+let category = require('./routes/admin/category');
+let adminGoods = require('./routes/admin/goods');
+let adminUpload = require('./routes/admin/upload');
+let adminOrder = require('./routes/admin/order');
 
 var app = express();
 
@@ -29,14 +40,25 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //使用中间件验证token合法性
 app.use(expressJwt({ secret: 'secret' }).unless({
-  path: ['/api/user/token', '/api/admin/register', '/api/admin/login'] //除了这些地址，其他的URL都需要验证
+  path: ['/','/api/user/token', '/api/admin/register', '/api/admin/login'] //除了这些地址，其他的URL都需要验证
 }));
 
-app.use('/api', index);
-app.use('/api', users);
-app.use('/api', admin);
-app.use('/api', role);
-app.use('/api', menu);
+app.use('/', index);
+
+app.use('/api/address', address);
+app.use('/api/user', user);
+app.use('/api/goods', goods);
+app.use('/api/cart', cart);
+app.use('/api/order', order);
+app.use('/api/upload', userUpload);
+
+app.use('/api/role', role);
+app.use('/api/menu', menu);
+app.use('/api/admin', admin);
+app.use('/api/category', category);
+app.use('/api/admin/goods', adminGoods);
+app.use('/api/upload', adminUpload);
+app.use('/api/admin/order', adminOrder);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
