@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "api": "apidoc -i routes/ -o public/api/"
+    "api": "apidoc -i routes/ -o public/api/ && apidoc -i routes/ -o docs/"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
