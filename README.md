@@ -1,6 +1,6 @@
 # nodejs-mysql-wechat
-基于nodejs+mySQL+express的商城后台
-
+基于nodejs+mySQL+express的商城后台API接口
+#### 在线预览，请点击[API文档](https://luotuo19880328.github.io/nodejs-mysql-wechat/)
 ## 安装
 `npm i apidoc -g`
 
