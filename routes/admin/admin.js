@@ -177,7 +177,7 @@ router.post('/login', function (req, res) {
 router.get("/list", function (req, res) {
     //查询账户数据
     let sql =
-        `SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id ORDER BY a.id`;
+        `SELECT a.id,a.username,a.nickname,a.sex,a.avatar,a.tel,DATE_FORMAT(a.login_time,'%Y-%m-%d %H:%i:%s') AS login_time,a.login_count,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id ORDER BY a.id`;
     db.query(sql, [], function (results, fields) {
         if (!results.length) {
             res.json({
@@ -202,10 +202,10 @@ router.get("/list", function (req, res) {
  *
  * @apiParam {Number} id admin用户id.
  *
- * @apiSampleRequest /api/admin/delete
+ * @apiSampleRequest /api/admin
  */
 router.delete('/', function (req, res) {
-    let {id} = req.body;
+    let {id} = req.query;
     let sql = `DELETE FROM admin WHERE id = ?;DELETE FROM admin_role WHERE admin_id = ?;`
     db.query(sql, [id, id], function (results) {
         // 获取成功
@@ -216,13 +216,13 @@ router.delete('/', function (req, res) {
     })
 });
 /**
- * @api {get} /api/admin/info/ 获取admin个人资料
+ * @api {get} /api/admin 获取admin个人资料
  * @apiName AdminInfo
  * @apiGroup admin User
  *
- * @apiSampleRequest /api/admin/info
+ * @apiSampleRequest /api/admin
  */
-router.get("/info", function (req, res) {
+router.get("/", function (req, res) {
     let {id} = req.user;
     //查询账户数据
     let sql =
@@ -244,7 +244,7 @@ router.get("/info", function (req, res) {
     })
 });
 /**
- * @api { put } /api/admin/info 更新admin个人资料
+ * @api { put } /api/admin 更新admin个人资料
  * @apiName UpdateInfo
  * @apiGroup admin User
  *
@@ -255,9 +255,9 @@ router.get("/info", function (req, res) {
  * @apiParam { String } tel 手机号码.
  * @apiParam { String } role 用户角色id.
  *
- * @apiSampleRequest /api/admin/info
+ * @apiSampleRequest /api/admin
  */
-router.put("/info", function (req, res) {
+router.put("/", function (req, res) {
     let {id, nickname, sex, avatar, tel, role} = req.body;
     let sql = `
     UPDATE admin SET nickname = ?,sex = ?,avatar = ?,tel = ? WHERE id = ?;

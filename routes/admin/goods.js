@@ -30,12 +30,10 @@ let db = require('../../config/mysql');
  * @apiSampleRequest /api/admin/goods/release
  */
 router.post("/", function (req, res) {
+    let {cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight} = req.body;
     let sql =
         `INSERT INTO GOODS (cate_1st,cate_2nd,cate_3rd,name,hotPoint,price,marketPrice,cost,discount,inventory,articleNo,img_lg,img_md,slider,brand,detail,freight,create_time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP()) `;
-    db.query(sql, [req.body.cate_1st, req.body.cate_2nd, req.body.cate_3rd, req.body.name, req.body.hotPoint, req.body.price,
-        req.body.marketPrice, req.body.cost, req.body.discount, req.body.inventory, req.body.articleNo, req.body.img_lg,
-        req.body.img_md, req.body.slider, req.body.brand, req.body.detail, req.body.freight
-    ], function (results, fields) {
+    db.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight], function (results, fields) {
         //成功
         res.json({
             status: true,
@@ -74,12 +72,10 @@ router.post("/", function (req, res) {
  * @apiSampleRequest /api/admin/goods
  */
 router.put("/", function (req, res) {
+    let {id, cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight} = req.body;
     let sql =
         `UPDATE GOODS SET cate_1st=?,cate_2nd=?,cate_3rd=?,name=?,hotPoint=?,price=?,marketPrice=?,cost=?,discount=?,inventory=?,articleNo=?,img_lg=?,img_md=?,slider=?,brand=?,detail=?,freight=?,update_time = CURRENT_TIMESTAMP() WHERE id=?`;
-    db.query(sql, [req.body.cate_1st, req.body.cate_2nd, req.body.cate_3rd, req.body.name, req.body.hotPoint, req.body.price,
-        req.body.marketPrice, req.body.cost, req.body.discount, req.body.inventory, req.body.articleNo, req.body.img_lg,
-        req.body.img_md, req.body.slider, req.body.brand, req.body.detail, req.body.freight, req.body.id
-    ], function (results, fields) {
+    db.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight, id], function (results, fields) {
         //成功
         res.json({
             status: true,
@@ -140,17 +136,18 @@ router.get("/list", function (req, res) {
     });
 });
 /**
- * @api {get} /api/admin/goods/detail 获取商品详情
+ * @api {get} /api/admin/goods 获取商品详情
  * @apiName GoodsDetail
  * @apiGroup admin Goods
  *
  * @apiParam {Number} id 商品id;
  *
- * @apiSampleRequest /api/admin/goods/detail
+ * @apiSampleRequest /api/admin/goods
  */
-router.get("/detail", function (req, res) {
-    let sql = `SELECT * FROM GOODS WHERE id = ?`
-    db.query(sql, [req.query.id], function (results, fields) {
+router.get("/", function (req, res) {
+    let {id} = req.query;
+    let sql = `SELECT * FROM GOODS WHERE id = ?`;
+    db.query(sql, [id], function (results, fields) {
         //成功
         res.json({
             status: true,
@@ -170,13 +167,13 @@ router.get("/detail", function (req, res) {
  * @apiSampleRequest /api/admin/goods
  */
 router.delete("/", function (req, res) {
+    let {id} = req.query;
     let sql = `DELETE FROM GOODS WHERE id=?`;
-    db.query(sql, [req.body.id], function (results, fields) {
+    db.query(sql, [id], function (results, fields) {
         //成功
         res.json({
             status: true,
             msg: "success!",
-            data: results[0]
         });
     });
 });

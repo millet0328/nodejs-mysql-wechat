@@ -813,7 +813,7 @@
   },
   {
     "type": "post",
-    "url": "/api/category/add",
+    "url": "/api/category",
     "title": "添加子分类",
     "name": "category_add______",
     "group": "admin_Category",
@@ -858,7 +858,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/category/add"
+        "url": "/api/category"
       }
     ],
     "version": "0.0.0",
@@ -1053,7 +1053,7 @@
   },
   {
     "type": "get",
-    "url": "/api/admin/goods/detail",
+    "url": "/api/admin/goods",
     "title": "获取商品详情",
     "name": "GoodsDetail",
     "group": "admin_Goods",
@@ -1072,7 +1072,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/admin/goods/detail"
+        "url": "/api/admin/goods"
       }
     ],
     "version": "0.0.0",
@@ -2091,13 +2091,13 @@
   },
   {
     "type": "get",
-    "url": "/api/admin/info/",
+    "url": "/api/admin",
     "title": "获取admin个人资料",
     "name": "AdminInfo",
     "group": "admin_User",
     "sampleRequest": [
       {
-        "url": "/api/admin/info"
+        "url": "/api/admin"
       }
     ],
     "version": "0.0.0",
@@ -2363,7 +2363,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/admin/delete"
+        "url": "/api/admin"
       }
     ],
     "version": "0.0.0",
@@ -2372,7 +2372,7 @@
   },
   {
     "type": " put ",
-    "url": "/api/admin/info",
+    "url": "/api/admin",
     "title": "更新admin个人资料",
     "name": "UpdateInfo",
     "group": "admin_User",
@@ -2426,7 +2426,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/admin/info"
+        "url": "/api/admin"
       }
     ],
     "version": "0.0.0",

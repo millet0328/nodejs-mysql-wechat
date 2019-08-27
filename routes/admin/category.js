@@ -24,7 +24,7 @@ router.get("/all", function (req, res) {
     });
 });
 /**
- * @api {post} /api/category/add 添加子分类
+ * @api {post} /api/category 添加子分类
  * @apiName category/add 添加子分类
  * @apiGroup admin-Category
  * @apiPermission admin
@@ -34,9 +34,9 @@ router.get("/all", function (req, res) {
  * @apiParam {String} img 分类图片src地址.
  * @apiParam {Number} [level] 分类所在层级.
  *
- * @apiSampleRequest /api/category/add
+ * @apiSampleRequest /api/category
  */
-router.post("/add", function (req, res) {
+router.post("/", function (req, res) {
     let {name, pId, level, img} = req.body;
     // 图片img为空
     if (!img) {
@@ -69,7 +69,7 @@ router.post("/add", function (req, res) {
  * @apiSampleRequest /api/category
  */
 router.delete("/", function (req, res) {
-    let {id} = req.body;
+    let {id} = req.query;
     let sql = `SELECT img FROM categories WHERE id = ?;DELETE FROM CATEGORIES WHERE id = ?`;
     db.query(sql, [id, id], function (results, fields) {
         let src = results[0][0].img;
@@ -84,7 +84,7 @@ router.delete("/", function (req, res) {
         }
         // 有分类图片
         src = '.' + results[0][0].img;
-        let realPath = path.resolve(__dirname, '../public/', src);
+        let realPath = path.resolve(__dirname, '../../public/', src);
         fs.unlink(realPath, function (err) {
             if (err) {
                 return console.error(err);
@@ -130,7 +130,7 @@ router.put("/", function (req, res) {
  * @apiSampleRequest /api/category/sub
  */
 router.get("/sub", function (req, res) {
-    let { pId } = req.body;
+    let { pId } = req.query;
     let sql = `SELECT * FROM CATEGORIES WHERE pId = ? `;
     db.query(sql, [pId], function (results, fields) {
         //成功
