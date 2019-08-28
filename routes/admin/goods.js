@@ -5,7 +5,7 @@ let db = require('../../config/mysql');
 
 /**
  * @api {post} /api/admin/goods 发布新商品
- * @apiName goods/release/
+ * @apiName goodsRelease
  * @apiGroup admin Goods
  * @apiPermission admin
  *
@@ -27,7 +27,7 @@ let db = require('../../config/mysql');
  * @apiParam {String} detail 商品详情,一般存储为HTML代码;
  * @apiParam {Number} freight 商品运费;
  *
- * @apiSampleRequest /api/admin/goods/release
+ * @apiSampleRequest /api/admin/goods
  */
 router.post("/", function (req, res) {
     let {cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight} = req.body;

@@ -4,16 +4,16 @@ const router = express.Router();
 let db = require('../../config/mysql');
 
 /**
- * @api {post} /api/cart/add 添加商品至购物车
+ * @api {post} /api/cart 添加商品至购物车
  * @apiName AddCart
  * @apiGroup Cart
  *
  * @apiParam {Number} gid 商品id;
  * @apiParam {Number} num 商品数量,不能超过库存;
  *
- * @apiSampleRequest /api/cart/add
+ * @apiSampleRequest /api/cart
  */
-router.post('/add', function(req, res) {
+router.post('/', function(req, res) {
     let { gid, num } = req.body;
     let { openid } = req.user;
     // 检查购物车是否已经有此商品

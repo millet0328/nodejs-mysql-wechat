@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// 数据库
-let db = require('../../config/mysql');
 //文件传输
 const multer = require('multer');
 const upload = multer();

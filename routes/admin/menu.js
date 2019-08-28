@@ -4,7 +4,7 @@ const router = express.Router();
 let db = require('../../config/mysql');
 
 /**
- * @api {post} /api/menu/add/ 添加子菜单
+ * @api {post} /api/menu 添加子菜单
  * @apiName MenuAdd
  * @apiGroup admin-Menu
  * @apiPermission admin
@@ -14,9 +14,9 @@ let db = require('../../config/mysql');
  * @apiParam {String} path 菜单url地址.
  * @apiParam {String} order 菜单显示顺序，按照数字从小到大排序，如2001.
  *
- * @apiSampleRequest /api/menu/add/
+ * @apiSampleRequest /api/menu
  */
-router.post("/add", function (req, res) {
+router.post("/", function (req, res) {
     let {name, pId, path, order} = req.body;
     let sql = `INSERT INTO MENU (name,pId,path,menu_order) VALUES (?,?,?,?) `;
     db.query(sql, [name, pId, path, order], function (results, fields) {

@@ -167,7 +167,7 @@ router.post('/login', function (req, res) {
     });
 });
 /**
- * @api {get} /api/admin/list/ 获取admin用户列表
+ * @api {get} /api/admin/list 获取admin用户列表
  * @apiName AdminList
  * @apiGroup admin User
  * @apiPermission admin

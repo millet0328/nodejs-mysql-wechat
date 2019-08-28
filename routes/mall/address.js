@@ -127,8 +127,9 @@ router.get('/list', function (req, res) {
  * @apiSampleRequest /api/address/detail
  */
 router.get("/detail", function (req, res) {
-    var sql = `SELECT * FROM addresses WHERE id = ? `
-    db.query(sql, [req.query.id], function (results, fields) {
+    var sql = `SELECT * FROM addresses WHERE id = ? `;
+    let {id} = req.query;
+    db.query(sql, [id], function (results, fields) {
         if (!results.length) {
             res.json({
                 status: false,

@@ -29,16 +29,16 @@ router.get('/list', function (req, res) {
     });
 });
 /**
- * @api {post} /api/role/add 添加角色
+ * @api {post} /api/role 添加角色
  * @apiName RoleAdd
  * @apiGroup admin-Role
  * @apiPermission admin
  *
  * @apiParam {String} name 角色名称.
  *
- * @apiSampleRequest /api/role/add
+ * @apiSampleRequest /api/role
  */
-router.post('/add', function (req, res) {
+router.post('/', function (req, res) {
     let {name} = req.body;
     let sql = `INSERT INTO role (role_name) VALUES (?)`;
     db.query(sql, [name], function (results) {
