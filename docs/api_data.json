@@ -241,7 +241,7 @@
   },
   {
     "type": "post",
-    "url": "/api/cart/add",
+    "url": "/api/cart",
     "title": "添加商品至购物车",
     "name": "AddCart",
     "group": "Cart",
@@ -267,7 +267,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/cart/add"
+        "url": "/api/cart"
       }
     ],
     "version": "0.0.0",
@@ -1235,7 +1235,7 @@
     "type": "post",
     "url": "/api/admin/goods",
     "title": "发布新商品",
-    "name": "goods_release_",
+    "name": "goodsRelease",
     "group": "admin_Goods",
     "permission": [
       {
@@ -1369,7 +1369,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/admin/goods/release"
+        "url": "/api/admin/goods"
       }
     ],
     "version": "0.0.0",
@@ -1378,7 +1378,7 @@
   },
   {
     "type": "post",
-    "url": "/api/menu/add/",
+    "url": "/api/menu",
     "title": "添加子菜单",
     "name": "MenuAdd",
     "group": "admin_Menu",
@@ -1423,7 +1423,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/menu/add/"
+        "url": "/api/menu"
       }
     ],
     "version": "0.0.0",
@@ -1741,7 +1741,7 @@
   },
   {
     "type": "post",
-    "url": "/api/role/add",
+    "url": "/api/role",
     "title": "添加角色",
     "name": "RoleAdd",
     "group": "admin_Role",
@@ -1765,7 +1765,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/role/add"
+        "url": "/api/role"
       }
     ],
     "version": "0.0.0",
@@ -2106,7 +2106,7 @@
   },
   {
     "type": "get",
-    "url": "/api/admin/list/",
+    "url": "/api/admin/list",
     "title": "获取admin用户列表",
     "name": "AdminList",
     "group": "admin_User",
