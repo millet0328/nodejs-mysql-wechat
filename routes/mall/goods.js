@@ -17,7 +17,7 @@ let db = require('../../config/mysql');
  * @apiParam {String="ASC","DESC"} [sortByPrice] 按照价格排序，从小到大-ASC,从大到小-DESC;
  * @apiSampleRequest /api/goods/list
  */
-router.get("/list", function(req, res) {
+router.get("/list", function (req, res) {
     let query = req.query;
     //取出空键值对
     for (let key in query) {
@@ -25,8 +25,9 @@ router.get("/list", function(req, res) {
             delete query[key]
         }
     }
+
     //拼接SQL
-    function produceSQL({ pageSize = 4, pageIndex = 1, sortByPrice = '', cate_1st = '', cate_2nd = '', cate_3rd = '', }) {
+    function produceSQL({pageSize = 4, pageIndex = 1, sortByPrice = '', cate_1st = '', cate_2nd = '', cate_3rd = '',}) {
         let size = parseInt(pageSize);
         let count = size * (pageIndex - 1);
         let sql = `SELECT id,name,price,hotPoint,marketPrice,discount,img_md FROM GOODS `
@@ -42,7 +43,8 @@ router.get("/list", function(req, res) {
         sql += ` ORDER BY price ${sortByPrice},create_time DESC LIMIT ${count},${size}`
         return sql;
     }
-    db.query(produceSQL(req.query), [], function(results, fields) {
+
+    db.query(produceSQL(req.query), [], function (results, fields) {
         //成功
         res.json({
             status: true,
@@ -60,9 +62,10 @@ router.get("/list", function(req, res) {
  *
  * @apiSampleRequest /api/goods/detail
  */
-router.get("/detail", function(req, res) {
+router.get("/detail", function (req, res) {
+    let {id} = req.query;
     let sql = `SELECT id,name,price,hotPoint,marketPrice,discount,slider,detail FROM GOODS WHERE id = ?`
-    db.query(sql, [req.query.id], function(results, fields) {
+    db.query(sql, [id], function (results, fields) {
         //成功
         res.json({
             status: true,
