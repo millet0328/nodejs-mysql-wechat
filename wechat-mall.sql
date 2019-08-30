@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 16/06/2019 15:44:54
+ Date: 30/08/2019 08:21:12
 */
 
 SET NAMES utf8mb4;
@@ -57,13 +57,13 @@ CREATE TABLE `admin`  (
   `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
   `login_count` bigint(255) NOT NULL DEFAULT 1 COMMENT '登录次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES (2, '15863008280', '123456', '黄小米', '女', '/images/avatar/default.jpg', '15863008280', '2019-05-11 18:21:37', '2019-05-27 23:04:42', 4);
-INSERT INTO `admin` VALUES (1, 'admin', '123456', 'admin', '男', '/images/avatar/default.jpg', '13475829262', '2019-05-14 20:39:31', '2019-06-14 18:03:03', 59);
+INSERT INTO `admin` VALUES (2, '15863008280', '123456', '黄小米', '女', '/images/avatar/default.jpg', '15863008280', '2019-05-11 18:21:37', '2019-08-04 23:35:34', 6);
+INSERT INTO `admin` VALUES (1, 'admin', '123456', 'admin', '男', '/images/avatar/default.jpg', '13475829262', '2019-05-14 20:39:31', '2019-08-29 22:14:20', 80);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -108,7 +108,7 @@ CREATE TABLE `categories`  (
   `level` int(11) NULL DEFAULT NULL COMMENT '层级',
   `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 96 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 85 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of categories
@@ -212,7 +212,7 @@ CREATE TABLE `goods`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of goods
@@ -258,7 +258,6 @@ INSERT INTO `menu` VALUES (11, '订单列表', 4, '/order/list', '4001');
 INSERT INTO `menu` VALUES (12, '账户信息', 5, '/user/info', '5001');
 INSERT INTO `menu` VALUES (13, '用户角色', 6, '/auth/role', '6001');
 INSERT INTO `menu` VALUES (14, '菜单权限', 6, '/auth/menu', '6002');
-INSERT INTO `menu` VALUES (15, '测试', 14, '', '6101');
 
 -- ----------------------------
 -- Table structure for order_addresses
@@ -397,7 +396,34 @@ CREATE TABLE `role_menu`  (
   `role_id` int(11) NULL DEFAULT NULL COMMENT '角色id',
   `menu_id` int(11) NULL DEFAULT NULL COMMENT '权限id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+) ENGINE = MyISAM AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Fixed;
+
+-- ----------------------------
+-- Records of role_menu
+-- ----------------------------
+INSERT INTO `role_menu` VALUES (1, 1, 2);
+INSERT INTO `role_menu` VALUES (2, 1, 7);
+INSERT INTO `role_menu` VALUES (3, 1, 8);
+INSERT INTO `role_menu` VALUES (4, 1, 9);
+INSERT INTO `role_menu` VALUES (5, 1, 3);
+INSERT INTO `role_menu` VALUES (6, 1, 10);
+INSERT INTO `role_menu` VALUES (7, 1, 4);
+INSERT INTO `role_menu` VALUES (8, 1, 11);
+INSERT INTO `role_menu` VALUES (9, 1, 5);
+INSERT INTO `role_menu` VALUES (10, 1, 12);
+INSERT INTO `role_menu` VALUES (16, 1, 14);
+INSERT INTO `role_menu` VALUES (15, 1, 13);
+INSERT INTO `role_menu` VALUES (14, 1, 6);
+INSERT INTO `role_menu` VALUES (17, 2, 2);
+INSERT INTO `role_menu` VALUES (18, 2, 7);
+INSERT INTO `role_menu` VALUES (19, 2, 8);
+INSERT INTO `role_menu` VALUES (20, 2, 9);
+INSERT INTO `role_menu` VALUES (21, 2, 3);
+INSERT INTO `role_menu` VALUES (22, 2, 10);
+INSERT INTO `role_menu` VALUES (23, 2, 4);
+INSERT INTO `role_menu` VALUES (24, 2, 11);
+INSERT INTO `role_menu` VALUES (25, 2, 5);
+INSERT INTO `role_menu` VALUES (26, 2, 12);
 
 -- ----------------------------
 -- Table structure for users
@@ -420,6 +446,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, 'China', 'Shandong', 'Qingdao', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'IWHiLAwLxxFdQwbmguPMHA==');
+INSERT INTO `users` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, 'China', 'Shandong', 'Qingdao', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'edWfmohP/w6cjqj2VE0V6g==');
 
 SET FOREIGN_KEY_CHECKS = 1;
