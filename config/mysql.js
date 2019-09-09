@@ -12,10 +12,7 @@ var pool = mysql.createPool({
 let query = function(sql, arr = [], callback) {
     //建立链接
     pool.getConnection(function(err, connection) {
-        if (err) {
-            throw err;
-            return;
-        }
+        if (err) throw err;
         connection.query(sql, arr, function(error, results, fields) {
             //将链接返回到连接池中，准备由其他人重复使用
             connection.release();

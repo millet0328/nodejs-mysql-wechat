@@ -20,6 +20,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../cms-admin" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -36,7 +37,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.api">
     <configuration name="api" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -86,7 +87,12 @@
       <updated>1567047184001</updated>
       <workItem from="1567047187072" duration="1659000" />
       <workItem from="1567086990673" duration="83000" />
-      <workItem from="1567087103576" duration="923000" />
+      <workItem from="1567087103576" duration="925000" />
+      <workItem from="1567427493000" duration="617000" />
+      <workItem from="1567428467887" duration="38000" />
+      <workItem from="1567428519444" duration="2076000" />
+      <workItem from="1567513024504" duration="2947000" />
+      <workItem from="1567910039274" duration="58000" />
     </task>
     <servers />
   </component>
