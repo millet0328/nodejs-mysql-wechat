@@ -13,13 +13,6 @@ let db = require('../../config/mysql');
 router.get('/list', function (req, res) {
     let sql = `SELECT id, role_name AS name FROM role`;
     db.query(sql, [], function (results) {
-        if (!results.length) {
-            res.json({
-                status: false,
-                msg: "获取失败！"
-            });
-            return false;
-        }
         // 获取成功
         res.json({
             status: true,

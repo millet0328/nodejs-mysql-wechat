@@ -22,6 +22,7 @@ let category = require('./routes/admin/category');
 let adminGoods = require('./routes/admin/goods');
 let adminUpload = require('./routes/admin/upload');
 let adminOrder = require('./routes/admin/order');
+let icon = require('./routes/admin/icon');
 
 var app = express();
 
@@ -59,6 +60,17 @@ app.use('/api/category', category);
 app.use('/api/admin/goods', adminGoods);
 app.use('/api/upload', adminUpload);
 app.use('/api/admin/order', adminOrder);
+app.use('/api/admin/icon', icon);
+
+// 处理401错误
+app.use(function(err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+      res.status(401).json({
+          status: false,
+          msg: err,
+      });
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -18,7 +18,7 @@ let query = function(sql, arr = [], callback) {
             connection.release();
             if (error) throw error;
             //执行回调函数，将数据返回
-            callback && callback(results, fields);
+            callback && callback(results);
         });
     });
 };
