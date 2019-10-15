@@ -11,7 +11,7 @@
  Target Server Version : 50553
  File Encoding         : 65001
 
- Date: 30/08/2019 08:21:12
+ Date: 15/10/2019 22:31:11
 */
 
 SET NAMES utf8mb4;
@@ -49,21 +49,23 @@ CREATE TABLE `admin`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
-  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
+  `fullname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
   `sex` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '男' COMMENT '性别',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/images/avatar/default.jpg' COMMENT '头像',
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号码',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注册邮箱',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
   `login_count` bigint(255) NOT NULL DEFAULT 1 COMMENT '登录次数',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES (2, '15863008280', '123456', '黄小米', '女', '/images/avatar/default.jpg', '15863008280', '2019-05-11 18:21:37', '2019-08-04 23:35:34', 6);
-INSERT INTO `admin` VALUES (1, 'admin', '123456', 'admin', '男', '/images/avatar/default.jpg', '13475829262', '2019-05-14 20:39:31', '2019-08-29 22:14:20', 80);
+INSERT INTO `admin` VALUES (1, 'admin', '123456', '超级管理员', '男', '/images/avatar/default.jpg', '13475829262', NULL, '2019-05-14 20:39:31', '2019-10-14 14:02:33', 95);
+INSERT INTO `admin` VALUES (2, '15863008280', '123456', '黄小米', '女', '/images/avatar/default.jpg', '15863008280', NULL, '2019-05-11 18:21:37', '2019-08-04 23:35:34', 6);
+INSERT INTO `admin` VALUES (3, 'moz', '123', '黄渤', '男', '/images/avatar/default.jpg', '13475829262', NULL, '2019-10-11 12:03:12', '2019-10-12 00:49:06', 1);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -229,6 +231,300 @@ INSERT INTO `goods` VALUES (27, 23, 72, 0, '永久（FOREVER）自行车24速山
 INSERT INTO `goods` VALUES (28, 23, 72, 0, '凤凰 高碳钢破风设计21速钳型刹越野学生车弯把公路车自行车', '用户需知：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收商品，由用户自行承担退回所产生的运费！！！', 768.00, 900.00, 350.00, 0, 1000, 10, '/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', '/images/goods/b8042c00-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,/images/goods/b95d5360-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,/images/goods/ba73a560-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '凤凰', '<p><img src=\"/images/details/c11f8ff0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"/images/details/c2d667b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/c47857e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/c5d1cd60-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/c7597ed0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/ca644dd0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/cbf9e1f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/cd84c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/cef4d270-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/d1a684f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/d3d090e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/d5f93d40-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/d8684170-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/db0867c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/defc1020-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/e18b6d90-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/e47c24e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"/images/details/f472c0c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:57:06', NULL);
 
 -- ----------------------------
+-- Table structure for icons
+-- ----------------------------
+DROP TABLE IF EXISTS `icons`;
+CREATE TABLE `icons`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 281 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of icons
+-- ----------------------------
+INSERT INTO `icons` VALUES (1, 'platform-eleme');
+INSERT INTO `icons` VALUES (2, 'eleme');
+INSERT INTO `icons` VALUES (3, 'delete-solid');
+INSERT INTO `icons` VALUES (4, 'delete');
+INSERT INTO `icons` VALUES (5, 's-tools');
+INSERT INTO `icons` VALUES (6, 'setting');
+INSERT INTO `icons` VALUES (7, 'user-solid');
+INSERT INTO `icons` VALUES (8, 'user');
+INSERT INTO `icons` VALUES (9, 'phone');
+INSERT INTO `icons` VALUES (10, 'phone-outline');
+INSERT INTO `icons` VALUES (11, 'more');
+INSERT INTO `icons` VALUES (12, 'more-outline');
+INSERT INTO `icons` VALUES (13, 'star-on');
+INSERT INTO `icons` VALUES (14, 'star-off');
+INSERT INTO `icons` VALUES (15, 's-goods');
+INSERT INTO `icons` VALUES (16, 'goods');
+INSERT INTO `icons` VALUES (17, 'warning');
+INSERT INTO `icons` VALUES (18, 'warning-outline');
+INSERT INTO `icons` VALUES (19, 'question');
+INSERT INTO `icons` VALUES (20, 'info');
+INSERT INTO `icons` VALUES (21, 'remove');
+INSERT INTO `icons` VALUES (22, 'circle-plus');
+INSERT INTO `icons` VALUES (23, 'success');
+INSERT INTO `icons` VALUES (24, 'error');
+INSERT INTO `icons` VALUES (25, 'zoom-in');
+INSERT INTO `icons` VALUES (26, 'zoom-out');
+INSERT INTO `icons` VALUES (27, 'remove-outline');
+INSERT INTO `icons` VALUES (28, 'circle-plus-outline');
+INSERT INTO `icons` VALUES (29, 'circle-check');
+INSERT INTO `icons` VALUES (30, 'circle-close');
+INSERT INTO `icons` VALUES (31, 's-help');
+INSERT INTO `icons` VALUES (32, 'help');
+INSERT INTO `icons` VALUES (33, 'minus');
+INSERT INTO `icons` VALUES (34, 'plus');
+INSERT INTO `icons` VALUES (35, 'check');
+INSERT INTO `icons` VALUES (36, 'close');
+INSERT INTO `icons` VALUES (37, 'picture');
+INSERT INTO `icons` VALUES (38, 'picture-outline');
+INSERT INTO `icons` VALUES (39, 'picture-outline-round');
+INSERT INTO `icons` VALUES (40, 'upload');
+INSERT INTO `icons` VALUES (41, 'upload2');
+INSERT INTO `icons` VALUES (42, 'download');
+INSERT INTO `icons` VALUES (43, 'camera-solid');
+INSERT INTO `icons` VALUES (44, 'camera');
+INSERT INTO `icons` VALUES (45, 'video-camera-solid');
+INSERT INTO `icons` VALUES (46, 'video-camera');
+INSERT INTO `icons` VALUES (47, 'message-solid');
+INSERT INTO `icons` VALUES (48, 'bell');
+INSERT INTO `icons` VALUES (49, 's-cooperation');
+INSERT INTO `icons` VALUES (50, 's-order');
+INSERT INTO `icons` VALUES (51, 's-platform');
+INSERT INTO `icons` VALUES (52, 's-fold');
+INSERT INTO `icons` VALUES (53, 's-unfold');
+INSERT INTO `icons` VALUES (54, 's-operation');
+INSERT INTO `icons` VALUES (55, 's-promotion');
+INSERT INTO `icons` VALUES (56, 's-home');
+INSERT INTO `icons` VALUES (57, 's-release');
+INSERT INTO `icons` VALUES (58, 's-ticket');
+INSERT INTO `icons` VALUES (59, 's-management');
+INSERT INTO `icons` VALUES (60, 's-open');
+INSERT INTO `icons` VALUES (61, 's-shop');
+INSERT INTO `icons` VALUES (62, 's-marketing');
+INSERT INTO `icons` VALUES (63, 's-flag');
+INSERT INTO `icons` VALUES (64, 's-comment');
+INSERT INTO `icons` VALUES (65, 's-finance');
+INSERT INTO `icons` VALUES (66, 's-claim');
+INSERT INTO `icons` VALUES (67, 's-custom');
+INSERT INTO `icons` VALUES (68, 's-opportunity');
+INSERT INTO `icons` VALUES (69, 's-data');
+INSERT INTO `icons` VALUES (70, 's-check');
+INSERT INTO `icons` VALUES (71, 's-grid');
+INSERT INTO `icons` VALUES (72, 'menu');
+INSERT INTO `icons` VALUES (73, 'share');
+INSERT INTO `icons` VALUES (74, 'd-caret');
+INSERT INTO `icons` VALUES (75, 'caret-left');
+INSERT INTO `icons` VALUES (76, 'caret-right');
+INSERT INTO `icons` VALUES (77, 'caret-bottom');
+INSERT INTO `icons` VALUES (78, 'caret-top');
+INSERT INTO `icons` VALUES (79, 'bottom-left');
+INSERT INTO `icons` VALUES (80, 'bottom-right');
+INSERT INTO `icons` VALUES (81, 'back');
+INSERT INTO `icons` VALUES (82, 'right');
+INSERT INTO `icons` VALUES (83, 'bottom');
+INSERT INTO `icons` VALUES (84, 'top');
+INSERT INTO `icons` VALUES (85, 'top-left');
+INSERT INTO `icons` VALUES (86, 'top-right');
+INSERT INTO `icons` VALUES (87, 'arrow-left');
+INSERT INTO `icons` VALUES (88, 'arrow-right');
+INSERT INTO `icons` VALUES (89, 'arrow-down');
+INSERT INTO `icons` VALUES (90, 'arrow-up');
+INSERT INTO `icons` VALUES (91, 'd-arrow-left');
+INSERT INTO `icons` VALUES (92, 'd-arrow-right');
+INSERT INTO `icons` VALUES (93, 'video-pause');
+INSERT INTO `icons` VALUES (94, 'video-play');
+INSERT INTO `icons` VALUES (95, 'refresh');
+INSERT INTO `icons` VALUES (96, 'refresh-right');
+INSERT INTO `icons` VALUES (97, 'refresh-left');
+INSERT INTO `icons` VALUES (98, 'finished');
+INSERT INTO `icons` VALUES (99, 'sort');
+INSERT INTO `icons` VALUES (100, 'sort-up');
+INSERT INTO `icons` VALUES (101, 'sort-down');
+INSERT INTO `icons` VALUES (102, 'rank');
+INSERT INTO `icons` VALUES (103, 'loading');
+INSERT INTO `icons` VALUES (104, 'view');
+INSERT INTO `icons` VALUES (105, 'c-scale-to-original');
+INSERT INTO `icons` VALUES (106, 'date');
+INSERT INTO `icons` VALUES (107, 'edit');
+INSERT INTO `icons` VALUES (108, 'edit-outline');
+INSERT INTO `icons` VALUES (109, 'folder');
+INSERT INTO `icons` VALUES (110, 'folder-opened');
+INSERT INTO `icons` VALUES (111, 'folder-add');
+INSERT INTO `icons` VALUES (112, 'folder-remove');
+INSERT INTO `icons` VALUES (113, 'folder-delete');
+INSERT INTO `icons` VALUES (114, 'folder-checked');
+INSERT INTO `icons` VALUES (115, 'tickets');
+INSERT INTO `icons` VALUES (116, 'document-remove');
+INSERT INTO `icons` VALUES (117, 'document-delete');
+INSERT INTO `icons` VALUES (118, 'document-copy');
+INSERT INTO `icons` VALUES (119, 'document-checked');
+INSERT INTO `icons` VALUES (120, 'document');
+INSERT INTO `icons` VALUES (121, 'document-add');
+INSERT INTO `icons` VALUES (122, 'printer');
+INSERT INTO `icons` VALUES (123, 'paperclip');
+INSERT INTO `icons` VALUES (124, 'takeaway-box');
+INSERT INTO `icons` VALUES (125, 'search');
+INSERT INTO `icons` VALUES (126, 'monitor');
+INSERT INTO `icons` VALUES (127, 'attract');
+INSERT INTO `icons` VALUES (128, 'mobile');
+INSERT INTO `icons` VALUES (129, 'scissors');
+INSERT INTO `icons` VALUES (130, 'umbrella');
+INSERT INTO `icons` VALUES (131, 'headset');
+INSERT INTO `icons` VALUES (132, 'brush');
+INSERT INTO `icons` VALUES (133, 'mouse');
+INSERT INTO `icons` VALUES (134, 'coordinate');
+INSERT INTO `icons` VALUES (135, 'magic-stick');
+INSERT INTO `icons` VALUES (136, 'reading');
+INSERT INTO `icons` VALUES (137, 'data-line');
+INSERT INTO `icons` VALUES (138, 'data-board');
+INSERT INTO `icons` VALUES (139, 'pie-chart');
+INSERT INTO `icons` VALUES (140, 'data-analysis');
+INSERT INTO `icons` VALUES (141, 'collection-tag');
+INSERT INTO `icons` VALUES (142, 'film');
+INSERT INTO `icons` VALUES (143, 'suitcase');
+INSERT INTO `icons` VALUES (144, 'suitcase-1');
+INSERT INTO `icons` VALUES (145, 'receiving');
+INSERT INTO `icons` VALUES (146, 'collection');
+INSERT INTO `icons` VALUES (147, 'files');
+INSERT INTO `icons` VALUES (148, 'notebook-1');
+INSERT INTO `icons` VALUES (149, 'notebook-2');
+INSERT INTO `icons` VALUES (150, 'toilet-paper');
+INSERT INTO `icons` VALUES (151, 'office-building');
+INSERT INTO `icons` VALUES (152, 'school');
+INSERT INTO `icons` VALUES (153, 'table-lamp');
+INSERT INTO `icons` VALUES (154, 'house');
+INSERT INTO `icons` VALUES (155, 'no-smoking');
+INSERT INTO `icons` VALUES (156, 'smoking');
+INSERT INTO `icons` VALUES (157, 'shopping-cart-full');
+INSERT INTO `icons` VALUES (158, 'shopping-cart-1');
+INSERT INTO `icons` VALUES (159, 'shopping-cart-2');
+INSERT INTO `icons` VALUES (160, 'shopping-bag-1');
+INSERT INTO `icons` VALUES (161, 'shopping-bag-2');
+INSERT INTO `icons` VALUES (162, 'sold-out');
+INSERT INTO `icons` VALUES (163, 'sell');
+INSERT INTO `icons` VALUES (164, 'present');
+INSERT INTO `icons` VALUES (165, 'box');
+INSERT INTO `icons` VALUES (166, 'bank-card');
+INSERT INTO `icons` VALUES (167, 'money');
+INSERT INTO `icons` VALUES (168, 'coin');
+INSERT INTO `icons` VALUES (169, 'wallet');
+INSERT INTO `icons` VALUES (170, 'discount');
+INSERT INTO `icons` VALUES (171, 'price-tag');
+INSERT INTO `icons` VALUES (172, 'news');
+INSERT INTO `icons` VALUES (173, 'guide');
+INSERT INTO `icons` VALUES (174, 'male');
+INSERT INTO `icons` VALUES (175, 'female');
+INSERT INTO `icons` VALUES (176, 'thumb');
+INSERT INTO `icons` VALUES (177, 'cpu');
+INSERT INTO `icons` VALUES (178, 'link');
+INSERT INTO `icons` VALUES (179, 'connection');
+INSERT INTO `icons` VALUES (180, 'open');
+INSERT INTO `icons` VALUES (181, 'turn-off');
+INSERT INTO `icons` VALUES (182, 'set-up');
+INSERT INTO `icons` VALUES (183, 'chat-round');
+INSERT INTO `icons` VALUES (184, 'chat-line-round');
+INSERT INTO `icons` VALUES (185, 'chat-square');
+INSERT INTO `icons` VALUES (186, 'chat-dot-round');
+INSERT INTO `icons` VALUES (187, 'chat-dot-square');
+INSERT INTO `icons` VALUES (188, 'chat-line-square');
+INSERT INTO `icons` VALUES (189, 'message');
+INSERT INTO `icons` VALUES (190, 'postcard');
+INSERT INTO `icons` VALUES (191, 'position');
+INSERT INTO `icons` VALUES (192, 'turn-off-microphone');
+INSERT INTO `icons` VALUES (193, 'microphone');
+INSERT INTO `icons` VALUES (194, 'close-notification');
+INSERT INTO `icons` VALUES (195, 'bangzhu');
+INSERT INTO `icons` VALUES (196, 'time');
+INSERT INTO `icons` VALUES (197, 'odometer');
+INSERT INTO `icons` VALUES (198, 'crop');
+INSERT INTO `icons` VALUES (199, 'aim');
+INSERT INTO `icons` VALUES (200, 'switch-button');
+INSERT INTO `icons` VALUES (201, 'full-screen');
+INSERT INTO `icons` VALUES (202, 'copy-document');
+INSERT INTO `icons` VALUES (203, 'mic');
+INSERT INTO `icons` VALUES (204, 'stopwatch');
+INSERT INTO `icons` VALUES (205, 'medal-1');
+INSERT INTO `icons` VALUES (206, 'medal');
+INSERT INTO `icons` VALUES (207, 'trophy');
+INSERT INTO `icons` VALUES (208, 'trophy-1');
+INSERT INTO `icons` VALUES (209, 'first-aid-kit');
+INSERT INTO `icons` VALUES (210, 'discover');
+INSERT INTO `icons` VALUES (211, 'place');
+INSERT INTO `icons` VALUES (212, 'location');
+INSERT INTO `icons` VALUES (213, 'location-outline');
+INSERT INTO `icons` VALUES (214, 'location-information');
+INSERT INTO `icons` VALUES (215, 'add-location');
+INSERT INTO `icons` VALUES (216, 'delete-location');
+INSERT INTO `icons` VALUES (217, 'map-location');
+INSERT INTO `icons` VALUES (218, 'alarm-clock');
+INSERT INTO `icons` VALUES (219, 'timer');
+INSERT INTO `icons` VALUES (220, 'watch-1');
+INSERT INTO `icons` VALUES (221, 'watch');
+INSERT INTO `icons` VALUES (222, 'lock');
+INSERT INTO `icons` VALUES (223, 'unlock');
+INSERT INTO `icons` VALUES (224, 'key');
+INSERT INTO `icons` VALUES (225, 'service');
+INSERT INTO `icons` VALUES (226, 'mobile-phone');
+INSERT INTO `icons` VALUES (227, 'bicycle');
+INSERT INTO `icons` VALUES (228, 'truck');
+INSERT INTO `icons` VALUES (229, 'ship');
+INSERT INTO `icons` VALUES (230, 'basketball');
+INSERT INTO `icons` VALUES (231, 'football');
+INSERT INTO `icons` VALUES (232, 'soccer');
+INSERT INTO `icons` VALUES (233, 'baseball');
+INSERT INTO `icons` VALUES (234, 'wind-power');
+INSERT INTO `icons` VALUES (235, 'light-rain');
+INSERT INTO `icons` VALUES (236, 'lightning');
+INSERT INTO `icons` VALUES (237, 'heavy-rain');
+INSERT INTO `icons` VALUES (238, 'sunrise');
+INSERT INTO `icons` VALUES (239, 'sunrise-1');
+INSERT INTO `icons` VALUES (240, 'sunset');
+INSERT INTO `icons` VALUES (241, 'sunny');
+INSERT INTO `icons` VALUES (242, 'cloudy');
+INSERT INTO `icons` VALUES (243, 'partly-cloudy');
+INSERT INTO `icons` VALUES (244, 'cloudy-and-sunny');
+INSERT INTO `icons` VALUES (245, 'moon');
+INSERT INTO `icons` VALUES (246, 'moon-night');
+INSERT INTO `icons` VALUES (247, 'dish');
+INSERT INTO `icons` VALUES (248, 'dish-1');
+INSERT INTO `icons` VALUES (249, 'food');
+INSERT INTO `icons` VALUES (250, 'chicken');
+INSERT INTO `icons` VALUES (251, 'fork-spoon');
+INSERT INTO `icons` VALUES (252, 'knife-fork');
+INSERT INTO `icons` VALUES (253, 'burger');
+INSERT INTO `icons` VALUES (254, 'tableware');
+INSERT INTO `icons` VALUES (255, 'sugar');
+INSERT INTO `icons` VALUES (256, 'dessert');
+INSERT INTO `icons` VALUES (257, 'ice-cream');
+INSERT INTO `icons` VALUES (258, 'hot-water');
+INSERT INTO `icons` VALUES (259, 'water-cup');
+INSERT INTO `icons` VALUES (260, 'coffee-cup');
+INSERT INTO `icons` VALUES (261, 'cold-drink');
+INSERT INTO `icons` VALUES (262, 'goblet');
+INSERT INTO `icons` VALUES (263, 'goblet-full');
+INSERT INTO `icons` VALUES (264, 'goblet-square');
+INSERT INTO `icons` VALUES (265, 'goblet-square-full');
+INSERT INTO `icons` VALUES (266, 'refrigerator');
+INSERT INTO `icons` VALUES (267, 'grape');
+INSERT INTO `icons` VALUES (268, 'watermelon');
+INSERT INTO `icons` VALUES (269, 'cherry');
+INSERT INTO `icons` VALUES (270, 'apple');
+INSERT INTO `icons` VALUES (271, 'pear');
+INSERT INTO `icons` VALUES (272, 'orange');
+INSERT INTO `icons` VALUES (273, 'coffee');
+INSERT INTO `icons` VALUES (274, 'ice-tea');
+INSERT INTO `icons` VALUES (275, 'ice-drink');
+INSERT INTO `icons` VALUES (276, 'milk-tea');
+INSERT INTO `icons` VALUES (277, 'potato-strips');
+INSERT INTO `icons` VALUES (278, 'lollipop');
+INSERT INTO `icons` VALUES (279, 'ice-cream-square');
+INSERT INTO `icons` VALUES (280, 'ice-cream-round');
+
+-- ----------------------------
 -- Table structure for menu
 -- ----------------------------
 DROP TABLE IF EXISTS `menu`;
@@ -238,26 +534,27 @@ CREATE TABLE `menu`  (
   `pId` int(11) NULL DEFAULT NULL COMMENT '父级id',
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接url',
   `menu_order` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示顺序',
+  `icon_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES (1, '全部菜单', 0, NULL, '0');
-INSERT INTO `menu` VALUES (2, '商品管理', 1, '', '2000');
-INSERT INTO `menu` VALUES (3, '用户管理', 1, '', '3000');
-INSERT INTO `menu` VALUES (4, '订单管理', 1, '', '4000');
-INSERT INTO `menu` VALUES (5, '账户设置', 1, '', '5000');
-INSERT INTO `menu` VALUES (6, '权限设置', 1, '', '6000');
-INSERT INTO `menu` VALUES (7, '商品分类', 2, '/goods/category/', '2001');
-INSERT INTO `menu` VALUES (8, '发布商品', 2, '/goods/release', '2002');
-INSERT INTO `menu` VALUES (9, '商品列表', 2, '/goods/list', '2003');
-INSERT INTO `menu` VALUES (10, '用户列表', 3, '/user/list', '3001');
-INSERT INTO `menu` VALUES (11, '订单列表', 4, '/order/list', '4001');
-INSERT INTO `menu` VALUES (12, '账户信息', 5, '/user/info', '5001');
-INSERT INTO `menu` VALUES (13, '用户角色', 6, '/auth/role', '6001');
-INSERT INTO `menu` VALUES (14, '菜单权限', 6, '/auth/menu', '6002');
+INSERT INTO `menu` VALUES (1, '全部菜单', 0, NULL, '0', NULL);
+INSERT INTO `menu` VALUES (2, '商品管理', 1, '', '2000', '16');
+INSERT INTO `menu` VALUES (3, '用户管理', 1, '', '5000', '8');
+INSERT INTO `menu` VALUES (4, '订单管理', 1, '', '3000', '147');
+INSERT INTO `menu` VALUES (5, '账户设置', 1, '', '4000', '6');
+INSERT INTO `menu` VALUES (6, '权限设置', 1, '', '6000', '182');
+INSERT INTO `menu` VALUES (7, '商品分类', 2, '/goods/category/', '2001', '');
+INSERT INTO `menu` VALUES (8, '发布商品', 2, '/goods/release', '2002', '');
+INSERT INTO `menu` VALUES (9, '商品列表', 2, '/goods/list', '2003', '');
+INSERT INTO `menu` VALUES (10, '用户列表', 3, '/user/list', '5001', NULL);
+INSERT INTO `menu` VALUES (11, '订单列表', 4, '/order/list', '3001', '');
+INSERT INTO `menu` VALUES (12, '账户信息', 5, '/user/info', '4001', NULL);
+INSERT INTO `menu` VALUES (13, '用户角色', 6, '/auth/role', '6001', NULL);
+INSERT INTO `menu` VALUES (14, '菜单权限', 6, '/auth/menu', '6002', NULL);
 
 -- ----------------------------
 -- Table structure for order_addresses
