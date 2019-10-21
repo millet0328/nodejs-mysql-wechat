@@ -32,7 +32,7 @@ router.get('/list', function (req, res) {
  * @apiSampleRequest /api/role
  */
 router.post('/', function (req, res) {
-    let {name} = req.body;
+    let { name } = req.body;
     let sql = `INSERT INTO role (role_name) VALUES (?)`;
     db.query(sql, [name], function (results) {
         //成功
@@ -56,7 +56,7 @@ router.post('/', function (req, res) {
  * @apiSampleRequest /api/role
  */
 router.delete('/', function (req, res) {
-    let {id} = req.body;
+    let { id } = req.query;
     let sql = `DELETE FROM role WHERE id = ?`;
     db.query(sql, [id], function (results) {
         //成功
@@ -78,7 +78,7 @@ router.delete('/', function (req, res) {
  * @apiSampleRequest /api/role
  */
 router.put('/', function (req, res) {
-    let {id, name} = req.body;
+    let { id, name } = req.body;
     let sql = `UPDATE role SET role_name = ? WHERE id = ?`;
     db.query(sql, [name, id], function (results) {
         //成功
@@ -99,7 +99,7 @@ router.put('/', function (req, res) {
  * @apiSampleRequest /api/role/config
  */
 router.get("/config", function (req, res) {
-    let {id} = req.query;
+    let { id } = req.query;
     //获取所有菜单
     let sql = `SELECT id, name, path, menu_order AS 'order', pId FROM MENU ORDER BY menu_order;`;
     db.query(sql, [], (results) => {
@@ -150,7 +150,7 @@ router.get("/config", function (req, res) {
  * @apiSampleRequest /api/role/menu
  */
 router.post('/menu', function (req, res) {
-    let {role_id, menu_id} = req.body;
+    let { role_id, menu_id } = req.body;
     let sql = `INSERT INTO role_menu (role_id,menu_id) SELECT ?,? FROM DUAL WHERE NOT EXISTS (SELECT * FROM role_menu WHERE role_id = ? AND menu_id = ?)`;
     db.query(sql, [role_id, menu_id, role_id, menu_id], function (results) {
         //成功
@@ -172,7 +172,7 @@ router.post('/menu', function (req, res) {
  * @apiSampleRequest /api/role/menu
  */
 router.delete('/menu', function (req, res) {
-    let {role_id, menu_id} = req.query;
+    let { role_id, menu_id } = req.query;
     let sql = `DELETE FROM role_menu WHERE role_id = ? AND menu_id = ?`;
     db.query(sql, [role_id, menu_id], function (results) {
         //成功
