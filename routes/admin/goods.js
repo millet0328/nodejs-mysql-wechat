@@ -11,7 +11,7 @@ let db = require('../../config/mysql');
  *
  * @apiParam {Number} cate_1st 一级分类id;
  * @apiParam {Number} cate_2nd 二级分类id;
- * @apiParam {Number} [cate_3rd] 三级分类id;
+ * @apiParam {Number} cate_3rd 三级分类id，无此分类，id = 0;
  * @apiParam {String} name 商品名称;
  * @apiParam {String} [hotPoint] 商品热点描述;
  * @apiParam {Number} price 商品价格;
