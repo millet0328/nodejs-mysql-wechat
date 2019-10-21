@@ -41,7 +41,7 @@ router.post("/", function(req, res) {
  * @apiSampleRequest /api/menu
  */
 router.delete("/", function(req, res) {
-	let { id } = req.body;
+	let { id } = req.query;
 	let sql = `DELETE FROM MENU WHERE id = ?`;
 	db.query(sql, [id], function(results, fields) {
 		//成功
