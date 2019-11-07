@@ -42,9 +42,10 @@ router.get("/list", function(req, res) {
 	} else {
 		sql += ` ORDER BY create_time DESC`;
 	}
-	sql += ` LIMIT ${count},${size}`
+	sql += ` LIMIT ${count},${size};SELECT FOUND_ROWS() as total;`
 
 	db.query(sql, [], function(results, fields) {
+		console.log(results)
 		//成功
 		res.json({
 			status: true,

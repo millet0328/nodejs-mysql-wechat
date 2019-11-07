@@ -412,7 +412,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "pId",
-            "description": "<p>父级分类id。注：获取一级分类pId=1;</p>"
+            "description": "<p>父级分类id。注：获取一级分类pId = 1，获取根分类pId = 0;</p>"
           }
         ]
       }
@@ -458,7 +458,7 @@ define({ "api": [
     "type": "get",
     "url": "/api/goods/list",
     "title": "获取商品列表",
-    "description": "<p>具备商品分页功能，3个分类参数至多能传1个</p>",
+    "description": "<p>具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
     "name": "GoodsList_______",
     "group": "Goods",
     "parameter": {
@@ -469,14 +469,16 @@ define({ "api": [
             "type": "Number",
             "optional": true,
             "field": "pageSize",
-            "description": "<p>一个页有多少个商品,默认4个;</p>"
+            "defaultValue": "4",
+            "description": "<p>一个页有多少个商品;</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "pageIndex",
-            "description": "<p>第几页,默认1;</p>"
+            "defaultValue": "1",
+            "description": "<p>第几页;</p>"
           },
           {
             "group": "Parameter",
@@ -509,6 +511,26 @@ define({ "api": [
             "optional": true,
             "field": "sortByPrice",
             "description": "<p>按照价格排序，从小到大-ASC,从大到小-DESC;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "goods",
+            "description": "<p>商品数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>商品总数.</p>"
           }
         ]
       }
@@ -695,6 +717,35 @@ define({ "api": [
         ]
       }
     },
+    "version": "0.0.0",
+    "filename": "routes/mall/upload.js",
+    "groupTitle": "Upload_Image"
+  },
+  {
+    "type": "delete",
+    "url": "/api/upload",
+    "title": "删除图片API",
+    "description": "<p>如果上传错误的图片，通过此API删除错误的图片</p>",
+    "name": "uploadDelete",
+    "group": "Upload_Image",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "src",
+            "description": "<p>图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/upload"
+      }
+    ],
     "version": "0.0.0",
     "filename": "routes/mall/upload.js",
     "groupTitle": "Upload_Image"
@@ -949,7 +1000,7 @@ define({ "api": [
     "type": "get",
     "url": "/api/admin/goods/list",
     "title": "获取商品列表",
-    "description": "<p>具备商品分页功能，3个分类参数至多能传1个</p>",
+    "description": "<p>具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
     "name": "AdminGoodsList",
     "group": "admin_Goods",
     "permission": [
@@ -965,14 +1016,16 @@ define({ "api": [
             "type": "Number",
             "optional": true,
             "field": "pageSize",
-            "description": "<p>一个页有多少个商品,默认4个;</p>"
+            "defaultValue": "4",
+            "description": "<p>一个页有多少个商品;</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "pageIndex",
-            "description": "<p>第几页,默认1;</p>"
+            "defaultValue": "1",
+            "description": "<p>第几页;</p>"
           },
           {
             "group": "Parameter",
@@ -1005,6 +1058,26 @@ define({ "api": [
             "optional": true,
             "field": "sortByPrice",
             "description": "<p>按照价格排序，从小到大-ASC,从大到小-DESC;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "goods",
+            "description": "<p>商品数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>商品总数.</p>"
           }
         ]
       }
@@ -1262,9 +1335,9 @@ define({ "api": [
           {
             "group": "Parameter",
             "type": "Number",
-            "optional": true,
+            "optional": false,
             "field": "cate_3rd",
-            "description": "<p>三级分类id;</p>"
+            "description": "<p>三级分类id，无此分类，id = 0;</p>"
           },
           {
             "group": "Parameter",
@@ -1375,6 +1448,62 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/admin/goods.js",
     "groupTitle": "admin_Goods"
+  },
+  {
+    "type": "get",
+    "url": "/api/admin/icon/list",
+    "title": "获取所有element图标",
+    "description": "<p>获取系统中的element图标，具备分页功能。</p>",
+    "name": "AdminIcons",
+    "group": "admin_Icon",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageSize",
+            "description": "<p>一个页有多少个商品,默认4个;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "pageIndex",
+            "description": "<p>第几页,默认1;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "icons",
+            "description": "<p>图标数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "total",
+            "description": "<p>图标总数.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/admin/icon/list"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/icon.js",
+    "groupTitle": "admin_Icon"
   },
   {
     "type": "post",
@@ -1537,6 +1666,46 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "/api/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin_Menu"
+  },
+  {
+    "type": "put",
+    "url": "/api/menu/icon",
+    "title": "设置子菜单图标",
+    "name": "MenuUpdateIcon",
+    "group": "admin_Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>子菜单id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "icon",
+            "description": "<p>element图标id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu/icon"
       }
     ],
     "version": "0.0.0",
@@ -1955,40 +2124,6 @@ define({ "api": [
     "groupTitle": "admin_Upload_Image"
   },
   {
-    "type": "delete",
-    "url": "/api/upload",
-    "title": "删除图片API",
-    "description": "<p>如果上传错误的图片，通过此API删除错误的图片</p>",
-    "name": "uploadDelete",
-    "group": "admin_Upload_Image",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "src",
-            "description": "<p>图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/upload"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/upload.js",
-    "groupTitle": "admin_Upload_Image"
-  },
-  {
     "type": "post",
     "url": "/api/upload/goods",
     "title": "上传商品主图",
@@ -2092,9 +2227,22 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/admin",
-    "title": "获取admin个人资料",
+    "title": "获取管理员个人资料",
     "name": "AdminInfo",
     "group": "admin_User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>账户id.</p>"
+          }
+        ]
+      }
+    },
     "sampleRequest": [
       {
         "url": "/api/admin"
@@ -2107,7 +2255,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/api/admin/list",
-    "title": "获取admin用户列表",
+    "title": "获取管理员列表",
     "name": "AdminList",
     "group": "admin_User",
     "permission": [
@@ -2144,14 +2292,14 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "username",
-            "description": "<p>用户账户名.</p>"
+            "description": "<p>账户名.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "password",
-            "description": "<p>用户密码.</p>"
+            "description": "<p>密码.</p>"
           }
         ]
       }
@@ -2193,21 +2341,21 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "data.token",
-            "description": "<p>注册成功之后返回的token.</p>"
+            "description": "<p>返回的token.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "data.id",
-            "description": "<p>用户uid.</p>"
+            "description": "<p>账户id.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "data.role",
-            "description": "<p>用户角色id.</p>"
+            "description": "<p>账户角色id.</p>"
           }
         ]
       },
@@ -2224,7 +2372,7 @@ define({ "api": [
     "type": "post",
     "url": "/api/admin/register",
     "title": "管理员注册",
-    "description": "<p>注册成功， 返回token, 请在头部headers中设置Authorization: <code>Bearer ${token}</code>,所有请求都必须携带token;</p>",
+    "description": "<p>注册成功，默认角色为运营人员，默认生成头像地址：&quot;/images/avatar/default.jpg&quot;， 返回token, 请在头部headers中设置Authorization: <code>Bearer ${token}</code>,所有请求都必须携带token;</p>",
     "name": "AdminRegister",
     "group": "admin_User",
     "permission": [
@@ -2240,21 +2388,21 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "username",
-            "description": "<p>用户账户名.</p>"
+            "description": "<p>账户名.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "password",
-            "description": "<p>用户密码.</p>"
+            "description": "<p>密码.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "nickname",
-            "description": "<p>用户昵称.</p>"
+            "field": "fullname",
+            "description": "<p>姓名.</p>"
           },
           {
             "group": "Parameter",
@@ -2310,21 +2458,21 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "data.token",
-            "description": "<p>注册成功之后返回的token.</p>"
+            "description": "<p>返回的token.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "data.id",
-            "description": "<p>用户uid.</p>"
+            "description": "<p>账户id.</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "data.role",
-            "description": "<p>用户角色id.</p>"
+            "description": "<p>账户角色id.</p>"
           }
         ]
       },
@@ -2340,7 +2488,7 @@ define({ "api": [
   {
     "type": "delete",
     "url": "/api/admin",
-    "title": "删除admin用户",
+    "title": "删除管理员",
     "name": "DeleteAdmin",
     "group": "admin_User",
     "permission": [
@@ -2356,7 +2504,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>admin用户id.</p>"
+            "description": "<p>账户id.</p>"
           }
         ]
       }
@@ -2373,7 +2521,7 @@ define({ "api": [
   {
     "type": " put ",
     "url": "/api/admin",
-    "title": "更新admin个人资料",
+    "title": "更新管理员个人资料",
     "name": "UpdateInfo",
     "group": "admin_User",
     "parameter": {
@@ -2384,14 +2532,14 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>admin账户id.</p>"
+            "description": "<p>账户id.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "nickname",
-            "description": "<p>昵称.</p>"
+            "field": "fullname",
+            "description": "<p>姓名.</p>"
           },
           {
             "group": "Parameter",
@@ -2418,8 +2566,15 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "email",
+            "description": "<p>邮箱地址.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "role",
-            "description": "<p>用户角色id.</p>"
+            "description": "<p>账户角色id.</p>"
           }
         ]
       }
