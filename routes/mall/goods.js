@@ -45,7 +45,6 @@ router.get("/list", function(req, res) {
 	sql += ` LIMIT ${count},${size};SELECT FOUND_ROWS() as total;`
 
 	db.query(sql, [], function(results, fields) {
-		console.log(results)
 		//成功
 		res.json({
 			status: true,
