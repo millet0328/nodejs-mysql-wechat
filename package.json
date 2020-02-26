@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "set SERVER=http://localhost:3003&node ./bin/www",
     "api": "apidoc -i routes/ -o public/api/ && apidoc -i routes/ -o docs/"
   },
   "dependencies": {
@@ -13,7 +13,6 @@
     "debug": "~2.6.9",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
-    "images": "^3.0.2",
     "jade": "~1.11.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
@@ -21,6 +20,7 @@
     "mysql": "^2.17.1",
     "request": "^2.88.0",
     "serve-favicon": "~2.4.5",
+    "sharp": "^0.24.1",
     "uuid": "^3.3.2"
   },
   "apidoc": {

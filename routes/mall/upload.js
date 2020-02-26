@@ -8,7 +8,7 @@ const path = require('path');
 const multer = require('multer');
 const upload = multer();
 //图片处理
-const images = require("images");
+const sharp = require('sharp');
 //uuid
 const uuidv1 = require('uuid/v1');
 /**
@@ -23,13 +23,12 @@ const uuidv1 = require('uuid/v1');
  *
  * @apiSuccess {String} src 返回图片地址.
  */
-router.post("/common", upload.single('file'), function(req, res) {
+router.post("/common", upload.single('file'), async function(req, res) {
 	//文件类型
-	var type = req.file.mimetype;
-	var size = req.file.size;
+	let { mimetype, size } = req.file;
 	//判断是否为图片
 	var reg = /^image\/\w+$/;
-	var flag = reg.test(type);
+	var flag = reg.test(mimetype);
 	if (!flag) {
 		res.status(400).json({
 			status: false,
@@ -45,25 +44,27 @@ router.post("/common", upload.single('file'), function(req, res) {
 		});
 		return;
 	}
-	//处理原文件名
-	var originalName = req.file.originalname;
-	var formate = originalName.split(".");
-	//扩展名
-	var extName = "." + formate[formate.length - 1];
+	// 扩展名
+	var { format } = await sharp(req.file.buffer).metadata();
+	// 生成文件名
 	var filename = uuidv1();
-	//储存文件夹
+	// 储存文件夹
 	var fileFolder = "/images/common/";
 	//处理图片
-	images(req.file.buffer)
-		.save("public" + fileFolder + filename + extName, {
-			quality: 70 //保存图片到文件,图片质量为70
+	try {
+		await sharp(req.file.buffer).toFile("public" + fileFolder + filename + '.' + format);
+		//返回储存结果
+		res.json({
+			status: true,
+			msg: "图片上传处理成功!",
+			data: process.env.server + fileFolder + filename + '.' + format
 		});
-	//返回储存结果
-	res.json({
-		status: true,
-		msg: "图片上传处理成功!",
-		src: fileFolder + filename + extName
-	});
+	} catch (error) {
+		res.json({
+			status: false,
+			msg: error,
+		});
+	}
 });
 /**
  * @api {delete} /api/upload 删除图片API

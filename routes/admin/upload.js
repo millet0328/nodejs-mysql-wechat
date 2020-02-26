@@ -4,7 +4,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 //图片处理
-const images = require("images");
+const sharp = require('sharp');
 //uuid
 const uuidv1 = require('uuid/v1');
 
@@ -22,64 +22,62 @@ const uuidv1 = require('uuid/v1');
  * @apiSuccess {String} lgImg 返回720宽度图片地址.
  * @apiSuccess {String} mdImg 返回360宽度图片地址.
  */
-router.post("/goods", upload.single('file'), function (req, res) {
-    //文件类型
-    var type = req.file.mimetype;
-    var size = req.file.size;
-    //判断是否为图片
-    var reg = /^image\/\w+$/;
-    var flag = reg.test(type);
-    if (!flag) {
-        res.status(400).json({
-            status: false,
-            msg: "格式错误，请选择一张图片!"
-        });
-        return;
-    }
-    //判断图片体积是否小于2M
-    if (size >= 2 * 1024 * 1024) {
-        res.status(400).json({
-            status: false,
-            msg: "图片体积太大，请压缩图片!"
-        });
-        return;
-    }
-    //判读图片尺寸
-    var width = images(req.file.buffer).width();
-    if (width < 300 || width > 1500) {
-        res.status(400).json({
-            status: false,
-            msg: "图片尺寸300-1500，请重新处理!"
-        });
-        return;
-    }
-    //处理原文件名
-    var originalName = req.file.originalname;
-    var formate = originalName.split(".");
-    //扩展名
-    var extName = "." + formate[formate.length - 1];
-    var filename = uuidv1();
-    //储存文件夹
-    var fileFolder = "/images/goods/";
-
-    images(req.file.buffer)
-        .resize(720) //缩放尺寸至720宽
-        .save("public" + fileFolder + filename + "_720" + extName, {
-            quality: 70 //保存图片到文件,图片质量为70
-        });
-
-    images(req.file.buffer)
-        .resize(360) //缩放尺寸至360宽
-        .save("public" + fileFolder + filename + "_360" + extName, {
-            quality: 70 //保存图片到文件,图片质量为70
-        });
-    //返回储存结果
-    res.json({
-        status: true,
-        msg: "图片上传处理成功!",
-        lgImg: fileFolder + filename + "_720" + extName,
-        mdImg: fileFolder + filename + "_360" + extName
-    });
+router.post("/goods", upload.single('file'), async function(req, res) {
+	//文件类型
+	let { mimetype, size } = req.file;
+	//判断是否为图片
+	var reg = /^image\/\w+$/;
+	var flag = reg.test(mimetype);
+	if (!flag) {
+		res.status(400).json({
+			status: false,
+			msg: "格式错误，请选择一张图片!"
+		});
+		return;
+	}
+	//判断图片体积是否小于2M
+	if (size >= 2 * 1024 * 1024) {
+		res.status(400).json({
+			status: false,
+			msg: "图片体积太大，请压缩图片!"
+		});
+		return;
+	}
+	// 获取图片信息
+	var { width, format } = await sharp(req.file.buffer).metadata();
+	// 判读图片尺寸
+	if (width < 300 || width > 1500) {
+		res.status(400).json({
+			status: false,
+			msg: "图片尺寸300-1500，请重新处理!"
+		});
+		return;
+	}
+	// 生成文件名
+	var filename = uuidv1();
+	// 储存文件夹
+	var fileFolder = "/images/goods/";
+	//处理图片
+	try {
+		await sharp(req.file.buffer)
+			.resize(720)
+			.toFile("public" + fileFolder + filename + '_720.' + format);
+		await sharp(req.file.buffer)
+			.resize(360)
+			.toFile("public" + fileFolder + filename + '_360.' + format);
+		//返回储存结果
+		res.json({
+			status: true,
+			msg: "图片上传处理成功!",
+			lgImg: process.env.server + fileFolder + filename + '_720.' + format,
+			mdImg: process.env.server + fileFolder + filename + '_360.' + format,
+		});
+	} catch (error) {
+		res.json({
+			status: false,
+			msg: error,
+		});
+	}
 });
 
 /**
@@ -95,65 +93,65 @@ router.post("/goods", upload.single('file'), function (req, res) {
  *
  * @apiSuccess {String} src 返回720宽度图片地址.
  */
-router.post("/slider", upload.single('file'), function (req, res) {
-    //文件类型
-    var type = req.file.mimetype;
-    var size = req.file.size;
-    //判断是否为图片
-    var reg = /^image\/\w+$/;
-    var flag = reg.test(type);
-    if (!flag) {
-        res.status(400).json({
-            status: false,
-            msg: "格式错误，请选择一张图片!"
-        });
-        return;
-    }
-    //判断图片体积是否小于2M
-    if (size >= 2 * 1024 * 1024) {
-        res.status(400).json({
-            status: false,
-            msg: "图片体积太大，请压缩图片!"
-        });
-        return;
-    }
-    //判读图片尺寸
-    var width = images(req.file.buffer).width();
-    var height = images(req.file.buffer).height();
-    if (width != height) {
-        res.status(400).json({
-            status: false,
-            msg: "图片必须为正方形，请重新上传!"
-        });
-        return;
-    }
-    if (width < 300 || width > 1500) {
-        res.status(400).json({
-            status: false,
-            msg: "图片尺寸300-1500，请重新处理!"
-        });
-        return;
-    }
-    //处理原文件名
-    var originalName = req.file.originalname;
-    var formate = originalName.split(".");
-    //扩展名
-    var extName = "." + formate[formate.length - 1];
-    var filename = uuidv1();
-    //储存文件夹
-    var fileFolder = "/images/goods/";
-    //处理图片
-    images(req.file.buffer)
-        .resize(720) //缩放尺寸至720宽
-        .save("public" + fileFolder + filename + "_720" + extName, {
-            quality: 70 //保存图片到文件,图片质量为70
-        });
-    //返回储存结果
-    res.json({
-        status: true,
-        msg: "图片上传处理成功!",
-        src: fileFolder + filename + "_720" + extName
-    });
+router.post("/slider", upload.single('file'), async function(req, res) {
+	//文件类型
+	let { mimetype, size } = req.file;
+	//判断是否为图片
+	var reg = /^image\/\w+$/;
+	var flag = reg.test(mimetype);
+	if (!flag) {
+		res.status(400).json({
+			status: false,
+			msg: "格式错误，请选择一张图片!"
+		});
+		return;
+	}
+	//判断图片体积是否小于2M
+	if (size >= 2 * 1024 * 1024) {
+		res.status(400).json({
+			status: false,
+			msg: "图片体积太大，请压缩图片!"
+		});
+		return;
+	}
+	// 获取图片信息
+	var { width, height, format } = await sharp(req.file.buffer).metadata();
+	// 判断图片尺寸
+	if (width != height) {
+		res.status(400).json({
+			status: false,
+			msg: "图片必须为正方形，请重新上传!"
+		});
+		return;
+	}
+	if (width < 300 || width > 1500) {
+		res.status(400).json({
+			status: false,
+			msg: "图片尺寸300-1500，请重新处理!"
+		});
+		return;
+	}
+	// 生成文件名
+	var filename = uuidv1();
+	// 储存文件夹
+	var fileFolder = "/images/goods/";
+	// 处理图片
+	try {
+		await sharp(req.file.buffer)
+			.resize(720)
+			.toFile("public" + fileFolder + filename + '_720.' + format);
+		//返回储存结果
+		res.json({
+			status: true,
+			msg: "图片上传处理成功!",
+			src: process.env.server + fileFolder + filename + '_720.' + format,
+		});
+	} catch (error) {
+		res.json({
+			status: false,
+			msg: error,
+		});
+	}
 });
 /**
  * @api {post} /api/upload/editor 富文本编辑器图片上传
@@ -168,47 +166,48 @@ router.post("/slider", upload.single('file'), function (req, res) {
  *
  * @apiSuccess {String[]} data 返回图片地址.
  */
-router.post("/editor", upload.single('file'), function (req, res) {
-    //文件类型
-    var type = req.file.mimetype;
-    var size = req.file.size;
-    //判断是否为图片
-    var reg = /^image\/\w+$/;
-    var flag = reg.test(type);
-    if (!flag) {
-        res.json({
-            errno: 1,
-            msg: "格式错误，请选择一张图片!"
-        });
-        return;
-    }
-    //判断图片体积是否小于2M
-    if (size >= 2 * 1024 * 1024) {
-        res.json({
-            errno: 1,
-            msg: "图片体积太大，请压缩图片!"
-        });
-        return;
-    }
-    //处理原文件名
-    var originalName = req.file.originalname;
-    var formate = originalName.split(".");
-    //扩展名
-    var extName = "." + formate[formate.length - 1];
-    var filename = uuidv1();
-    //储存文件夹
-    var fileFolder = "/images/details/";
-    //处理图片
-    images(req.file.buffer)
-        .save("public" + fileFolder + filename + extName, {
-            quality: 70 //保存图片到文件,图片质量为70
-        });
-    //返回储存结果
-    res.json({
-        errno: 0,
-        msg: "图片上传处理成功!",
-        data: fileFolder + filename + extName
-    });
+router.post("/editor", upload.single('file'), async function(req, res) {
+	//文件类型
+	let { mimetype, size } = req.file;
+	//判断是否为图片
+	var reg = /^image\/\w+$/;
+	var flag = reg.test(mimetype);
+	if (!flag) {
+		res.json({
+			errno: 1,
+			msg: "格式错误，请选择一张图片!"
+		});
+		return;
+	}
+	//判断图片体积是否小于2M
+	if (size >= 2 * 1024 * 1024) {
+		res.json({
+			errno: 1,
+			msg: "图片体积太大，请压缩图片!"
+		});
+		return;
+	}
+	//扩展名
+	var { format } = await sharp(req.file.buffer).metadata();
+	// 生成文件名
+	var filename = uuidv1();
+	//储存文件夹
+	var fileFolder = "/images/details/";
+	//处理图片
+	try {
+		await sharp(req.file.buffer).toFile("public" + fileFolder + filename + '.' + format);
+		//返回储存结果
+		res.json({
+			errno: 0,
+			msg: "图片上传处理成功!",
+			data: [process.env.server + fileFolder + filename + '.' + format],
+		});
+	} catch (error) {
+		res.json({
+			errno: 1,
+			msg: error,
+		});
+	}
 });
 
 /**
@@ -224,64 +223,63 @@ router.post("/editor", upload.single('file'), function (req, res) {
  *
  * @apiSuccess {String} src 返回图片地址.
  */
-router.post("/avatar", upload.single('file'), function (req, res) {
-    //文件类型
-    var type = req.file.mimetype;
-    var size = req.file.size;
-    //判断是否为图片
-    var reg = /^image\/\w+$/;
-    var flag = reg.test(type);
-    if (!flag) {
-        res.status(400).json({
-            status: false,
-            msg: "格式错误，请选择一张图片!"
-        });
-        return;
-    }
-    //判断图片体积是否小于2M
-    if (size >= 2 * 1024 * 1024) {
-        res.status(400).json({
-            status: false,
-            msg: "图片体积太大，请压缩图片!"
-        });
-        return;
-    }
-    //判读图片尺寸
-    var width = images(req.file.buffer).width();
-    var height = images(req.file.buffer).height();
-    if (width != height) {
-        res.status(400).json({
-            status: false,
-            msg: "图片必须为正方形，请重新上传!"
-        });
-        return;
-    }
-    if (width < 120 || width > 300) {
-        res.status(400).json({
-            status: false,
-            msg: "图片尺寸120-300，请重新处理!"
-        });
-        return;
-    }
-    //处理原文件名
-    var originalName = req.file.originalname;
-    var formate = originalName.split(".");
-    //扩展名
-    var extName = "." + formate[formate.length - 1];
-    var filename = uuidv1();
-    //储存文件夹
-    var fileFolder = "/images/avatar/";
-    //处理图片
-    images(req.file.buffer)
-        .save("public" + fileFolder + filename + extName, {
-            quality: 70 //保存图片到文件,图片质量为70
-        });
-    //返回储存结果
-    res.json({
-        status: true,
-        msg: "图片上传处理成功!",
-        src: fileFolder + filename + extName
-    });
+router.post("/avatar", upload.single('file'), async function(req, res) {
+	//文件类型
+	let { mimetype, size } = req.file;
+	//判断是否为图片
+	var reg = /^image\/\w+$/;
+	var flag = reg.test(mimetype);
+	if (!flag) {
+		res.status(400).json({
+			status: false,
+			msg: "格式错误，请选择一张图片!"
+		});
+		return;
+	}
+	//判断图片体积是否小于2M
+	if (size >= 2 * 1024 * 1024) {
+		res.status(400).json({
+			status: false,
+			msg: "图片体积太大，请压缩图片!"
+		});
+		return;
+	}
+	// 获取图片信息
+	var { width, height, format } = await sharp(req.file.buffer).metadata();
+	// 判读图片尺寸
+	if (width != height) {
+		res.status(400).json({
+			status: false,
+			msg: "图片必须为正方形，请重新上传!"
+		});
+		return;
+	}
+	if (width < 120 || width > 300) {
+		res.status(400).json({
+			status: false,
+			msg: "图片尺寸120-300，请重新处理!"
+		});
+		return;
+	}
+	// 生成文件名
+	var filename = uuidv1();
+	//储存文件夹
+	var fileFolder = "/images/avatar/";
+	//处理图片
+	try {
+		await sharp(req.file.buffer).toFile("public" + fileFolder + filename + '.' + format);
+		//返回储存结果
+		res.json({
+			status: true,
+			msg: "图片上传处理成功!",
+			data: process.env.server + fileFolder + filename + '.' + format
+		});
+	} catch (error) {
+		res.json({
+			status: false,
+			msg: error,
+		});
+	}
 });
 
 module.exports = router;
