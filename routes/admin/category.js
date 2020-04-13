@@ -13,7 +13,7 @@ const path = require("path");
  * @apiSampleRequest /api/category/all
  */
 router.get("/all", function (req, res) {
-    let sql = `SELECT * FROM CATEGORIES `;
+    let sql = `SELECT * FROM CATEGORY `;
     db.query(sql, [], function (results, fields) {
         //成功
         res.json({
@@ -25,7 +25,7 @@ router.get("/all", function (req, res) {
 });
 /**
  * @api {post} /api/category 添加子分类
- * @apiName category/add 添加子分类
+ * @apiName categoryAdd
  * @apiGroup admin-Category
  * @apiPermission admin
  *
@@ -46,7 +46,7 @@ router.post("/", function (req, res) {
         });
         return;
     }
-    let sql = `INSERT INTO CATEGORIES (name,pId,level,img) VALUES (?,?,?,?) `;
+    let sql = `INSERT INTO CATEGORY (name,pId,level,img) VALUES (?,?,?,?) `;
     db.query(sql, [name, pId, level, img], function (results, fields) {
         //成功
         res.json({
@@ -60,7 +60,7 @@ router.post("/", function (req, res) {
 });
 /**
  * @api {delete} /api/category 删除分类
- * @apiName category/delete 删除分类
+ * @apiName categoryDelete
  * @apiGroup admin-Category
  * @apiPermission admin
  *
@@ -70,7 +70,7 @@ router.post("/", function (req, res) {
  */
 router.delete("/", function (req, res) {
     let {id} = req.query;
-    let sql = `SELECT img FROM categories WHERE id = ?;DELETE FROM CATEGORIES WHERE id = ?`;
+    let sql = `SELECT img FROM category WHERE id = ?;DELETE FROM CATEGORY WHERE id = ?`;
     db.query(sql, [id, id], function (results, fields) {
         let src = results[0][0].img;
         // 如果没有分类图片
@@ -111,7 +111,7 @@ router.delete("/", function (req, res) {
  */
 router.put("/", function (req, res) {
     let {id, name, img} = req.body;
-    let sql = `UPDATE CATEGORIES SET name = ? , img = ? WHERE id = ? `;
+    let sql = `UPDATE CATEGORY SET name = ? , img = ? WHERE id = ? `;
     db.query(sql, [name, img, id], function (results, fields) {
         //成功
         res.json({
@@ -122,16 +122,17 @@ router.put("/", function (req, res) {
 });
 /**
  * @api {get} /api/category/sub 获取子级分类
- * @apiName category/sub
+ * @apiName categorySub
  * @apiGroup Category
- *
+ * @apiPermission admin user
+ * 
  * @apiParam {Number} pId 父级分类id。注：获取一级分类pId = 1，获取根分类pId = 0;
  *
  * @apiSampleRequest /api/category/sub
  */
 router.get("/sub", function (req, res) {
     let { pId } = req.query;
-    let sql = `SELECT * FROM CATEGORIES WHERE pId = ? `;
+    let sql = `SELECT * FROM CATEGORY WHERE pId = ? `;
     db.query(sql, [pId], function (results, fields) {
         //成功
         res.json({

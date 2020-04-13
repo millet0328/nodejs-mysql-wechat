@@ -8,7 +8,8 @@ let db = require('../../config/mysql');
  * @apiDescription 具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序
  * @apiName GoodsList 获取商品列表
  * @apiGroup Goods
- *
+ * @apiPermission user
+ * 
  * @apiParam {Number} [pageSize=4] 一个页有多少个商品;
  * @apiParam {Number} [pageIndex=1] 第几页;
  * @apiParam {Number} [cate_1st] 一级分类id;
@@ -44,7 +45,7 @@ router.get("/list", function(req, res) {
 	}
 	sql += ` LIMIT ${count},${size};SELECT FOUND_ROWS() as total;`
 
-	db.query(sql, [], function(results, fields) {
+	db.query(sql, [], function(results) {
 		//成功
 		res.json({
 			status: true,
@@ -58,7 +59,8 @@ router.get("/list", function(req, res) {
  * @api {get} /api/goods/detail 获取商品详情
  * @apiName GoodsDetail
  * @apiGroup Goods
- *
+ * @apiPermission user
+ * 
  * @apiParam {Number} id 商品id;
  *
  * @apiSampleRequest /api/goods/detail
@@ -66,7 +68,7 @@ router.get("/list", function(req, res) {
 router.get("/detail", function(req, res) {
 	let { id } = req.query;
 	let sql = `SELECT id,name,price,hotPoint,marketPrice,discount,slider,detail FROM GOODS WHERE id = ?`
-	db.query(sql, [id], function(results, fields) {
+	db.query(sql, [id], function(results) {
 		//成功
 		res.json({
 			status: true,

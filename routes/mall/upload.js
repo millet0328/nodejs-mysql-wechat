@@ -16,7 +16,8 @@ const uuidv1 = require('uuid/v1');
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，不限制尺寸，存储至common文件夹
  * @apiName UploadCommon
  * @apiGroup Upload Image
- *
+ * @apiPermission user
+ * 
  * @apiParam {File} file File文件对象;
  *
  * @apiSampleRequest /api/upload/common
@@ -71,7 +72,8 @@ router.post("/common", upload.single('file'), async function(req, res) {
  * @apiDescription 如果上传错误的图片，通过此API删除错误的图片
  * @apiName uploadDelete
  * @apiGroup Upload Image
- *
+ * @apiPermission user
+ * 
  * @apiParam {String} src 图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;
  *
  * @apiSampleRequest /api/upload

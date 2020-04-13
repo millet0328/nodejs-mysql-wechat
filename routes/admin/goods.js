@@ -144,7 +144,8 @@ router.get("/list", function (req, res) {
  * @api {get} /api/admin/goods 获取商品详情
  * @apiName GoodsDetail
  * @apiGroup admin Goods
- *
+ * @apiPermission admin
+ * 
  * @apiParam {Number} id 商品id;
  *
  * @apiSampleRequest /api/admin/goods

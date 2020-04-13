@@ -12,14 +12,19 @@ npm i apidoc -g
 cd {项目目录}
 ```
 
-## 安装依赖包
+## 安装依赖包，必须cnpm
 ```
-$ npm i
+$ cnpm i
 ```
 
 ## 还原数据库
 1. 在mysql中创建wechat-mall数据库
 2. 将wechat-mall.sql文件还原至wechat-mall数据库
+3. 在config文件夹mysql.js文件，配置数据库、账户、密码；
+
+## 修改小程序配置
+1. 注册小程序开发平台，获取小程序appid、小程序密钥
+2. 在config文件夹wx.js文件，修改成自己的appid、小程序密钥
 
 ## 重新生成API文档
 ```

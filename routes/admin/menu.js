@@ -108,7 +108,7 @@ router.put("/icon", function(req, res) {
  */
 router.get("/sub", function(req, res) {
 	let sql =
-		`SELECT m.id,m.name,m.pId,m.path, m.menu_order AS 'order', i.name AS 'icon' FROM MENU m LEFT JOIN ICONS i ON m.icon_id = i.id WHERE m.pId = ? ORDER BY m.menu_order`;
+		`SELECT m.id,m.name,m.pId,m.path, m.menu_order AS 'order', i.name AS 'icon' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id WHERE m.pId = ? ORDER BY m.menu_order`;
 	db.query(sql, [req.query.pId], function(results, fields) {
 		//成功
 		res.json({
@@ -131,7 +131,7 @@ router.get("/sub", function(req, res) {
 router.get('/tree', function(req, res) {
 	let { id } = req.query;
 	let sql =
-		`SELECT m.*,i.name AS 'icon' FROM MENU m JOIN role_menu rm ON rm.menu_id = m.id LEFT JOIN ICONS i ON m.icon_id = i.id WHERE rm.role_id = ? ORDER BY menu_order;`;
+		`SELECT m.*,i.name AS 'icon' FROM MENU m JOIN role_menu rm ON rm.menu_id = m.id LEFT JOIN ICON i ON m.icon_id = i.id WHERE rm.role_id = ? ORDER BY menu_order;`;
 	db.query(sql, [id], function(results) {
 		//筛选出一级菜单
 		let menu_1st = results.filter((item) => item.pId === 1 ? item : null);

@@ -215,7 +215,7 @@ router.post("/editor", upload.single('file'), async function(req, res) {
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，尺寸（120~300）必须是正方形，存储至avatar文件夹
  * @apiName UploadAvatar
  * @apiGroup admin Upload Image
- *
+ * @apiPermission admin user
  *
  * @apiParam {File} file File文件对象;
  *

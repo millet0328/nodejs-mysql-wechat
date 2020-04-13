@@ -4,32 +4,32 @@ const router = express.Router();
 let db = require('../../config/mysql');
 /**
  * @api {post} /api/address 添加收货地址
- * @apiName /address/add/
+ * @apiName addressAdd
  * @apiGroup Address
- *
+ * @apiPermission user
+ * 
  * @apiParam {String} name 收货人姓名.
  * @apiParam {String} tel 电话.
- * @apiParam {String} province 省.
+ * @apiParam {String} province 省份.
  * @apiParam {String} city 市.
- * @apiParam {String} area 区.
- * @apiParam {String} street 街道.
+ * @apiParam {String} county 区县.
+ * @apiParam {String} street 详细地址.
  * @apiParam {String} code 邮编.
  * @apiParam {Number=1,0} isDefault 是否默认 1-默认,0-否.
  *
- * @apiSampleRequest /api/address/add
+ * @apiSampleRequest /api/address/
  */
 router.post('/', function (req, res) {
     let sql;
-    let {name, tel, province, city, area, street, code, isDefault} = req.body;
-    let {openid} = req.user;
+    let { name, tel, province, city, county, street, code, isDefault } = req.body;
+    let { openid } = req.user;
     if (isDefault == '1') {
-        sql =
-            `UPDATE addresses SET isDefault = 0 WHERE uid = '${openid}';
-		INSERT INTO addresses(uid,name,tel,province,city,area,street,code,isDefault) VALUES(?,?,?,?,?,?,?,?,?);`
+        sql = `UPDATE address SET isDefault = 0 WHERE uid = '${openid}';
+		INSERT INTO address(uid, name, tel, province, city, county, street, code, isDefault) VALUES(?,?,?,?,?,?,?,?,?);`
     } else {
-        sql = `INSERT INTO addresses(uid,name,tel,province,city,area,street,code,isDefault) VALUES(?,?,?,?,?,?,?,?,?)`
+        sql = `INSERT INTO address(uid, name, tel, province, city, county, street, code, isDefault) VALUES(?,?,?,?,?,?,?,?,?)`
     }
-    db.query(sql, [openid, name, tel, province, city, area, street, code, isDefault], function (results, fields) {
+    db.query(sql, [openid, name, tel, province, city, county, street, code, isDefault], function (results) {
         res.json({
             status: true,
             msg: "添加成功！"
@@ -37,18 +37,19 @@ router.post('/', function (req, res) {
     });
 });
 /**
- * @api {delete} /api/address 删除收货地址
- * @apiName /address/delete/
+ * @api {delete} /api/address/:id 删除收货地址
+ * @apiName addressDelete
  * @apiGroup Address
- *
+ * @apiPermission user
+ * 
  * @apiParam {Number} id 收货地址id.
  *
  * @apiSampleRequest /api/address
  */
 router.delete("/", function (req, res) {
-    let {id} = req.body;
-    var sql = `DELETE FROM addresses WHERE id = ? `
-    db.query(sql, [id], function (results, fields) {
+    let { id } = req.params;
+    var sql = `DELETE FROM address WHERE id = ? `
+    db.query(sql, [id], function (results) {
         res.json({
             status: true,
             data: results,
@@ -58,16 +59,17 @@ router.delete("/", function (req, res) {
 })
 /**
  * @api {put} /api/address 修改收货地址
- * @apiName /address/update/
+ * @apiName addressUpdate
  * @apiGroup Address
- *
+ * @apiPermission user
+ 
  * @apiParam {Number} id 收货地址id.
  * @apiParam {String} name 收货人姓名.
  * @apiParam {String} tel 电话.
- * @apiParam {String} province 省.
+ * @apiParam {String} province 省份.
  * @apiParam {String} city 市.
- * @apiParam {String} area 区.
- * @apiParam {String} street 街道.
+ * @apiParam {String} county 区县.
+ * @apiParam {String} street 详细地址.
  * @apiParam {String} code 邮编.
  * @apiParam {Number=1,0} isDefault 是否默认.1-默认,0-否.
  *
@@ -75,17 +77,15 @@ router.delete("/", function (req, res) {
  */
 router.put("/", function (req, res) {
     let sql;
-    let {id, name, tel, province, city, area, street, code, isDefault} = req.body;
-    let {openid} = req.user;
+    let { id, name, tel, province, city, county, street, code, isDefault } = req.body;
+    let { openid } = req.user;
     if (isDefault == '1') {
-        sql = `
-		UPDATE addresses SET isDefault = 0 WHERE uid = '${openid}';
-		UPDATE addresses SET name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?;
-		`
+        sql = `UPDATE address SET isDefault = 0 WHERE uid = '${openid}';
+		UPDATE address SET name = ?, tel = ?, province = ?, city = ?, county = ?, street = ?, code = ?, isDefault = ? WHERE id = ?;`
     } else {
-        sql = `UPDATE addresses SET name = ?,tel = ?,province = ?,city = ?,area = ?,street = ?,code = ?,isDefault = ? WHERE id = ?`
+        sql = `UPDATE address SET name = ?, tel = ?, province = ?, city = ?, county = ?, street = ?, code = ?, isDefault = ? WHERE id = ?`
     }
-    db.query(sql, [name, tel, province, city, area, street, code, isDefault, id], function (results, fields) {
+    db.query(sql, [name, tel, province, city, county, street, code, isDefault, id], function (results) {
         res.json({
             status: true,
             msg: "修改成功！"
@@ -94,15 +94,16 @@ router.put("/", function (req, res) {
 });
 /**
  * @api {get} /api/address/list 获取收货地址列表
- * @apiName /address/list/
+ * @apiName addressList
  * @apiGroup Address
- *
+ * @apiPermission user
+ * 
  * @apiSampleRequest /api/address/list
  */
 router.get('/list', function (req, res) {
-    let {openid} = req.user;
-    var sql = `SELECT * FROM addresses WHERE uid = ? `
-    db.query(sql, [openid], function (results, fields) {
+    let { openid } = req.user;
+    var sql = 'SELECT * FROM address WHERE uid = ?'
+    db.query(sql, [openid], function (results) {
         if (!results.length) {
             res.json({
                 status: false,
@@ -118,18 +119,19 @@ router.get('/list', function (req, res) {
     })
 });
 /**
- * @api {get} /api/address/detail 根据id获取收货地址详情
- * @apiName /address/detail/
+ * @api {get} /api/address 根据id获取收货地址详情
+ * @apiName addressDetail
  * @apiGroup Address
- *
+ * @apiPermission user
+ * 
  * @apiParam {Number} id 收货地址id.
  *
- * @apiSampleRequest /api/address/detail
+ * @apiSampleRequest /api/address
  */
-router.get("/detail", function (req, res) {
-    var sql = `SELECT * FROM addresses WHERE id = ? `;
-    let {id} = req.query;
-    db.query(sql, [id], function (results, fields) {
+router.get("/", function (req, res) {
+    var sql = `SELECT * FROM address WHERE id = ? `;
+    let { id } = req.query;
+    db.query(sql, [id], function (results) {
         if (!results.length) {
             res.json({
                 status: false,

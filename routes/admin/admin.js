@@ -216,7 +216,8 @@ router.delete('/', function(req, res) {
  * @api {get} /api/admin 获取管理员个人资料
  * @apiName AdminInfo
  * @apiGroup admin User
- *
+ * @apiPermission admin
+ * 
  * @apiParam {Number} id 账户id.
  * 
  * @apiSampleRequest /api/admin
@@ -246,7 +247,8 @@ router.get("/", function(req, res) {
  * @api { put } /api/admin 更新管理员个人资料
  * @apiName UpdateInfo
  * @apiGroup admin User
- *
+ * @apiPermission admin
+ * 
  * @apiParam {Number} id 账户id.
  * @apiParam {String} fullname 姓名.
  * @apiParam {String} sex 性别.

@@ -3,8 +3,13 @@
     "type": "post",
     "url": "/api/address",
     "title": "添加收货地址",
-    "name": "_address_add_",
+    "name": "addressAdd",
     "group": "Address",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -27,7 +32,7 @@
             "type": "String",
             "optional": false,
             "field": "province",
-            "description": "<p>省.</p>"
+            "description": "<p>省份.</p>"
           },
           {
             "group": "Parameter",
@@ -40,15 +45,15 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "area",
-            "description": "<p>区.</p>"
+            "field": "county",
+            "description": "<p>区县.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "street",
-            "description": "<p>街道.</p>"
+            "description": "<p>详细地址.</p>"
           },
           {
             "group": "Parameter",
@@ -73,7 +78,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/address/add"
+        "url": "/api/address/"
       }
     ],
     "version": "0.0.0",
@@ -84,8 +89,13 @@
     "type": "delete",
     "url": "/api/address",
     "title": "删除收货地址",
-    "name": "_address_delete_",
+    "name": "addressDelete",
     "group": "Address",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -110,10 +120,15 @@
   },
   {
     "type": "get",
-    "url": "/api/address/detail",
+    "url": "/api/address",
     "title": "根据id获取收货地址详情",
-    "name": "_address_detail_",
+    "name": "addressDetail",
     "group": "Address",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -129,7 +144,7 @@
     },
     "sampleRequest": [
       {
-        "url": "/api/address/detail"
+        "url": "/api/address"
       }
     ],
     "version": "0.0.0",
@@ -140,8 +155,13 @@
     "type": "get",
     "url": "/api/address/list",
     "title": "获取收货地址列表",
-    "name": "_address_list_",
+    "name": "addressList",
     "group": "Address",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/address/list"
@@ -155,8 +175,13 @@
     "type": "put",
     "url": "/api/address",
     "title": "修改收货地址",
-    "name": "_address_update_",
+    "name": "addressUpdate",
     "group": "Address",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -186,7 +211,7 @@
             "type": "String",
             "optional": false,
             "field": "province",
-            "description": "<p>省.</p>"
+            "description": "<p>省份.</p>"
           },
           {
             "group": "Parameter",
@@ -199,15 +224,15 @@
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "area",
-            "description": "<p>区.</p>"
+            "field": "county",
+            "description": "<p>区县.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "street",
-            "description": "<p>街道.</p>"
+            "description": "<p>详细地址.</p>"
           },
           {
             "group": "Parameter",
@@ -245,6 +270,11 @@
     "title": "添加商品至购物车",
     "name": "AddCart",
     "group": "Cart",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -280,6 +310,11 @@
     "title": "获取购物车列表",
     "name": "CartList",
     "group": "Cart",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/cart/list"
@@ -296,6 +331,11 @@
     "description": "<p>减少商品数量，前台注意约束num，商品数量&gt;=1</p>",
     "name": "DecreaseCart",
     "group": "Cart",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -332,6 +372,11 @@
     "title": "购物车删除商品",
     "name": "DeleteCart",
     "group": "Cart",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -361,6 +406,11 @@
     "description": "<p>增加商品数量，后台查询库存，注意提示库存不足</p>",
     "name": "IncreaseCart",
     "group": "Cart",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -402,8 +452,13 @@
     "type": "get",
     "url": "/api/category/sub",
     "title": "获取子级分类",
-    "name": "category_sub",
+    "name": "categorySub",
     "group": "Category",
+    "permission": [
+      {
+        "name": "admin user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -427,11 +482,157 @@
     "groupTitle": "Category"
   },
   {
+    "type": "post",
+    "url": "/api/collection",
+    "title": "添加商品至我的收藏",
+    "name": "CollectionAdd",
+    "group": "Collection",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>商品id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/collection"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/collection.js",
+    "groupTitle": "Collection"
+  },
+  {
+    "type": "get",
+    "url": "/api/collection",
+    "title": "获取所有收藏的商品",
+    "name": "CollectionList",
+    "group": "Collection",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>收藏条目id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "goods_id",
+            "description": "<p>商品id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>商品名称.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "hotPoint",
+            "description": "<p>卖点.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "price",
+            "description": "<p>价格.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "optional": false,
+            "field": "marketPrice",
+            "description": "<p>市场价格.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "img_md",
+            "description": "<p>商品图片.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/collection"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/collection.js",
+    "groupTitle": "Collection"
+  },
+  {
+    "type": "delete",
+    "url": "/api/collection",
+    "title": "取消收藏的商品",
+    "name": "CollectionRemove",
+    "group": "Collection",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>收藏条目id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/collection"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/collection.js",
+    "groupTitle": "Collection"
+  },
+  {
     "type": "get",
     "url": "/api/goods/detail",
     "title": "获取商品详情",
     "name": "GoodsDetail",
     "group": "Goods",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -459,8 +660,13 @@
     "url": "/api/goods/list",
     "title": "获取商品列表",
     "description": "<p>具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
-    "name": "GoodsList_______",
+    "name": "GoodsList_获取商品列表",
     "group": "Goods",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -551,6 +757,11 @@
     "description": "<p>在确认订单页面，提交订单按钮意味着将购物车中的商品转移到订单中，生成新的订单，称之为下单操作</p>",
     "name": "CreateOrder",
     "group": "Order",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -608,6 +819,11 @@
     "description": "<p>本账户uid中的订单列表，根据订单状态获取列表，具备分页功能</p>",
     "name": "OrderList",
     "group": "Order",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -657,6 +873,11 @@
     "description": "<p>点击结算按钮之后传参至&quot;确认订单&quot;，此API返回&quot;确认订单&quot;页面需要的数据，此时订单需要用户确认商品价格、数量、支付金额，收货地址在此页面选择或者修改</p>",
     "name": "SettleOrder",
     "group": "Order",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -680,12 +901,293 @@
     "groupTitle": "Order"
   },
   {
+    "type": "get",
+    "url": "/api/pcct/city",
+    "title": "根据省份id获取城市",
+    "name": "City",
+    "group": "Province-City-County-Town",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>省份id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>市区数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data._id",
+            "description": "<p>数据库id，无用处.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.name",
+            "description": "<p>城市名称.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.city_id",
+            "description": "<p>城市id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.province_id",
+            "description": "<p>省份id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/pcct/city"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/PCCT.js",
+    "groupTitle": "Province-City-County-Town"
+  },
+  {
+    "type": "get",
+    "url": "/api/pcct/county",
+    "title": "根据市区id获取县区",
+    "name": "County",
+    "group": "Province-City-County-Town",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>市区id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>县区数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data._id",
+            "description": "<p>数据库id，无用处.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.name",
+            "description": "<p>县区名称.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.city_id",
+            "description": "<p>市区id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.county_id",
+            "description": "<p>县区id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/pcct/county"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/PCCT.js",
+    "groupTitle": "Province-City-County-Town"
+  },
+  {
+    "type": "get",
+    "url": "/api/pcct/province",
+    "title": "获取所有省份",
+    "name": "Province",
+    "group": "Province-City-County-Town",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>省份数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data._id",
+            "description": "<p>数据库id，无用处.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.name",
+            "description": "<p>省份名称.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.province_id",
+            "description": "<p>省份id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/pcct/province"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/PCCT.js",
+    "groupTitle": "Province-City-County-Town"
+  },
+  {
+    "type": "get",
+    "url": "/api/pcct/town",
+    "title": "根据县区id获取街道(镇)",
+    "name": "Town",
+    "group": "Province-City-County-Town",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>县区id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "data",
+            "description": "<p>街道数组.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data._id",
+            "description": "<p>数据库id，无用处.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.name",
+            "description": "<p>街道(镇)名称.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.town_id",
+            "description": "<p>街道(镇)id.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "data.county_id",
+            "description": "<p>县区id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/pcct/town"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/mall/PCCT.js",
+    "groupTitle": "Province-City-County-Town"
+  },
+  {
     "type": "post",
     "url": "/api/upload/common",
     "title": "通用图片上传API",
     "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，不限制尺寸，存储至common文件夹</p>",
     "name": "UploadCommon",
     "group": "Upload_Image",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -728,6 +1230,11 @@
     "description": "<p>如果上传错误的图片，通过此API删除错误的图片</p>",
     "name": "uploadDelete",
     "group": "Upload_Image",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -757,6 +1264,11 @@
     "description": "<p>微信小程序login之后，获得临时登录凭证code，再使用code换取登录token,请在头部headers中设置Authorization: <code>Bearer ${token}</code>,所有请求都必须携带token;</p>",
     "name": "Token",
     "group": "User",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -783,8 +1295,13 @@
     "type": "put",
     "url": "/api/user/info",
     "title": "上传微信用户信息",
-    "name": "_info_upload_________",
+    "name": "userInfoUpload",
     "group": "User",
+    "permission": [
+      {
+        "name": "user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -847,7 +1364,7 @@
     "url": "/api/category/all",
     "title": "获取所有树形分类",
     "name": "allCategory",
-    "group": "admin_Category",
+    "group": "admin-Category",
     "permission": [
       {
         "name": "admin"
@@ -860,14 +1377,14 @@
     ],
     "version": "0.0.0",
     "filename": "routes/admin/category.js",
-    "groupTitle": "admin_Category"
+    "groupTitle": "admin-Category"
   },
   {
     "type": "post",
     "url": "/api/category",
     "title": "添加子分类",
-    "name": "category_add______",
-    "group": "admin_Category",
+    "name": "categoryAdd",
+    "group": "admin-Category",
     "permission": [
       {
         "name": "admin"
@@ -914,14 +1431,14 @@
     ],
     "version": "0.0.0",
     "filename": "routes/admin/category.js",
-    "groupTitle": "admin_Category"
+    "groupTitle": "admin-Category"
   },
   {
     "type": "delete",
     "url": "/api/category",
     "title": "删除分类",
-    "name": "category_delete_____",
-    "group": "admin_Category",
+    "name": "categoryDelete",
+    "group": "admin-Category",
     "permission": [
       {
         "name": "admin"
@@ -947,14 +1464,14 @@
     ],
     "version": "0.0.0",
     "filename": "routes/admin/category.js",
-    "groupTitle": "admin_Category"
+    "groupTitle": "admin-Category"
   },
   {
     "type": "put",
     "url": "/api/category",
     "title": "更新分类",
     "name": "updateCategory",
-    "group": "admin_Category",
+    "group": "admin-Category",
     "permission": [
       {
         "name": "admin"
@@ -994,7 +1511,486 @@
     ],
     "version": "0.0.0",
     "filename": "routes/admin/category.js",
-    "groupTitle": "admin_Category"
+    "groupTitle": "admin-Category"
+  },
+  {
+    "type": "post",
+    "url": "/api/menu",
+    "title": "添加子菜单",
+    "name": "MenuAdd",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>分类名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pId",
+            "description": "<p>父级id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>菜单url地址.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>菜单显示顺序，按照数字从小到大排序，如2001.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "delete",
+    "url": "/api/menu",
+    "title": "删除子菜单",
+    "name": "MenuDelete",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>子菜单id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "get",
+    "url": "/api/menu/sub",
+    "title": "获取子菜单",
+    "name": "MenuSub",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pId",
+            "description": "<p>父级菜单id。 注： 获取一级菜单pId = 1;</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu/sub"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "put",
+    "url": "/api/menu",
+    "title": "更新子菜单",
+    "name": "MenuUpdate",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>子菜单id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>子菜单名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "path",
+            "description": "<p>子菜单url地址.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "put",
+    "url": "/api/menu/icon",
+    "title": "设置子菜单图标",
+    "name": "MenuUpdateIcon",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>子菜单id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "icon",
+            "description": "<p>element图标id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu/icon"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "get",
+    "url": "/api/menu/tree",
+    "title": "根据角色id获取侧边栏树形菜单",
+    "name": "TreeMenu",
+    "group": "admin-Menu",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>角色id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/menu/tree"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/menu.js",
+    "groupTitle": "admin-Menu"
+  },
+  {
+    "type": "delete",
+    "url": "/api/role/menu",
+    "title": "为指定角色删除菜单",
+    "name": "DeleteRoleMenu",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "role_id",
+            "description": "<p>角色id。</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "menu_id",
+            "description": "<p>菜单id。</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "get",
+    "url": "/api/role/config",
+    "title": "根据角色id获取菜单配置",
+    "name": "LoadRoleMenu",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>角色id。</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role/config"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "post",
+    "url": "/api/role/menu",
+    "title": "为指定角色添加菜单",
+    "name": "PutRoleMenu",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "role_id",
+            "description": "<p>角色id。</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "menu_id",
+            "description": "<p>菜单id。</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role/menu"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "post",
+    "url": "/api/role",
+    "title": "添加角色",
+    "name": "RoleAdd",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>角色名称.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "delete",
+    "url": "/api/role",
+    "title": "删除角色",
+    "name": "RoleDelete",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>角色id.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "get",
+    "url": "/api/role/list",
+    "title": "获取角色列表",
+    "name": "RoleList",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "/api/role/list"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
+  },
+  {
+    "type": "put",
+    "url": "/api/role",
+    "title": "更新角色",
+    "name": "RoleUpdate",
+    "group": "admin-Role",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>角色id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>角色名称.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/role"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/role.js",
+    "groupTitle": "admin-Role"
   },
   {
     "type": "get",
@@ -1130,6 +2126,11 @@
     "title": "获取商品详情",
     "name": "GoodsDetail",
     "group": "admin_Goods",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1454,8 +2455,13 @@
     "url": "/api/admin/icon/list",
     "title": "获取所有element图标",
     "description": "<p>获取系统中的element图标，具备分页功能。</p>",
-    "name": "AdminIcons",
+    "name": "AdminIcon",
     "group": "admin_Icon",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1506,252 +2512,17 @@
     "groupTitle": "admin_Icon"
   },
   {
-    "type": "post",
-    "url": "/api/menu",
-    "title": "添加子菜单",
-    "name": "MenuAdd",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>分类名称.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pId",
-            "description": "<p>父级id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "path",
-            "description": "<p>菜单url地址.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "order",
-            "description": "<p>菜单显示顺序，按照数字从小到大排序，如2001.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
-    "type": "delete",
-    "url": "/api/menu",
-    "title": "删除子菜单",
-    "name": "MenuDelete",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>子菜单id.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
-    "type": "get",
-    "url": "/api/menu/sub",
-    "title": "获取子菜单",
-    "name": "MenuSub",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "pId",
-            "description": "<p>父级菜单id。 注： 获取一级菜单pId = 1;</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu/sub"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
-    "type": "put",
-    "url": "/api/menu",
-    "title": "更新子菜单",
-    "name": "MenuUpdate",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>子菜单id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>子菜单名称.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "path",
-            "description": "<p>子菜单url地址.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
-    "type": "put",
-    "url": "/api/menu/icon",
-    "title": "设置子菜单图标",
-    "name": "MenuUpdateIcon",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>子菜单id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "icon",
-            "description": "<p>element图标id.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu/icon"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
-    "type": "get",
-    "url": "/api/menu/tree",
-    "title": "根据角色id获取侧边栏树形菜单",
-    "name": "TreeMenu",
-    "group": "admin_Menu",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>角色id.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/menu/tree"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/menu.js",
-    "groupTitle": "admin_Menu"
-  },
-  {
     "type": "get",
     "url": "/api/admin/order/list",
     "title": "获取所有账户订单列表",
     "description": "<p>获取系统中的订单列表，根据订单状态获取列表，具备分页功能</p>",
     "name": "AdminOrderList",
     "group": "admin_Order",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1796,251 +2567,17 @@
     "groupTitle": "admin_Order"
   },
   {
-    "type": "delete",
-    "url": "/api/role/menu",
-    "title": "为指定角色删除菜单",
-    "name": "DeleteRoleMenu",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "role_id",
-            "description": "<p>角色id。</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "menu_id",
-            "description": "<p>菜单id。</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role/menu"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "get",
-    "url": "/api/role/config",
-    "title": "根据角色id获取菜单配置",
-    "name": "LoadRoleMenu",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>角色id。</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role/config"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "post",
-    "url": "/api/role/menu",
-    "title": "为指定角色添加菜单",
-    "name": "PutRoleMenu",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "role_id",
-            "description": "<p>角色id。</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "menu_id",
-            "description": "<p>菜单id。</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role/menu"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "post",
-    "url": "/api/role",
-    "title": "添加角色",
-    "name": "RoleAdd",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>角色名称.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "delete",
-    "url": "/api/role",
-    "title": "删除角色",
-    "name": "RoleDelete",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>角色id.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "get",
-    "url": "/api/role/list",
-    "title": "获取角色列表",
-    "name": "RoleList",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "sampleRequest": [
-      {
-        "url": "/api/role/list"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
-    "type": "put",
-    "url": "/api/role",
-    "title": "更新角色",
-    "name": "RoleUpdate",
-    "group": "admin_Role",
-    "permission": [
-      {
-        "name": "admin"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "id",
-            "description": "<p>角色id.</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "name",
-            "description": "<p>角色名称.</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/role"
-      }
-    ],
-    "version": "0.0.0",
-    "filename": "routes/admin/role.js",
-    "groupTitle": "admin_Role"
-  },
-  {
     "type": "post",
     "url": "/api/upload/avatar",
     "title": "用户头像上传API",
     "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，尺寸（120~300）必须是正方形，存储至avatar文件夹</p>",
     "name": "UploadAvatar",
     "group": "admin_Upload_Image",
+    "permission": [
+      {
+        "name": "admin user"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2230,6 +2767,11 @@
     "title": "获取管理员个人资料",
     "name": "AdminInfo",
     "group": "admin_User",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2524,6 +3066,11 @@
     "title": "更新管理员个人资料",
     "name": "UpdateInfo",
     "group": "admin_User",
+    "permission": [
+      {
+        "name": "admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
