@@ -40,3 +40,7 @@ $ npm start
 ```
 http://localhost:3003/api/
 ```
+## 商城管理后台地址
+```
+http://localhost:3003/admin/
+```
