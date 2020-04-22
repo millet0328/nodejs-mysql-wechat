@@ -36,7 +36,7 @@ router.post("/", function (req, res) {
  * 
  * @apiSampleRequest /api/collection
  */
-router.delete("/", function (req, res) {
+router.delete("/:id", function (req, res) {
     let { id } = req.params;
     let sql = 'DELETE FROM collection WHERE id = ?';
     db.query(sql, [id], function (results) {

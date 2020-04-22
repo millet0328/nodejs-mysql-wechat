@@ -71,7 +71,7 @@ router.get('/list', function (req, res) {
  *
  * @apiSampleRequest /api/cart
  */
-router.delete('/', function (req, res) {
+router.delete('/:id', function (req, res) {
     let { id } = req.params;
     let sql = `DELETE FROM cart WHERE id = ?`;
     db.query(sql, [id], function (results) {

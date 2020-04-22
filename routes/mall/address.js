@@ -46,7 +46,7 @@ router.post('/', function (req, res) {
  *
  * @apiSampleRequest /api/address
  */
-router.delete("/", function (req, res) {
+router.delete("/:id", function (req, res) {
     let { id } = req.params;
     var sql = `DELETE FROM address WHERE id = ? `
     db.query(sql, [id], function (results) {
