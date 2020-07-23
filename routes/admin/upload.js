@@ -272,7 +272,7 @@ router.post("/avatar", upload.single('file'), async function(req, res) {
 		res.json({
 			status: true,
 			msg: "图片上传处理成功!",
-			data: process.env.server + fileFolder + filename + '.' + format
+			src: process.env.server + fileFolder + filename + '.' + format
 		});
 	} catch (error) {
 		res.json({

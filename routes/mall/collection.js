@@ -32,14 +32,15 @@ router.post("/", function (req, res) {
  * @apiGroup Collection
  * @apiPermission user
  * 
- * @apiParam {Number} id 收藏条目id.
+ * @apiParam {Number} id 商品id.
  * 
  * @apiSampleRequest /api/collection
  */
 router.delete("/:id", function (req, res) {
     let { id } = req.params;
-    let sql = 'DELETE FROM collection WHERE id = ?';
-    db.query(sql, [id], function (results) {
+    let { openid } = req.user;
+    let sql = 'DELETE FROM collection WHERE goods_id = ? and user_id = ?';
+    db.query(sql, [id, openid], function (results) {
         //成功
         res.json({
             status: true,

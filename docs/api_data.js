@@ -87,7 +87,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/address",
+    "url": "/api/address/:id",
     "title": "删除收货地址",
     "name": "addressDelete",
     "group": "Address",
@@ -368,7 +368,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/cart",
+    "url": "/api/cart/:id",
     "title": "购物车删除商品",
     "name": "DeleteCart",
     "group": "Cart",
@@ -591,7 +591,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/collection",
+    "url": "/api/collection/:id",
     "title": "取消收藏的商品",
     "name": "CollectionRemove",
     "group": "Collection",
@@ -608,7 +608,7 @@ define({ "api": [
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>收藏条目id.</p>"
+            "description": "<p>商品id.</p>"
           }
         ]
       }
@@ -1243,7 +1243,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "src",
-            "description": "<p>图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;</p>"
+            "description": "<p>图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg</p>"
           }
         ]
       }

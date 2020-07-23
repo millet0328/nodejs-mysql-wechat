@@ -30,7 +30,7 @@ let db = require('../../config/mysql');
  * @apiSampleRequest /api/admin/goods
  */
 router.post("/", function (req, res) {
-    let { cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
+    let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
     let sql =
         `INSERT INTO GOODS (cate_1st,cate_2nd,cate_3rd,name,hotPoint,price,marketPrice,cost,discount,inventory,articleNo,img_lg,img_md,slider,brand,detail,freight,create_time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP()) `;
     db.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory,
@@ -74,7 +74,8 @@ router.post("/", function (req, res) {
  * @apiSampleRequest /api/admin/goods
  */
 router.put("/", function (req, res) {
-    let { id, cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
+    let { id, cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
+    console.log(cate_3rd);
     let sql =
         `UPDATE GOODS SET cate_1st=?,cate_2nd=?,cate_3rd=?,name=?,hotPoint=?,price=?,marketPrice=?,cost=?,discount=?,inventory=?,articleNo=?,img_lg=?,img_md=?,slider=?,brand=?,detail=?,freight=?,update_time = CURRENT_TIMESTAMP() WHERE id=?`;
     db.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory,

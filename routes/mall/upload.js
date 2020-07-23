@@ -24,7 +24,7 @@ const uuidv1 = require('uuid/v1');
  *
  * @apiSuccess {String} src 返回图片地址.
  */
-router.post("/common", upload.single('file'), async function(req, res) {
+router.post("/common", upload.single('file'), async function (req, res) {
 	//文件类型
 	let { mimetype, size } = req.file;
 	//判断是否为图片
@@ -58,7 +58,7 @@ router.post("/common", upload.single('file'), async function(req, res) {
 		res.json({
 			status: true,
 			msg: "图片上传处理成功!",
-			data: process.env.server + fileFolder + filename + '.' + format
+			src: process.env.server + fileFolder + filename + '.' + format
 		});
 	} catch (error) {
 		res.json({
@@ -74,15 +74,16 @@ router.post("/common", upload.single('file'), async function(req, res) {
  * @apiGroup Upload Image
  * @apiPermission user
  * 
- * @apiParam {String} src 图片文件路径,注：src='./images/goods/file.jpg'，必须严格按照规范路径，'./images'不可省略;
+ * @apiParam {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
  *
  * @apiSampleRequest /api/upload
  */
 
-router.delete('/', function(req, res) {
+router.delete('/', function (req, res) {
 	let { src } = req.query;
+	src = src.replace(/.+\/images/, "./images");
 	let realPath = path.resolve(__dirname, '../../public/', src);
-	fs.unlink(realPath, function(err) {
+	fs.unlink(realPath, function (err) {
 		if (err) throw err;
 		res.json({
 			status: true,

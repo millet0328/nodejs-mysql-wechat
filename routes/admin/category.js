@@ -38,14 +38,6 @@ router.get("/all", function (req, res) {
  */
 router.post("/", function (req, res) {
     let {name, pId, level, img} = req.body;
-    // 图片img为空
-    if (!img) {
-        res.json({
-            status: false,
-            msg: "请上传分类图片!",
-        });
-        return;
-    }
     let sql = `INSERT INTO CATEGORY (name,pId,level,img) VALUES (?,?,?,?) `;
     db.query(sql, [name, pId, level, img], function (results, fields) {
         //成功
@@ -83,7 +75,7 @@ router.delete("/", function (req, res) {
             return;
         }
         // 有分类图片
-        src = '.' + results[0][0].img;
+        src = src.replace(/.+\/images/, "./images");
         let realPath = path.resolve(__dirname, '../../public/', src);
         fs.unlink(realPath, function (err) {
             if (err) {
