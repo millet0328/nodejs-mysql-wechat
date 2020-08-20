@@ -1232,7 +1232,7 @@
     "group": "Upload_Image",
     "permission": [
       {
-        "name": "user"
+        "name": "user admin"
       }
     ],
     "parameter": {
@@ -3062,13 +3062,83 @@
   },
   {
     "type": " put ",
-    "url": "/api/admin",
-    "title": "更新管理员个人资料",
-    "name": "UpdateInfo",
+    "url": "/api/admin/account",
+    "title": "修改本账户信息",
+    "description": "<p>管理员自行修改本账户信息，但是无权限分配角色。</p>",
+    "name": "UpdateAccount",
     "group": "admin_User",
     "permission": [
       {
         "name": "admin"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>账户id.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "fullname",
+            "description": "<p>姓名.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sex",
+            "description": "<p>性别.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>头像.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "tel",
+            "description": "<p>手机号码.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>邮箱地址.</p>"
+          }
+        ]
+      }
+    },
+    "sampleRequest": [
+      {
+        "url": "/api/admin/account"
+      }
+    ],
+    "version": "0.0.0",
+    "filename": "routes/admin/admin.js",
+    "groupTitle": "admin_User"
+  },
+  {
+    "type": " put ",
+    "url": "/api/admin",
+    "title": "更新管理员个人资料",
+    "description": "<p>只有超级管理员才有权限修改用户角色，普通管理员无权限更改角色。</p>",
+    "name": "UpdateInfo",
+    "group": "admin_User",
+    "permission": [
+      {
+        "name": "超级管理员"
       }
     ],
     "parameter": {

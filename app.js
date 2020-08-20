@@ -41,13 +41,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 设置跨域资源分享CORS
+app.use(cors());
+
 //使用中间件验证token合法性
 app.use(expressJwt({ secret: 'secret' }).unless({
   path: ['/', '/api/user/token', '/api/admin/register', '/api/admin/login'] //除了这些地址，其他的URL都需要验证
 }));
-
-// 设置跨域资源分享CORS
-app.use(cors());
 
 app.use('/', index);
 

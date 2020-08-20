@@ -8,9 +8,9 @@ let db = require('../../config/mysql');
  * @apiName CollectionAdd
  * @apiGroup Collection
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 商品id.
- * 
+ *
  * @apiSampleRequest /api/collection
  */
 router.post("/", function (req, res) {
@@ -31,9 +31,9 @@ router.post("/", function (req, res) {
  * @apiName CollectionRemove
  * @apiGroup Collection
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 商品id.
- * 
+ *
  * @apiSampleRequest /api/collection
  */
 router.delete("/:id", function (req, res) {
@@ -54,7 +54,7 @@ router.delete("/:id", function (req, res) {
  * @apiName CollectionList
  * @apiGroup Collection
  * @apiPermission user
- * 
+ *
  * @apiSuccess {Number} id 收藏条目id.
  * @apiSuccess {Number} goods_id 商品id.
  * @apiSuccess {String} name 商品名称.
@@ -62,7 +62,7 @@ router.delete("/:id", function (req, res) {
  * @apiSuccess {Number} price 价格.
  * @apiSuccess {Number} marketPrice 市场价格.
  * @apiSuccess {String} img_md 商品图片.
- * 
+ *
  * @apiSampleRequest /api/collection
  */
 router.get("/", function (req, res) {
@@ -73,6 +73,7 @@ router.get("/", function (req, res) {
         res.json({
             status: true,
             msg: "success!",
+            data: results,
         });
     });
 });

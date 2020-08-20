@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 23/07/2020 09:18:07
+ Date: 20/08/2020 10:29:43
 */
 
 SET NAMES utf8mb4;
@@ -33,15 +33,19 @@ CREATE TABLE `address`  (
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
   `isDefault` int(0) NULL DEFAULT 1 COMMENT '是否默认',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of address
 -- ----------------------------
 INSERT INTO `address` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄渤', '15863008280', '山东省', '青岛市', '李沧区', '重庆中路873号', '262621', 0);
 INSERT INTO `address` VALUES (2, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄小米', '15863008280', '湖南省', '长沙市', '芙蓉区', '重庆中路', '266200', 0);
-INSERT INTO `address` VALUES (3, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '张艺兴', '15863008280', '湖北省', '武汉市', '江岸区', '南京路', '266221', 1);
+INSERT INTO `address` VALUES (3, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '张艺兴', '15863008280', '湖北省', '武汉市', '江岸区', '南京路', '266221', 0);
 INSERT INTO `address` VALUES (4, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '罗志祥', '15863008280', '山东省', '济南市', '历下区', '宜昌路', '266221', 0);
+INSERT INTO `address` VALUES (5, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '欧阳靖', '15194250468', '广东省', '广州市', '海珠区', '崇景路', '266000', 0);
+INSERT INTO `address` VALUES (6, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄晓明', '15194250468', '广东省', '广州市', '荔湾区', '鞍山路', '266000', 0);
+INSERT INTO `address` VALUES (7, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '赵薇', '15194250468', '广东省', '广州市', '海珠区', '重庆路', '266000', 0);
+INSERT INTO `address` VALUES (8, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '林心如', '15194250468', '广东省', '广州市', '海珠区', '重庆路', '266000', 1);
 
 -- ----------------------------
 -- Table structure for admin
@@ -65,8 +69,8 @@ CREATE TABLE `admin`  (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES (1, 'admin', '123456', '超级管理员', '男', '/images/avatar/default.jpg', '13475829262', NULL, '2019-05-14 20:39:31', '2020-07-22 21:20:08', 151);
-INSERT INTO `admin` VALUES (2, '15863008280', '123456', '黄小米', '女', '/images/avatar/default.jpg', '15863008280', NULL, '2019-05-11 18:21:37', '2020-07-15 23:53:28', 6);
+INSERT INTO `admin` VALUES (1, 'admin', '123456', '超级管理员', '男', '/images/avatar/default.jpg', '15863008280', NULL, '2019-05-14 20:39:31', '2020-08-19 15:07:48', 200);
+INSERT INTO `admin` VALUES (2, 'moz', '123456', '黄小米', '女', '/images/avatar/default.jpg', '13475829262', 'nn880328@126.com', '2019-05-11 18:21:37', '2020-08-13 13:57:24', 9);
 
 -- ----------------------------
 -- Table structure for admin_role
@@ -624,12 +628,13 @@ CREATE TABLE `collection`  (
   `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户id',
   `goods_id` int(0) NULL DEFAULT NULL COMMENT '商品id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户收藏商品' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户收藏商品' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of collection
 -- ----------------------------
 INSERT INTO `collection` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 15);
+INSERT INTO `collection` VALUES (3, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 38);
 
 -- ----------------------------
 -- Table structure for county
@@ -3955,7 +3960,7 @@ CREATE TABLE `goods`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 39 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of goods
@@ -3971,6 +3976,15 @@ INSERT INTO `goods` VALUES (26, 2, 29, 53, 'AIRTEX亚特户外男女防晒衣轻
 INSERT INTO `goods` VALUES (27, 15, 120, 122, '永久（FOREVER）自行车24速山地车26寸转把双碟刹男女式学生单车 猎狐T01-A', '温馨提示：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收，需客户承担运费\n每天14：30前发货，客服在线时间9点-17点\n★【11月12日-15日返场购车领券满399-30 另加送骑行手电 评价还送二重礼包】', 599.00, 700.00, 300.00, 9, 1000, 9, 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/6f328260-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/708a9850-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/7160d410-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/73521cc0-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '永久', '<p><img src=\"http://localhost:3003/images/details/7a82c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/7bd78240-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7d807750-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7eb1a450-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/80547ee0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/81b60ab0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/837ce800-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/85267950-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:53:56', '2020-07-22 23:31:53');
 INSERT INTO `goods` VALUES (28, 15, 120, 122, '凤凰 高碳钢破风设计21速钳型刹越野学生车弯把公路车自行车', '用户需知：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收商品，由用户自行承担退回所产生的运费！！！', 768.00, 900.00, 350.00, 9, 1000, 10, 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/b8042c00-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/b95d5360-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/ba73a560-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '凤凰', '<p><img src=\"http://localhost:3003/images/details/c11f8ff0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/c2d667b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c47857e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c5d1cd60-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c7597ed0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ca644dd0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cbf9e1f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cd84c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cef4d270-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d1a684f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d3d090e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d5f93d40-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d8684170-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/db0867c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/defc1020-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e18b6d90-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e47c24e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f472c0c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:57:06', '2020-07-22 23:31:37');
 INSERT INTO `goods` VALUES (29, 2, 24, 30, '法式桔梗碎花连衣裙女夏小清新复古方领泡泡袖小个子2020夏装新款', '', 219.00, 429.00, 100.00, 5, 1000, 241254, 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_360.jpeg', 'http://localhost:3003/images/goods/0fc08010-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/12acca90-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/151d2e50-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/174ae3c0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/1a30c5a0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'Hyliangpin', '<p><img src=\"http://localhost:3003/images/details/96e84320-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/d3f47770-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/19fd8b30-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/1ea34580-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-07-22 23:15:43', '2020-07-22 23:18:44');
+INSERT INTO `goods` VALUES (30, 2, 24, 30, '大码女装2020夏装新款微胖妹妹mm仙女中长款雪纺显瘦遮肚子连衣裙', '', 299.00, 399.00, 150.00, 7, 1000, 124564, 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_720.png', 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_360.png', 'http://localhost:3003/images/goods/1c4e89f0-dbee-11ea-8858-c992a1c4bc0e_720.png,http://localhost:3003/images/goods/1fe12690-dbee-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/22fee150-dbee-11ea-8858-c992a1c4bc0e_720.jpeg', '韩风', '<p><img src=\"http://localhost:3003/images/details/27fc5890-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/2c0c6290-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:19:14', NULL);
+INSERT INTO `goods` VALUES (31, 2, 24, 30, '2020夏季新款女装胖mm大码气质显瘦方领泡泡袖高腰雪纺波点连衣裙', '', 116.00, 200.00, 40.00, 6, 1000, 21, 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/bb98aac0-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/c017a330-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ccdd2360-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', '布拉格', '<p><img src=\"http://localhost:3003/images/details/d3e81de0-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/dae6bc50-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/ea52f280-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-08-12 00:37:38', NULL);
+INSERT INTO `goods` VALUES (32, 2, 24, 30, '方领连衣裙2020夏新款职场ol气质系带收腰a字裙女', '', 287.00, 420.00, 120.00, 7, 1000, 45, 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/369d2ba0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/3c3dc0b0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/4070e310-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', '粉领', '<p><img src=\"http://localhost:3003/images/details/46cd2700-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/4c2f7a90-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/532c4440-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:47:52', NULL);
+INSERT INTO `goods` VALUES (33, 2, 24, 30, '夏季气质性感v领连衣裙纯色泡泡袖连衣裙中长款收腰显瘦连衣裙', '', 689.00, 1200.00, 100.00, 6, 1000, 48, 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/02430030-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/09cffbf0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/10c6f940-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'UC', '<p><img src=\"http://localhost:3003/images/details/16dd81a0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/20eb34d0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:00:37', NULL);
+INSERT INTO `goods` VALUES (34, 2, 24, 30, '复古温柔赫本风优雅方领丝绒连衣裙', '', 199.00, 289.00, 60.00, 7, 1000, 78, 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/712cdc50-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/77662ef0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/7d0d0590-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'WEMEN', '<p><img src=\"http://localhost:3003/images/details/83dad000-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/8a9cdaa0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/90830430-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:03:45', NULL);
+INSERT INTO `goods` VALUES (35, 2, 24, 30, '阔色小紫薯复古方领连衣裙2020夏新款韩版复古盘扣格纹裙子女', '', 99.00, 152.00, 20.00, 7, 1000, 79, 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/fe583c00-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0525b850-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0a2fd9c0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'CC', '<p><img src=\"http://localhost:3003/images/details/10ffee20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/157b3d10-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/190eeb20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:07:25', NULL);
+INSERT INTO `goods` VALUES (36, 2, 24, 30, '方领连衣裙2020夏新款韩版格纹裙子', '', 269.00, 350.00, 100.00, 8, 1000, 98, 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/c8047ff0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/caf202f0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ce90d490-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'Lisa', '<p><img src=\"http://localhost:3003/images/details/d3bc1290-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/d7cd7c20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:13:01', NULL);
+INSERT INTO `goods` VALUES (37, 2, 24, 30, '梵希2020夏季新款复古方领泡泡袖开叉短袖连衣裙收腰仙女裙小白裙', '', 389.00, 659.00, 200.00, 6, 1000, 758, 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/84e72500-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/8a653df0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', '梵希', '<p><img src=\"http://localhost:3003/images/details/9fbec9a0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/a446e9d0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a889eab0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:18:26', NULL);
+INSERT INTO `goods` VALUES (38, 2, 24, 30, '蜜搭 新款复古收腰桔梗初恋裙 夏法式方领绿色泡泡袖中长款连衣裙 158', '', 98.00, 189.00, 35.00, 5, 1000, 258, 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/00176640-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/04569690-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg', '蜜芽', '<p><img src=\"http://localhost:3003/images/details/0aabae90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/0f139c90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/13071de0-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:21:44', NULL);
 
 -- ----------------------------
 -- Table structure for icon
@@ -4274,6 +4288,7 @@ CREATE TABLE `menu`  (
   `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '菜单id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
   `pId` int(0) NULL DEFAULT NULL COMMENT '父级id',
+  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组件名称',
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接url',
   `menu_order` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示顺序',
   `icon_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标id',
@@ -4283,20 +4298,20 @@ CREATE TABLE `menu`  (
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES (1, '全部菜单', 0, NULL, '0', NULL);
-INSERT INTO `menu` VALUES (2, '商品管理', 1, '', '2000', '16');
-INSERT INTO `menu` VALUES (3, '用户管理', 1, '', '5000', '8');
-INSERT INTO `menu` VALUES (4, '订单管理', 1, '', '3000', '147');
-INSERT INTO `menu` VALUES (5, '账户设置', 1, '', '4000', '6');
-INSERT INTO `menu` VALUES (6, '权限设置', 1, '', '6000', '182');
-INSERT INTO `menu` VALUES (7, '商品分类', 2, '/goods/category/', '2001', '');
-INSERT INTO `menu` VALUES (8, '发布商品', 2, '/goods/release', '2002', '');
-INSERT INTO `menu` VALUES (9, '商品列表', 2, '/goods/list', '2003', '');
-INSERT INTO `menu` VALUES (10, '用户列表', 3, '/user/list', '5001', NULL);
-INSERT INTO `menu` VALUES (11, '订单列表', 4, '/order/list', '3001', '');
-INSERT INTO `menu` VALUES (12, '账户信息', 5, '/user/info', '4001', NULL);
-INSERT INTO `menu` VALUES (13, '用户角色', 6, '/auth/role', '6001', NULL);
-INSERT INTO `menu` VALUES (14, '菜单权限', 6, '/auth/menu', '6002', NULL);
+INSERT INTO `menu` VALUES (1, '全部菜单', 0, NULL, NULL, '0', NULL);
+INSERT INTO `menu` VALUES (2, '商品管理', 1, NULL, '', '2000', '16');
+INSERT INTO `menu` VALUES (3, '用户管理', 1, NULL, '', '5000', '8');
+INSERT INTO `menu` VALUES (4, '订单管理', 1, NULL, '', '3000', '147');
+INSERT INTO `menu` VALUES (5, '账户设置', 1, NULL, '', '4000', '6');
+INSERT INTO `menu` VALUES (6, '权限设置', 1, NULL, '', '6000', '182');
+INSERT INTO `menu` VALUES (7, '商品分类', 2, NULL, '/goods/category/', '2001', '');
+INSERT INTO `menu` VALUES (8, '发布商品', 2, NULL, '/goods/release', '2002', '');
+INSERT INTO `menu` VALUES (9, '商品列表', 2, NULL, '/goods/list', '2003', '');
+INSERT INTO `menu` VALUES (10, '用户列表', 3, NULL, '/user/list', '5001', NULL);
+INSERT INTO `menu` VALUES (11, '订单列表', 4, NULL, '/order/list', '3001', '');
+INSERT INTO `menu` VALUES (12, '账户信息', 5, NULL, '/user/info', '4001', NULL);
+INSERT INTO `menu` VALUES (13, '用户角色', 6, NULL, '/auth/role', '6001', NULL);
+INSERT INTO `menu` VALUES (14, '菜单权限', 6, NULL, '/auth/menu', '6002', NULL);
 
 -- ----------------------------
 -- Table structure for order_address
@@ -4309,7 +4324,7 @@ CREATE TABLE `order_address`  (
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省',
   `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '市',
-  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区',
+  `country` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区',
   `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '街道',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
   PRIMARY KEY (`id`) USING BTREE
@@ -4481,7 +4496,7 @@ CREATE TABLE `role_menu`  (
   `role_id` int(0) NULL DEFAULT NULL COMMENT '角色id',
   `menu_id` int(0) NULL DEFAULT NULL COMMENT '权限id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 47 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = FIXED;
+) ENGINE = MyISAM AUTO_INCREMENT = 58 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = FIXED;
 
 -- ----------------------------
 -- Records of role_menu
@@ -4513,6 +4528,16 @@ INSERT INTO `role_menu` VALUES (43, 4, 2);
 INSERT INTO `role_menu` VALUES (44, 4, 7);
 INSERT INTO `role_menu` VALUES (45, 4, 8);
 INSERT INTO `role_menu` VALUES (46, 4, 9);
+INSERT INTO `role_menu` VALUES (47, 3, 2);
+INSERT INTO `role_menu` VALUES (48, 3, 7);
+INSERT INTO `role_menu` VALUES (51, 3, 8);
+INSERT INTO `role_menu` VALUES (50, 3, 9);
+INSERT INTO `role_menu` VALUES (52, 3, 4);
+INSERT INTO `role_menu` VALUES (53, 3, 11);
+INSERT INTO `role_menu` VALUES (54, 3, 5);
+INSERT INTO `role_menu` VALUES (55, 3, 12);
+INSERT INTO `role_menu` VALUES (56, 4, 5);
+INSERT INTO `role_menu` VALUES (57, 4, 12);
 
 -- ----------------------------
 -- Table structure for town
@@ -47930,6 +47955,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '中国', '山东', '青岛', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'faGvB2C/48QoFksJdTPPwg==');
+INSERT INTO `user` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '中国', '山东', '青岛', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'I0YfnuBn8aaYwlTy97QHUQ==');
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -14,17 +14,19 @@ let db = require('../../config/mysql');
  * 
  * @apiSampleRequest /api/order/settle
  */
-router.get('/settle', function(req, res) {
+router.get('/settle', function (req, res) {
 	let { goods } = req.query;
 	let { openid } = req.user;
+	// 序列化数组
+	goods = JSON.parse(goods);
 	// 多表查询
 	let data = {};
-	let sql = `SELECT * FROM address WHERE uid =? AND isDefault =1 LIMIT 1`;
-	db.query(sql, [openid], function(results) {
+	let sql = `SELECT * FROM address WHERE uid =? AND isDefault = 1 LIMIT 1`;
+	db.query(sql, [openid], function (results) {
 		data.address = results[0];
 		let sql =
 			`SELECT g.id,g.name,g.price,g.img_md,c.goods_num FROM goods g JOIN cart c ON g.id = c.goods_id  WHERE c.uid = ? AND c.goods_id IN (?)`;
-		db.query(sql, [openid, goods], function(results) {
+		db.query(sql, [openid, goods], function (results) {
 			data.goods = results;
 			//成功
 			res.json({
@@ -50,19 +52,19 @@ router.get('/settle', function(req, res) {
  * 
  * @apiSampleRequest /api/order/create
  */
-router.post('/create', function(req, res) {
+router.post('/create', function (req, res) {
 	// 准备查询的商品id,方便使用IN
 	let queryGid = [];
 	let { addressId, payment, goodsList } = req.body;
 	let { openid } = req.user;
-	goodsList.forEach(function(item) {
+	goodsList.forEach(function (item) {
 		queryGid.push(item.id);
 	});
 	// 检查库存是否充足
 	let sql = `SELECT inventory FROM goods WHERE id IN (?)`;
-	db.query(sql, [queryGid], function(results) {
+	db.query(sql, [queryGid], function (results) {
 		// every碰到第一个为false的，即终止执行
-		let isAllPassed = results.every(function(item, index) {
+		let isAllPassed = results.every(function (item, index) {
 			let isPassed = item.inventory >= goodsList[index].num;
 			if (isPassed == false) {
 				res.json({
@@ -81,62 +83,62 @@ router.post('/create', function(req, res) {
 		}
 		// 数据库事务
 		let { pool } = db;
-		pool.getConnection(function(err, connection) {
+		pool.getConnection(function (err, connection) {
 			if (err) {
 				throw err;
 			}
-			connection.beginTransaction(function(error) {
+			connection.beginTransaction(function (error) {
 				// 库存充足,对应商品减库存,拼接SQL
 				let sql = `UPDATE goods SET  inventory = CASE id `;
-				goodsList.forEach(function(item, index) {
+				goodsList.forEach(function (item, index) {
 					sql += `WHEN ${item.id} THEN inventory - ${item.num} `;
 				});
 				sql += `END WHERE id IN (${queryGid});`;
-				connection.query(sql, function(error, results, fields) {
+				connection.query(sql, function (error, results, fields) {
 					if (error || results.changedRows <= 0) {
-						return connection.rollback(function() {
+						return connection.rollback(function () {
 							throw error || `${results.changedRows} rows changed!`;
 						});
 					}
 					// 订单表中生成新订单
 					let sql = `INSERT INTO orders (uid,payment,create_time) VALUES (?,?,CURRENT_TIMESTAMP())`;
-					connection.query(sql, [openid, payment], function(error, results, fields) {
+					connection.query(sql, [openid, payment], function (error, results, fields) {
 						// 提取新订单id
 						let { insertId, affectedRows } = results;
 						if (error || affectedRows <= 0) {
-							return connection.rollback(function() {
+							return connection.rollback(function () {
 								throw error || `${affectedRows} rows affected!`;
 							});
 						}
 						// 存储收货地址快照
 						let sql =
-							`INSERT INTO order_address ( order_id, name, tel, province, city, area, street, code )
-							 SELECT ( ? ), name, tel, province, city, area, street, code
+							`INSERT INTO order_address ( order_id, name, tel, province, city, county, street, code )
+							 SELECT ( ? ), name, tel, province, city, county, street, code
 							 FROM address WHERE id = ?`;
-						connection.query(sql, [insertId, addressId], function(error, results, fields) {
+						connection.query(sql, [insertId, addressId], function (error, results, fields) {
 							let { affectedRows } = results;
 							if (error || affectedRows <= 0) {
-								return connection.rollback(function() {
+								return connection.rollback(function () {
 									throw error || `${affectedRows} rows affected!`;
 								});
 							}
 							// 购物车对应商品复制到order_goods表中，carts表删除对应商品
 							let sql =
 								`INSERT INTO order_goods ( order_id, goods_id, goods_num, goods_price ) 
-									SELECT ( ? ), c.goods_id, c.goods_num, goods.price
+									SELECT ( ? ), c.goods_id, c.goods_num, g.price
 									FROM cart c JOIN goods g ON g.id = c.goods_id 
 									WHERE c.uid = ? AND c.goods_id IN (?);
 									DELETE FROM cart WHERE uid = ? AND goods_id IN (?)`;
-							connection.query(sql, [insertId, openid, queryGid, openid, queryGid], function(error, results,
+							connection.query(sql, [insertId, openid, queryGid, openid, queryGid], function (error, results,
 								fields) {
 								if (error) {
-									return connection.rollback(function() {
+									return connection.rollback(function () {
 										throw error;
 									});
 								}
-								connection.commit(function(err) {
+								connection.commit(function (err) {
 									if (err) {
-										return connection.rollback(function() {
+										return connection.rollback(function () {
 											throw err;
 										});
 									}
@@ -169,7 +171,7 @@ router.post('/create', function(req, res) {
  * 
  * @apiSampleRequest /api/order/list
  */
-router.get('/list', function(req, res) {
+router.get('/list', function (req, res) {
 	let { pageSize = 4, pageIndex = 1, status } = req.query;
 	let { openid } = req.user;
 	let size = parseInt(pageSize);
@@ -179,7 +181,7 @@ router.get('/list', function(req, res) {
 		`SELECT o.id, o.create_time, o.payment, os.text AS status
 		 FROM orders o JOIN order_status os ON o.order_state = os.CODE
 		 WHERE o.uid = ? AND o.order_state = ? LIMIT ?, ?`;
-	db.query(sql, [openid, status, count, size], function(results) {
+	db.query(sql, [openid, status, count, size], function (results) {
 		// 查询订单商品信息
 		let data = results;
 		let sql =

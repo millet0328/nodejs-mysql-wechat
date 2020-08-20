@@ -72,7 +72,7 @@ router.post("/common", upload.single('file'), async function (req, res) {
  * @apiDescription 如果上传错误的图片，通过此API删除错误的图片
  * @apiName uploadDelete
  * @apiGroup Upload Image
- * @apiPermission user
+ * @apiPermission user admin
  * 
  * @apiParam {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
  *
