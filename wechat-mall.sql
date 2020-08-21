@@ -11,7 +11,7 @@
  Target Server Version : 80020
  File Encoding         : 65001
 
- Date: 20/08/2020 10:29:43
+ Date: 21/08/2020 10:05:59
 */
 
 SET NAMES utf8mb4;
@@ -4324,7 +4324,7 @@ CREATE TABLE `order_address`  (
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省',
   `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '市',
-  `country` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区',
+  `county` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区',
   `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '街道',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
   PRIMARY KEY (`id`) USING BTREE
@@ -47955,6 +47955,6 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '中国', '山东', '青岛', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'I0YfnuBn8aaYwlTy97QHUQ==');
+INSERT INTO `user` VALUES (3, '紫风', '1', 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '中国', '山东', '青岛', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'WHhvxm1c7ZYEd2JFfLXVVA==');
 
 SET FOREIGN_KEY_CHECKS = 1;

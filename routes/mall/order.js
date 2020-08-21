@@ -83,11 +83,10 @@ router.post('/create', function (req, res) {
 		}
 		// 数据库事务
 		let { pool } = db;
-		pool.getConnection(function (err, connection) {
-			if (err) {
-				throw err;
-			}
+		pool.getConnection(function (error, connection) {
+			if (error) { throw error; }
 			connection.beginTransaction(function (error) {
+				if (error) { throw error; }
 				// 库存充足,对应商品减库存,拼接SQL
 				let sql = `UPDATE goods SET  inventory = CASE id `;
 				goodsList.forEach(function (item, index) {
@@ -103,23 +102,22 @@ router.post('/create', function (req, res) {
 					// 订单表中生成新订单
 					let sql = `INSERT INTO orders (uid,payment,create_time) VALUES (?,?,CURRENT_TIMESTAMP())`;
 					connection.query(sql, [openid, payment], function (error, results, fields) {
-						// 提取新订单id
-						let { insertId, affectedRows } = results;
-						if (error || affectedRows <= 0) {
+						if (error || results.affectedRows <= 0) {
 							return connection.rollback(function () {
-								throw error || `${affectedRows} rows affected!`;
+								throw error || `${results.affectedRows} rows affected!`;
 							});
 						}
+						// 提取新订单id
+						let { insertId } = results;
 						// 存储收货地址快照
 						let sql =
 							`INSERT INTO order_address ( order_id, name, tel, province, city, county, street, code )
 							 SELECT ( ? ), name, tel, province, city, county, street, code
 							 FROM address WHERE id = ?`;
 						connection.query(sql, [insertId, addressId], function (error, results, fields) {
-							let { affectedRows } = results;
-							if (error || affectedRows <= 0) {
+							if (error || results.affectedRows <= 0) {
 								return connection.rollback(function () {
-									throw error || `${affectedRows} rows affected!`;
+									throw error || `${results.affectedRows} rows affected!`;
 								});
 							}
 							// 购物车对应商品复制到order_goods表中，carts表删除对应商品
@@ -131,9 +129,9 @@ router.post('/create', function (req, res) {
 									DELETE FROM cart WHERE uid = ? AND goods_id IN (?)`;
 							connection.query(sql, [insertId, openid, queryGid, openid, queryGid], function (error, results,
 								fields) {
-								if (error) {
+								if (error || results.affectedRows <= 0) {
 									return connection.rollback(function () {
-										throw error;
+										throw error || `${results.affectedRows} rows affected!`;
 									});
 								}
 								connection.commit(function (err) {
