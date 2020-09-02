@@ -179,30 +179,22 @@ router.get('/list', function (req, res) {
 		`SELECT o.id, o.create_time, o.payment, os.text AS status
 		 FROM orders o JOIN order_status os ON o.order_state = os.CODE
 		 WHERE o.uid = ? AND o.order_state = ? LIMIT ?, ?`;
-	db.query(sql, [openid, status, count, size], function (results) {
+	db.query(sql, [openid, status, count, size], function (orders) {
 		// 查询订单商品信息
-		let data = results;
 		let sql =
 			`SELECT g.id, o.id AS order_id, g.name, g.img_md, og.goods_num, og.goods_price
 			 FROM orders o JOIN order_goods og ON o.id = og.order_id
 			 JOIN goods g ON g.id = og.goods_id
 			 WHERE o.uid = ? AND o.order_state = ?`;
-		db.query(sql, [openid, status], (results) => {
-			data.forEach((order) => {
-				if (!order.goodsList) {
-					order.goodsList = [];
-				}
-				results.forEach((goods) => {
-					if (order.id == goods.order_id) {
-						order.goodsList.push(goods);
-					}
-				});
+		db.query(sql, [openid, status], (goods) => {
+			orders.forEach((order) => {
+				order.goodsList = goods.filter((item) => order.id == item.order_id);
 			});
 			//成功
 			res.json({
 				status: true,
 				msg: "success!",
-				data
+				orders
 			});
 		});
 	});

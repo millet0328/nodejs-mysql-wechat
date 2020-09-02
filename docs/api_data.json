@@ -282,7 +282,7 @@
             "group": "Parameter",
             "type": "Number",
             "optional": false,
-            "field": "gid",
+            "field": "id",
             "description": "<p>商品id;</p>"
           },
           {
@@ -1536,6 +1536,13 @@
           },
           {
             "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "component",
+            "description": "<p>关联组件名称.</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "pId",
@@ -1659,14 +1666,35 @@
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>子菜单名称.</p>"
+            "description": "<p>分类名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "component",
+            "description": "<p>关联组件名称.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "pId",
+            "description": "<p>父级id.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "path",
-            "description": "<p>子菜单url地址.</p>"
+            "description": "<p>菜单url地址.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>菜单显示顺序，按照数字从小到大排序，如2001.</p>"
           }
         ]
       }

@@ -9,25 +9,25 @@ let db = require('../../config/mysql');
  * @apiGroup Cart
  * @apiPermission user
  * 
- * @apiParam {Number} gid 商品id;
+ * @apiParam {Number} id 商品id;
  * @apiParam {Number} num 商品数量,不能超过库存;
  *
  * @apiSampleRequest /api/cart
  */
 router.post('/', function (req, res) {
-    let { gid, num } = req.body;
+    let { id, num } = req.body;
     let { openid } = req.user;
     // 检查购物车是否已经有此商品
     let sql = `SELECT * FROM cart WHERE goods_id = ?`;
-    db.query(sql, [gid], function (results) {
+    db.query(sql, [id], function (results) {
         // 没有此商品,插入新纪录
         sql =
             `INSERT INTO cart ( uid , goods_id , goods_num , create_time )
-			VALUES ( '${openid}' , ${gid} , ${num} ,CURRENT_TIMESTAMP())`;
+			VALUES ( '${openid}' , ${id} , ${num} ,CURRENT_TIMESTAMP())`;
         // 已有此商品，增加数量
         if (results.length > 0) {
             sql =
-                `UPDATE cart SET goods_num = goods_num + ${num} WHERE goods_id = ${gid} AND uid = '${openid}'`;
+                `UPDATE cart SET goods_num = goods_num + ${num} WHERE goods_id = ${id} AND uid = '${openid}'`;
         }
         db.query(sql, function (results) {
             //成功
