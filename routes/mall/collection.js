@@ -16,7 +16,7 @@ let db = require('../../config/mysql');
 router.post("/", function (req, res) {
     let { id } = req.body;
     let { openid } = req.user;
-    let sql = 'INSERT INTO collection ( user_id, goods_id ) VALUES (?,?)';
+    let sql = 'INSERT INTO collection ( uid, goods_id ) VALUES (?,?)';
     db.query(sql, [openid, id], function (results) {
         //成功
         res.json({
@@ -39,7 +39,7 @@ router.post("/", function (req, res) {
 router.delete("/:id", function (req, res) {
     let { id } = req.params;
     let { openid } = req.user;
-    let sql = 'DELETE FROM collection WHERE goods_id = ? and user_id = ?';
+    let sql = 'DELETE FROM collection WHERE goods_id = ? and uid = ?';
     db.query(sql, [id, openid], function (results) {
         //成功
         res.json({
@@ -67,7 +67,7 @@ router.delete("/:id", function (req, res) {
  */
 router.get("/", function (req, res) {
     let { openid } = req.user;
-    let sql = 'SELECT c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE user_id = ?';
+    let sql = 'SELECT c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ?';
     db.query(sql, [openid], function (results) {
         //成功
         res.json({
