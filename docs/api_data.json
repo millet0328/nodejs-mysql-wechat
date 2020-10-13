@@ -867,7 +867,7 @@
     "groupTitle": "Order"
   },
   {
-    "type": "get",
+    "type": "post",
     "url": "/api/order/settle",
     "title": "获取\"确认订单\"页面的数据",
     "description": "<p>点击结算按钮之后传参至&quot;确认订单&quot;，此API返回&quot;确认订单&quot;页面需要的数据，此时订单需要用户确认商品价格、数量、支付金额，收货地址在此页面选择或者修改</p>",

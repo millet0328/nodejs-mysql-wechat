@@ -4,7 +4,7 @@ const router = express.Router();
 let db = require('../../config/mysql');
 
 /**
- * @api {get} /api/order/settle 获取"确认订单"页面的数据
+ * @api {post} /api/order/settle 获取"确认订单"页面的数据
  * @apiDescription 点击结算按钮之后传参至"确认订单"，此API返回"确认订单"页面需要的数据，此时订单需要用户确认商品价格、数量、支付金额，收货地址在此页面选择或者修改
  * @apiName SettleOrder
  * @apiGroup Order
@@ -14,11 +14,9 @@ let db = require('../../config/mysql');
  * 
  * @apiSampleRequest /api/order/settle
  */
-router.get('/settle', function (req, res) {
-	let { goods } = req.query;
+router.post('/settle', function (req, res) {
+	let { goods } = req.body;
 	let { openid } = req.user;
-	// 序列化数组
-	goods = JSON.parse(goods);
 	// 多表查询
 	let data = {};
 	let sql = `SELECT * FROM address WHERE uid =? AND isDefault = 1 LIMIT 1`;
