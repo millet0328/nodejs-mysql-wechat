@@ -11,20 +11,23 @@ const upload = multer();
 const sharp = require('sharp');
 //uuid
 const uuidv1 = require('uuid/v1');
+
 /**
  * @api {post} /api/upload/common 通用图片上传API
- * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，不限制尺寸，存储至common文件夹
- * @apiName UploadCommon
+ * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，avatar存储至avatar文件夹,common存储至common文件夹，type=avatar图片必须是正方形，type=common不限制尺寸。
+ * @apiName uploadCommon
  * @apiGroup Upload Image
- * @apiPermission user
  * 
  * @apiParam {File} file File文件对象;
- *
+ * @apiParam {String="common","avatar"} type 上传类型：avatar--头像上传；common--通用上传；
+ * 
  * @apiSampleRequest /api/upload/common
- *
+ * 
  * @apiSuccess {String} src 返回图片地址.
  */
 router.post("/common", upload.single('file'), async function (req, res) {
+	//上传类型
+	let { type } = req.body;
 	//文件类型
 	let { mimetype, size } = req.file;
 	//判断是否为图片
@@ -45,12 +48,20 @@ router.post("/common", upload.single('file'), async function (req, res) {
 		});
 		return;
 	}
-	// 扩展名
+	// 判断图片尺寸
+	if (type == "avatar" && width != height) {
+		res.status(400).json({
+			status: false,
+			msg: "图片必须为正方形，请重新上传!"
+		});
+		return;
+	}
+	//扩展名
 	var { format } = await sharp(req.file.buffer).metadata();
 	// 生成文件名
 	var filename = uuidv1();
-	// 储存文件夹
-	var fileFolder = "/images/common/";
+	//储存文件夹
+	var fileFolder = `/images/${type}/`;
 	//处理图片
 	try {
 		await sharp(req.file.buffer).toFile("public" + fileFolder + filename + '.' + format);
@@ -67,6 +78,7 @@ router.post("/common", upload.single('file'), async function (req, res) {
 		});
 	}
 });
+
 /**
  * @api {delete} /api/upload 删除图片API
  * @apiDescription 如果上传错误的图片，通过此API删除错误的图片

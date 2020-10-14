@@ -1180,14 +1180,9 @@
     "type": "post",
     "url": "/api/upload/common",
     "title": "通用图片上传API",
-    "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，不限制尺寸，存储至common文件夹</p>",
-    "name": "UploadCommon",
+    "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，avatar存储至avatar文件夹,common存储至common文件夹，type=avatar图片必须是正方形，type=common不限制尺寸。</p>",
+    "name": "uploadCommon",
     "group": "Upload_Image",
-    "permission": [
-      {
-        "name": "user"
-      }
-    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1197,6 +1192,17 @@
             "optional": false,
             "field": "file",
             "description": "<p>File文件对象;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "allowedValues": [
+              "\"common\"",
+              "\"avatar\""
+            ],
+            "optional": false,
+            "field": "type",
+            "description": "<p>上传类型：avatar--头像上传；common--通用上传；</p>"
           }
         ]
       }
@@ -2593,53 +2599,6 @@
     "version": "0.0.0",
     "filename": "routes/admin/order.js",
     "groupTitle": "admin_Order"
-  },
-  {
-    "type": "post",
-    "url": "/api/upload/avatar",
-    "title": "用户头像上传API",
-    "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，尺寸（120~300）必须是正方形，存储至avatar文件夹</p>",
-    "name": "UploadAvatar",
-    "group": "admin_Upload_Image",
-    "permission": [
-      {
-        "name": "admin user"
-      }
-    ],
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "File",
-            "optional": false,
-            "field": "file",
-            "description": "<p>File文件对象;</p>"
-          }
-        ]
-      }
-    },
-    "sampleRequest": [
-      {
-        "url": "/api/upload/avatar"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "src",
-            "description": "<p>返回图片地址.</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "routes/admin/upload.js",
-    "groupTitle": "admin_Upload_Image"
   },
   {
     "type": "post",

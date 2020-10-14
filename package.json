@@ -3,13 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "set SERVER=http://localhost:3003&node ./bin/www",
+    "start": "cross-env-shell SERVER=http://localhost:3003 npm run server",
+    "server": "node bin/www",
     "api": "apidoc -i routes/ -o public/api/ && apidoc -i routes/ -o docs/"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "debug": "~2.6.9",
     "express": "^4.17.1",
     "express-jwt": "^5.3.1",
