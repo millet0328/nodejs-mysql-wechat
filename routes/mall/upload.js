@@ -17,6 +17,7 @@ const uuidv1 = require('uuid/v1');
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，avatar存储至avatar文件夹,common存储至common文件夹，type=avatar图片必须是正方形，type=common不限制尺寸。
  * @apiName uploadCommon
  * @apiGroup Upload Image
+ * @apiPermission user admin
  * 
  * @apiParam {File} file File文件对象;
  * @apiParam {String="common","avatar"} type 上传类型：avatar--头像上传；common--通用上传；
@@ -48,6 +49,8 @@ router.post("/common", upload.single('file'), async function (req, res) {
 		});
 		return;
 	}
+	// 获取图片信息
+	var { width, height, format } = await sharp(req.file.buffer).metadata();
 	// 判断图片尺寸
 	if (type == "avatar" && width != height) {
 		res.status(400).json({
@@ -56,8 +59,6 @@ router.post("/common", upload.single('file'), async function (req, res) {
 		});
 		return;
 	}
-	//扩展名
-	var { format } = await sharp(req.file.buffer).metadata();
 	// 生成文件名
 	var filename = uuidv1();
 	//储存文件夹
