@@ -70,7 +70,7 @@ router.get("/detail", function (req, res) {
     let { openid } = req.user;
     let sql = `
 	SELECT id, name, price, hotPoint, marketPrice, discount, img_md, slider, detail FROM GOODS WHERE id = ?;
-	SELECT * FROM collection WHERE goods_id = ? AND user_id = ?;
+	SELECT * FROM collection WHERE goods_id = ? AND uid = ?;
 	`
     db.query(sql, [id, id, openid], function (results) {
         if (results[1].length) {

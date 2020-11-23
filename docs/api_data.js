@@ -1183,6 +1183,11 @@ define({ "api": [
     "description": "<p>上传图片会自动检测图片质量，压缩图片，体积&lt;2M，avatar存储至avatar文件夹,common存储至common文件夹，type=avatar图片必须是正方形，type=common不限制尺寸。</p>",
     "name": "uploadCommon",
     "group": "Upload_Image",
+    "permission": [
+      {
+        "name": "user admin"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
