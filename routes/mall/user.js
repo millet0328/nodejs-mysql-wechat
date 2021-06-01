@@ -45,7 +45,7 @@ router.post('/token', function(req, res) {
             return;
         }
         // 生成token
-        let token = jwt.sign(data, 'secret', { expiresIn: '5h' });
+        let token = jwt.sign(data, 'secret');
         // 查询数据库中是否有此openid
         let sql = 'SELECT * FROM user WHERE openid = ?';
         db.query(sql, [data.openid], function(results) {

@@ -659,7 +659,7 @@
     "type": "get",
     "url": "/api/goods/list",
     "title": "获取商品列表",
-    "description": "<p>具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
+    "description": "<p>具备搜索、分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
     "name": "GoodsList_获取商品列表",
     "group": "Goods",
     "permission": [
@@ -706,6 +706,13 @@
             "optional": true,
             "field": "cate_3rd",
             "description": "<p>三级分类id;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "keyword",
+            "description": "<p>搜索关键词;</p>"
           },
           {
             "group": "Parameter",
@@ -848,11 +855,12 @@
               "0",
               "3",
               "4",
-              "5"
+              "5",
+              "all"
             ],
             "optional": false,
             "field": "status",
-            "description": "<p>订单状态:0-待付款，3-待发货，4-待收货，5-待评价;</p>"
+            "description": "<p>订单状态:0-待付款，3-待发货，4-待收货，5-待评价，all-所有状态;</p>"
           }
         ]
       }
@@ -2035,7 +2043,7 @@
     "type": "get",
     "url": "/api/admin/goods/list",
     "title": "获取商品列表",
-    "description": "<p>具备商品分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
+    "description": "<p>具备搜索、分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序</p>",
     "name": "AdminGoodsList",
     "group": "admin_Goods",
     "permission": [
@@ -2082,6 +2090,13 @@
             "optional": true,
             "field": "cate_3rd",
             "description": "<p>三级分类id;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "keyword",
+            "description": "<p>搜索关键词;</p>"
           },
           {
             "group": "Parameter",

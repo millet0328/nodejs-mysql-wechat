@@ -15,49 +15,49 @@ let db = require('../../config/mysql');
  *
  * @apiSampleRequest /api/admin/order/list
  */
-router.get('/list', function (req, res) {
-    let {pageSize = 4, pageIndex = 1, status = 'all'} = req.query;
-    let size = parseInt(pageSize);
-    let count = size * (pageIndex - 1);
-    // 查询所有订单
-    let sql =
-        `SELECT o.id, o.create_time, o.payment, os.text AS status
-		 FROM orders o JOIN order_status os ON o.order_state = os.CODE LIMIT ? OFFSET ?`;
-    // 根据订单状态查询
-    if (status != 'all') {
-        sql =
-            `SELECT o.id, o.create_time, o.payment, os.text AS status
+router.get('/list', function(req, res) {
+	let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
+	let size = parseInt(pageSize);
+	let count = size * (pageIndex - 1);
+	// 查询所有订单
+	let sql =
+		`SELECT o.id, o.create_time, o.payment, os.text AS status
+		 FROM orders o JOIN order_status os ON o.order_state = os.CODE ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+	// 根据订单状态查询
+	if (status != 'all') {
+		sql =
+			`SELECT o.id, o.create_time, o.payment, os.text AS status
 			 FROM orders o JOIN order_status os ON o.order_state = os.CODE
-			 WHERE o.order_state = ${status} LIMIT ? OFFSET ?`;
-    }
-    db.query(sql, [size, count], function (results, fields) {
-        // 查询订单商品信息
-        let data = results;
-        let sql =
-            `SELECT g.id, o.id AS order_id, g.name, g.img_md, og.goods_num, og.goods_price
+			 WHERE o.order_state = ${status} ORDER BY create_time DESC LIMIT ? OFFSET ?`;
+	}
+	db.query(sql, [size, count], function(results, fields) {
+		// 查询订单商品信息
+		let data = results;
+		let sql =
+			`SELECT g.id, o.id AS order_id, g.name, g.img_md, og.goods_num, og.goods_price
 			 FROM orders o JOIN order_goods og ON o.id = og.order_id
 			 JOIN goods g ON g.id = og.goods_id`;
-        if (status != 'all') {
-            sql += ` WHERE o.order_state = ${status}`;
-        }
-        db.query(sql, [], (results, fields) => {
-            data.forEach((order) => {
-                if (!order.goodsList) {
-                    order.goodsList = [];
-                }
-                results.forEach((goods) => {
-                    if (order.id == goods.order_id) {
-                        order.goodsList.push(goods);
-                    }
-                });
-            });
-            //成功
-            res.json({
-                status: true,
-                msg: "success!",
-                data
-            });
-        });
-    });
+		if (status != 'all') {
+			sql += ` WHERE o.order_state = ${status}`;
+		}
+		db.query(sql, [], (results, fields) => {
+			data.forEach((order) => {
+				if (!order.goodsList) {
+					order.goodsList = [];
+				}
+				results.forEach((goods) => {
+					if (order.id == goods.order_id) {
+						order.goodsList.push(goods);
+					}
+				});
+			});
+			//成功
+			res.json({
+				status: true,
+				msg: "success!",
+				data
+			});
+		});
+	});
 });
 module.exports = router;

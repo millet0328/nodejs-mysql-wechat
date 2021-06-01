@@ -290,7 +290,7 @@ router.put("/account", function (req, res) {
 	db.query(sql, [fullname, sex, avatar, tel, email, id], function (results) {
 		if (!results.affectedRows) {
 			res.json({
-				status: true,
+				status: false,
 				msg: "修改失败！"
 			});
 			return;
