@@ -29,7 +29,7 @@ router.get("/list", function(req, res) {
 	let size = parseInt(pageSize);
 	let count = size * (pageIndex - 1);
 	let sql =
-		`SELECT SQL_CALC_FOUND_ROWS id,name,price,img_md,articleNo,inventory,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
+		`SELECT SQL_CALC_FOUND_ROWS id,name,price,img_md,hotPoint,articleNo,inventory,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
 	if (cate_1st) {
 		sql += ` AND cate_1st = ${cate_1st}`;
 	}
