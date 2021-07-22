@@ -3951,7 +3951,7 @@ CREATE TABLE `goods`  (
   `cost` decimal(10, 2) NOT NULL COMMENT '成本价',
   `discount` decimal(10, 0) NULL DEFAULT NULL COMMENT '折扣',
   `inventory` int(0) NOT NULL COMMENT '库存',
-  `articleNo` int(0) NOT NULL COMMENT '货号',
+  `articleNo` varchar(255) NOT NULL COMMENT '货号',
   `img_lg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图-720',
   `img_md` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图-360',
   `slider` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品轮播图片',

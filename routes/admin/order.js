@@ -28,7 +28,7 @@ router.get('/list', function(req, res) {
 		sql =
 			`SELECT o.id, o.create_time, o.payment, os.text AS status
 			 FROM orders o JOIN order_status os ON o.order_state = os.CODE
-			 WHERE o.order_state = ${status} ORDER BY create_time DESC LIMIT ? OFFSET ?`;
+			 WHERE o.order_state = ${status} ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
 	}
 	db.query(sql, [size, count], function(results, fields) {
 		// 查询订单商品信息
