@@ -89,6 +89,9 @@ router.post("/common", upload.single('file'), async function (req, res) {
  * 
  * @apiParam {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
  *
+ * @apiExample {js} 参数示例:
+ * /api/upload?src=http://localhost:3003/images/path/to/photo.jpg
+ *
  * @apiSampleRequest /api/upload
  */
 

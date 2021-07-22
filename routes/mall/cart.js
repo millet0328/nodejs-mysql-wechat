@@ -8,7 +8,7 @@ let db = require('../../config/mysql');
  * @apiName AddCart
  * @apiGroup Cart
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 商品id;
  * @apiParam {Number} num 商品数量,不能超过库存;
  *
@@ -43,7 +43,7 @@ router.post('/', function (req, res) {
  * @apiName CartList
  * @apiGroup Cart
  * @apiPermission user
- * 
+ *
  * @apiSampleRequest /api/cart/list
  */
 router.get('/list', function (req, res) {
@@ -66,7 +66,7 @@ router.get('/list', function (req, res) {
  * @apiName DeleteCart
  * @apiGroup Cart
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 购物车条目id;
  *
  * @apiSampleRequest /api/cart
@@ -83,20 +83,21 @@ router.delete('/:id', function (req, res) {
     });
 });
 /**
- * @api {put} /api/cart/increase 购物车增加商品数量
+ * @api {put} /api/cart/increase/:id 购物车增加商品数量
  * @apiDescription 增加商品数量，后台查询库存，注意提示库存不足
  * @apiName IncreaseCart
  * @apiGroup Cart
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 购物车条目id;
  * @apiParam {Number} gid 商品id;
  * @apiParam {Number{1-库存MAX}} num 商品数量;
  *
  * @apiSampleRequest /api/cart/increase
  */
-router.put('/increase', function (req, res) {
-    let { id, gid, num } = req.body;
+router.put('/increase/:id', function (req, res) {
+    let { id } = req.params;
+    let { gid, num } = req.body;
     // 检查库存
     let sql = `SELECT goods_num FROM cart WHERE id = ?;
 	SELECT inventory FROM goods WHERE id = ?`;
@@ -121,19 +122,20 @@ router.put('/increase', function (req, res) {
 
 });
 /**
- * @api {put} /api/cart/decrease 购物车减少商品数量
+ * @api {put} /api/cart/decrease/:id 购物车减少商品数量
  * @apiDescription 减少商品数量，前台注意约束num，商品数量>=1
  * @apiName DecreaseCart
  * @apiGroup Cart
  * @apiPermission user
- * 
+ *
  * @apiParam {Number} id 购物车条目id;
  * @apiParam {Number{1-库存MAX}} num 商品数量;
  *
  * @apiSampleRequest /api/cart/decrease
  */
-router.put('/decrease', function (req, res) {
-    let { id, num } = req.body;
+router.put('/decrease/:id', function (req, res) {
+    let { id } = req.params;
+    let { num } = req.body;
     let sql = `UPDATE cart SET goods_num = goods_num - ? WHERE id = ?`;
     db.query(sql, [num, id], function (results) {
         //成功

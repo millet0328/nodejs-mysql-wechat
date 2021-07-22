@@ -58,7 +58,7 @@ router.delete("/:id", function (req, res) {
     })
 })
 /**
- * @api {put} /api/address 修改收货地址
+ * @api {put} /api/address/:id 修改收货地址
  * @apiName addressUpdate
  * @apiGroup Address
  * @apiPermission user
@@ -73,11 +73,12 @@ router.delete("/:id", function (req, res) {
  * @apiParam {String} code 邮编.
  * @apiParam {Number=1,0} isDefault 是否默认.1-默认,0-否.
  *
- * @apiSampleRequest /api/address
+ * @apiSampleRequest /api/address/
  */
-router.put("/", function (req, res) {
+router.put("/:id", function (req, res) {
     let sql;
-    let { id, name, tel, province, city, county, street, code, isDefault } = req.body;
+    let { name, tel, province, city, county, street, code, isDefault } = req.body;
+    let { id } = req.params;
     let { openid } = req.user;
     if (isDefault == '1') {
         sql = `UPDATE address SET isDefault = 0 WHERE uid = '${openid}';

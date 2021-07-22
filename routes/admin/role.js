@@ -46,17 +46,20 @@ router.post('/', function (req, res) {
     });
 });
 /**
- * @api {delete} /api/role 删除角色
+ * @api {delete} /api/role/:id 删除角色
  * @apiName RoleDelete
  * @apiGroup admin-Role
  * @apiPermission admin
  *
  * @apiParam {String} id 角色id.
  *
+ * @apiExample {js} 参数示例:
+ * /api/role/3
+ *
  * @apiSampleRequest /api/role
  */
-router.delete('/', function (req, res) {
-    let { id } = req.query;
+router.delete('/:id', function (req, res) {
+    let { id } = req.params;
     let sql = `DELETE FROM role WHERE id = ?`;
     db.query(sql, [id], function (results) {
         //成功
@@ -67,7 +70,7 @@ router.delete('/', function (req, res) {
     });
 });
 /**
- * @api {put} /api/role 更新角色
+ * @api {put} /api/role/:id 更新角色
  * @apiName RoleUpdate
  * @apiGroup admin-Role
  * @apiPermission admin
@@ -75,10 +78,14 @@ router.delete('/', function (req, res) {
  * @apiParam {String} id 角色id.
  * @apiParam {String} name 角色名称.
  *
+ * @apiExample {js} 参数示例:
+ * /api/role/3
+ *
  * @apiSampleRequest /api/role
  */
-router.put('/', function (req, res) {
-    let { id, name } = req.body;
+router.put('/:id', function (req, res) {
+    let { id } = req.params;
+    let { name } = req.body;
     let sql = `UPDATE role SET role_name = ? WHERE id = ?`;
     db.query(sql, [name, id], function (results) {
         //成功
@@ -162,17 +169,22 @@ router.post('/menu', function (req, res) {
 });
 
 /**
- * @api {delete} /api/role/menu 为指定角色删除菜单
+ * @api {delete} /api/role/menu/:role_id 为指定角色删除菜单
  * @apiName DeleteRoleMenu
  * @apiGroup admin-Role
  * @apiPermission admin
  *
  * @apiParam { Number } role_id 角色id。
  * @apiParam { Number } menu_id 菜单id。
+ *
+ * @apiExample {js} 参数示例:
+ * /api/role/menu/3
+ *
  * @apiSampleRequest /api/role/menu
  */
-router.delete('/menu', function (req, res) {
-    let { role_id, menu_id } = req.query;
+router.delete('/menu/:role_id', function (req, res) {
+    let { role_id } = req.params;
+    let { menu_id } = req.query;
     let sql = `DELETE FROM role_menu WHERE role_id = ? AND menu_id = ?`;
     db.query(sql, [role_id, menu_id], function (results) {
         //成功

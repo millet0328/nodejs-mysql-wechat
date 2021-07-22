@@ -173,7 +173,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/address",
+    "url": "/api/address/:id",
     "title": "修改收货地址",
     "name": "addressUpdate",
     "group": "Address",
@@ -257,7 +257,7 @@ define({ "api": [
     },
     "sampleRequest": [
       {
-        "url": "/api/address"
+        "url": "/api/address/"
       }
     ],
     "version": "0.0.0",
@@ -326,7 +326,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/cart/decrease",
+    "url": "/api/cart/decrease/:id",
     "title": "购物车减少商品数量",
     "description": "<p>减少商品数量，前台注意约束num，商品数量&gt;=1</p>",
     "name": "DecreaseCart",
@@ -401,7 +401,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/cart/increase",
+    "url": "/api/cart/increase/:id",
     "title": "购物车增加商品数量",
     "description": "<p>增加商品数量，后台查询库存，注意提示库存不足</p>",
     "name": "IncreaseCart",
@@ -1267,6 +1267,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/upload?src=http://localhost:3003/images/path/to/photo.jpg",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/upload"
@@ -1454,7 +1461,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/category",
+    "url": "/api/category/:id",
     "title": "删除分类",
     "name": "categoryDelete",
     "group": "admin-Category",
@@ -1476,6 +1483,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/category/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/category"
@@ -1487,7 +1501,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/category",
+    "url": "/api/category/:id",
     "title": "更新分类",
     "name": "updateCategory",
     "group": "admin-Category",
@@ -1523,6 +1537,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/category/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/category"
@@ -1578,7 +1599,7 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "order",
+            "field": "menu_order",
             "description": "<p>菜单显示顺序，按照数字从小到大排序，如2001.</p>"
           }
         ]
@@ -1595,7 +1616,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/menu",
+    "url": "/api/menu/:id",
     "title": "删除子菜单",
     "name": "MenuDelete",
     "group": "admin-Menu",
@@ -1617,6 +1638,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/menu/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/menu"
@@ -1661,7 +1689,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/menu",
+    "url": "/api/menu/:id",
     "title": "更新子菜单",
     "name": "MenuUpdate",
     "group": "admin-Menu",
@@ -1712,12 +1740,19 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "order",
+            "field": "menu_order",
             "description": "<p>菜单显示顺序，按照数字从小到大排序，如2001.</p>"
           }
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/menu/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/menu"
@@ -1752,12 +1787,19 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
-            "field": "icon",
+            "field": "icon_id",
             "description": "<p>element图标id.</p>"
           }
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/menu/icon/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/menu/icon"
@@ -1802,7 +1844,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/role/menu",
+    "url": "/api/role/menu/:role_id",
     "title": "为指定角色删除菜单",
     "name": "DeleteRoleMenu",
     "group": "admin-Role",
@@ -1831,6 +1873,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/role/menu/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/role/menu"
@@ -1948,7 +1997,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/role",
+    "url": "/api/role/:id",
     "title": "删除角色",
     "name": "RoleDelete",
     "group": "admin-Role",
@@ -1970,6 +2019,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/role/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/role"
@@ -2001,7 +2057,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/role",
+    "url": "/api/role/:id",
     "title": "更新角色",
     "name": "RoleUpdate",
     "group": "admin-Role",
@@ -2030,6 +2086,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/role/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/role"
@@ -2143,7 +2206,7 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/admin/goods",
+    "url": "/api/admin/goods/:id",
     "title": "删除商品",
     "name": "GoodsDelete",
     "group": "admin_Goods",
@@ -2165,6 +2228,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/admin/goods/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/admin/goods"
@@ -2209,7 +2279,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/api/admin/goods",
+    "url": "/api/admin/goods/:id",
     "title": "编辑商品",
     "name": "goodsEdit",
     "group": "admin_Goods",
@@ -2350,6 +2420,13 @@ define({ "api": [
         ]
       }
     },
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/admin/goods/3",
+        "type": "js"
+      }
+    ],
     "sampleRequest": [
       {
         "url": "/api/admin/goods"
@@ -3036,13 +3113,20 @@ define({ "api": [
   },
   {
     "type": "delete",
-    "url": "/api/admin",
+    "url": "/api/admin/:id",
     "title": "删除管理员",
     "name": "DeleteAdmin",
     "group": "admin_User",
     "permission": [
       {
         "name": "admin"
+      }
+    ],
+    "examples": [
+      {
+        "title": "参数示例:",
+        "content": "/api/admin/3",
+        "type": "js"
       }
     ],
     "parameter": {
@@ -3082,13 +3166,6 @@ define({ "api": [
     "parameter": {
       "fields": {
         "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Number",
-            "optional": false,
-            "field": "id",
-            "description": "<p>账户id.</p>"
-          },
           {
             "group": "Parameter",
             "type": "String",
@@ -3138,7 +3215,7 @@ define({ "api": [
   },
   {
     "type": " put ",
-    "url": "/api/admin",
+    "url": "/api/admin/",
     "title": "更新管理员个人资料",
     "description": "<p>只有超级管理员才有权限修改用户角色，普通管理员无权限更改角色。</p>",
     "name": "UpdateInfo",

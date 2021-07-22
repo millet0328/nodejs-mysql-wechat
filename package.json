@@ -28,5 +28,8 @@
   "apidoc": {
     "name": "商城API文档",
     "title": "商城API文档"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

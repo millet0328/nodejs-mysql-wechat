@@ -47,7 +47,7 @@ router.post("/", function (req, res) {
     });
 });
 /**
- * @api {put} /api/admin/goods 编辑商品
+ * @api {put} /api/admin/goods/:id 编辑商品
  * @apiName goodsEdit
  * @apiGroup admin Goods
  * @apiPermission admin
@@ -71,11 +71,14 @@ router.post("/", function (req, res) {
  * @apiParam {String} detail 商品详情,一般存储为HTML代码;
  * @apiParam {Number} freight 商品运费;
  *
+ * @apiExample {js} 参数示例:
+ * /api/admin/goods/3
+ *
  * @apiSampleRequest /api/admin/goods
  */
-router.put("/", function (req, res) {
-    let { id, cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
-    console.log(cate_3rd);
+router.put("/:id", function (req, res) {
+    let { id } = req.params;
+    let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
     let sql =
         `UPDATE GOODS SET cate_1st=?,cate_2nd=?,cate_3rd=?,name=?,hotPoint=?,price=?,marketPrice=?,cost=?,discount=?,inventory=?,articleNo=?,img_lg=?,img_md=?,slider=?,brand=?,detail=?,freight=?,update_time = CURRENT_TIMESTAMP() WHERE id=?`;
     db.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory,
@@ -168,17 +171,20 @@ router.get("/", function (req, res) {
     });
 });
 /**
- * @api {delete} /api/admin/goods 删除商品
+ * @api {delete} /api/admin/goods/:id 删除商品
  * @apiName GoodsDelete
  * @apiGroup admin Goods
  * @apiPermission admin
  *
  * @apiParam {Number} id 商品id;
  *
+ * @apiExample {js} 参数示例:
+ * /api/admin/goods/3
+ *
  * @apiSampleRequest /api/admin/goods
  */
-router.delete("/", function (req, res) {
-    let { id } = req.query;
+router.delete("/:id", function (req, res) {
+    let { id } = req.params;
     let sql = `DELETE FROM GOODS WHERE id=?`;
     db.query(sql, [id], function (results) {
         //成功
