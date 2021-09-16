@@ -18,16 +18,13 @@ router.post('/', function (req, res) {
     let { id, num } = req.body;
     let { openid } = req.user;
     // 检查购物车是否已经有此商品
-    let sql = `SELECT * FROM cart WHERE goods_id = ?`;
+    let sql = `SELECT * FROM cart WHERE goods_id = ? AND uid = '${openid}'`;
     db.query(sql, [id], function (results) {
         // 没有此商品,插入新纪录
-        sql =
-            `INSERT INTO cart ( uid , goods_id , goods_num , create_time )
-			VALUES ( '${openid}' , ${id} , ${num} ,CURRENT_TIMESTAMP())`;
+        sql = `INSERT INTO cart ( uid , goods_id , goods_num , create_time ) VALUES ( '${openid}' , ${id} , ${num} ,CURRENT_TIMESTAMP())`;
         // 已有此商品，增加数量
         if (results.length > 0) {
-            sql =
-                `UPDATE cart SET goods_num = goods_num + ${num} WHERE goods_id = ${id} AND uid = '${openid}'`;
+            sql = `UPDATE cart SET goods_num = goods_num + ${num} WHERE goods_id = ${id} AND uid = '${openid}'`;
         }
         db.query(sql, function (results) {
             //成功
