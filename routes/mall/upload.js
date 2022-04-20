@@ -10,19 +10,19 @@ const upload = multer();
 //图片处理
 const sharp = require('sharp');
 //uuid
-const uuidv1 = require('uuid/v1');
+const { v5: uuidv5 } = require('uuid');
 
 /**
- * @api {post} /api/upload/common 通用图片上传API
+ * @api {post} /upload/common 通用图片上传API
  * @apiDescription 上传图片会自动检测图片质量，压缩图片，体积<2M，avatar存储至avatar文件夹,common存储至common文件夹，type=avatar图片必须是正方形，type=common不限制尺寸。
  * @apiName uploadCommon
- * @apiGroup Upload Image
+ * @apiGroup Upload
  * @apiPermission user admin
  * 
- * @apiParam {File} file File文件对象;
- * @apiParam {String="common","avatar"} type 上传类型：avatar--头像上传；common--通用上传；
+ * @apiBody {File} file File文件对象;
+ * @apiBody {String="common","avatar"} type 上传类型：avatar--头像上传；common--通用上传；
  * 
- * @apiSampleRequest /api/upload/common
+ * @apiSampleRequest /upload/common
  * 
  * @apiSuccess {String} src 返回图片地址.
  */
@@ -60,7 +60,7 @@ router.post("/common", upload.single('file'), async function(req, res) {
 		return;
 	}
 	// 生成文件名
-	var filename = uuidv1();
+	var filename = uuidv5();
 	//储存文件夹
 	var fileFolder = `/images/${type}/`;
 	//处理图片
@@ -81,18 +81,18 @@ router.post("/common", upload.single('file'), async function(req, res) {
 });
 
 /**
- * @api {delete} /api/upload 删除图片API
+ * @api {delete} /upload 删除图片API
  * @apiDescription 如果上传错误的图片，通过此API删除错误的图片
  * @apiName uploadDelete
- * @apiGroup Upload Image
+ * @apiGroup Upload
  * @apiPermission user admin
  * 
- * @apiParam {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
+ * @apiQuery {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
  *
  * @apiExample {js} 参数示例:
- * /api/upload?src=http://localhost:3003/images/path/to/photo.jpg
+ * /upload?src=http://localhost:3003/images/path/to/photo.jpg
  *
- * @apiSampleRequest /api/upload
+ * @apiSampleRequest /upload
  */
 
 router.delete('/', function(req, res) {

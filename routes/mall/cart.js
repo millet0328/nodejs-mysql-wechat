@@ -1,145 +1,192 @@
 const express = require('express');
 const router = express.Router();
 // 数据库
-let db = require('../../config/mysql');
+let pool = require('../../config/mysql');
 
 /**
- * @api {post} /api/cart 添加商品至购物车
+ * @api {post} /cart 添加商品至购物车
  * @apiName AddCart
  * @apiGroup Cart
  * @apiPermission user
  *
- * @apiParam {Number} id 商品id;
- * @apiParam {Number} num 商品数量,不能超过库存;
+ * @apiBody {Number} id 商品id;
+ * @apiBody {Number} num 商品数量,不能超过库存;
  *
- * @apiSampleRequest /api/cart
+ * @apiSampleRequest /cart
  */
-router.post('/', function (req, res) {
+router.post('/', async function (req, res) {
     let { id, num } = req.body;
     let { openid } = req.user;
     // 检查购物车是否已经有此商品
-    let sql = `SELECT * FROM cart WHERE goods_id = ? AND uid = '${openid}'`;
-    db.query(sql, [id], function (results) {
-        // 没有此商品,插入新纪录
-        sql = `INSERT INTO cart ( uid , goods_id , goods_num , create_time ) VALUES ( '${openid}' , ${id} , ${num} ,CURRENT_TIMESTAMP())`;
-        // 已有此商品，增加数量
-        if (results.length > 0) {
-            sql = `UPDATE cart SET goods_num = goods_num + ${num} WHERE goods_id = ${id} AND uid = '${openid}'`;
-        }
-        db.query(sql, function (results) {
-            //成功
+    let select_sql = `SELECT * FROM cart WHERE goods_id = ? AND uid = ?`;
+    let [results] = await pool.query(select_sql, [id, openid]);
+
+    // 没有此商品,插入新纪录
+    if (results.length <= 0) {
+        let insert_sql = `INSERT INTO cart ( uid , goods_id , goods_num , create_time ) VALUES ( ?, ?, ?,CURRENT_TIMESTAMP())`;
+        let [{ affectedRows }] = await pool.query(insert_sql, [openid, id, num]);
+        if (affectedRows === 0) {
             res.json({
-                status: true,
-                msg: "success!"
+                status: false,
+                msg: "添加失败!"
             });
-        });
+            return;
+        }
+    }
+
+    // 已有此商品，增加数量
+    if (results.length > 0) {
+        let update_sql = `UPDATE cart SET goods_num = goods_num + ? WHERE goods_id = ? AND uid = ?`;
+        let [{ affectedRows }] = await pool.query(update_sql, [num, id, openid]);
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "添加失败!"
+            });
+            return;
+        }
+    }
+    //成功
+    res.json({
+        status: true,
+        msg: "添加成功!"
     });
 });
 /**
- * @api {get} /api/cart/list 获取购物车列表
+ * @api {get} /cart/list 获取购物车列表
  * @apiName CartList
  * @apiGroup Cart
  * @apiPermission user
  *
- * @apiSampleRequest /api/cart/list
+ * @apiQuery { Number } [pagesize=10] 每一页文章数量.
+ * @apiQuery { Number } [pageindex=1] 第几页.
+ *
+ * @apiSampleRequest /cart/list
  */
-router.get('/list', function (req, res) {
+router.get('/list', async function (req, res) {
     let { openid } = req.user;
-    let sql =
-        `SELECT cart.id, cart.goods_id, goods.img_md AS img, goods.name, goods.price, cart.goods_num 
-		FROM cart JOIN goods 
-		WHERE cart.uid = ? AND cart.goods_id = goods.id`;
-    db.query(sql, [openid], function (results) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!",
-            data: results
-        });
+    let { pagesize = 10, pageindex = 1 } = req.query;
+    // 计算偏移量
+    pagesize = parseInt(pagesize);
+    const offset = pagesize * (pageindex - 1);
+
+    let sql = `SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.img_md AS img, g.name, g.price, c.goods_num FROM cart c JOIN goods g ON c.goods_id = g.id WHERE c.uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;`;
+    let [results] = await pool.query(sql, [openid, pagesize, offset]);
+    //成功
+    res.json({
+        status: true,
+        msg: "获取成功!",
+        ...results[1][0],
+        data: results[0],
     });
 });
 /**
- * @api {delete} /api/cart/:id 购物车删除商品
+ * @api {delete} /cart/:id 购物车删除商品
  * @apiName DeleteCart
  * @apiGroup Cart
  * @apiPermission user
  *
  * @apiParam {Number} id 购物车条目id;
  *
- * @apiSampleRequest /api/cart
+ * @apiSampleRequest /cart
  */
-router.delete('/:id', function (req, res) {
+router.delete('/:id', async function (req, res) {
     let { id } = req.params;
     let sql = `DELETE FROM cart WHERE id = ?`;
-    db.query(sql, [id], function (results) {
-        //成功
+
+    let [{ affectedRows }] = await pool.query(sql, [id]);
+    // 删除失败
+    if (affectedRows === 0) {
         res.json({
-            status: true,
-            msg: "success!",
+            status: false,
+            msg: "删除失败!",
         });
+        return;
+    }
+    // 删除成功
+    res.json({
+        status: true,
+        msg: "删除成功!",
     });
 });
 /**
- * @api {put} /api/cart/increase/:id 购物车增加商品数量
+ * @api {put} /cart/increase/:id 购物车增加商品数量
  * @apiDescription 增加商品数量，后台查询库存，注意提示库存不足
  * @apiName IncreaseCart
  * @apiGroup Cart
  * @apiPermission user
  *
  * @apiParam {Number} id 购物车条目id;
- * @apiParam {Number} gid 商品id;
- * @apiParam {Number{1-库存MAX}} num 商品数量;
+ * @apiBody {Number} gid 商品id;
+ * @apiBody {Number{1-库存MAX}} num 商品数量;
  *
- * @apiSampleRequest /api/cart/increase
+ * @apiSampleRequest /cart/increase
  */
-router.put('/increase/:id', function (req, res) {
+router.put('/increase/:id', async function (req, res) {
     let { id } = req.params;
     let { gid, num } = req.body;
-    // 检查库存
-    let sql = `SELECT goods_num FROM cart WHERE id = ?;
-	SELECT inventory FROM goods WHERE id = ?`;
-    db.query(sql, [id, gid], function (results) {
-        let isEmpty = results[1][0].inventory - results[0][0].goods_num - num >= 0 ? false : true;
-        if (isEmpty) {
-            res.json({
-                status: false,
-                msg: "库存不足!"
-            });
-            return;
-        }
-        let sql = `UPDATE cart SET goods_num = goods_num + ? WHERE id = ?`;
-        db.query(sql, [num, id], function (results) {
-            //成功
-            res.json({
-                status: true,
-                msg: "success!",
-            });
-        });
-    });
 
+    // 购物车商品数量
+    let cart_sql = 'SELECT goods_num FROM cart WHERE id = ?';
+    let [{ goods_num }] = await pool.query(cart_sql, [id]);
+
+    // 商品库存
+    let goods_sql = `SELECT inventory FROM goods WHERE id = ?`;
+    let [{ inventory }] = await pool.query(goods_sql, [gid]);
+    // 判断库存是否为空
+    let isEmpty = inventory - goods_num - num < 0;
+    if (isEmpty) {
+        res.json({
+            status: false,
+            msg: "库存不足!"
+        });
+        return;
+    }
+    let update_sql = `UPDATE cart SET goods_num = goods_num + ? WHERE id = ?`;
+    let [{ affectedRows }] = await pool.query(update_sql, [num, id]);
+    // 更新失败
+    if (affectedRows === 0) {
+        res.json({
+            status: false,
+            msg: "增加失败!",
+        });
+        return;
+    }
+    // 更新成功
+    res.json({
+        status: true,
+        msg: "增加成功!",
+    });
 });
 /**
- * @api {put} /api/cart/decrease/:id 购物车减少商品数量
+ * @api {put} /cart/decrease/:id 购物车减少商品数量
  * @apiDescription 减少商品数量，前台注意约束num，商品数量>=1
  * @apiName DecreaseCart
  * @apiGroup Cart
  * @apiPermission user
  *
  * @apiParam {Number} id 购物车条目id;
- * @apiParam {Number{1-库存MAX}} num 商品数量;
+ * @apiBody {Number{1-库存MAX}} num 商品数量;
  *
- * @apiSampleRequest /api/cart/decrease
+ * @apiSampleRequest /cart/decrease
  */
-router.put('/decrease/:id', function (req, res) {
+router.put('/decrease/:id', async function (req, res) {
     let { id } = req.params;
     let { num } = req.body;
     let sql = `UPDATE cart SET goods_num = goods_num - ? WHERE id = ?`;
-    db.query(sql, [num, id], function (results) {
-        //成功
+    let [{ affectedRows }] = await pool.query(sql, [num, id]);
+    // 更新失败
+    if (affectedRows === 0) {
         res.json({
-            status: true,
-            msg: "success!",
+            status: false,
+            msg: "减少失败!",
         });
+        return;
+    }
+    // 更新成功
+    res.json({
+        status: true,
+        msg: "减少成功!",
     });
 });
 

@@ -1,28 +1,12 @@
-var mysql = require('mysql');
-var pool = mysql.createPool({
-    connectionLimit: 10,
+const mysql = require('mysql2/promise');
+// 连接池pool（用于普通查询）
+const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'wechat-mall',
     multipleStatements: true,
-    // debug:true,
+    // debug: true,
 });
-//常规SQL
-let query = function (sql, arr = [], callback) {
-    //建立链接
-    pool.getConnection(function (err, connection) {
-        if (err) throw err;
-        connection.query(sql, arr, function (error, results, fields) {
-            //将链接返回到连接池中，准备由其他人重复使用
-            connection.release();
-            if (error) throw error;
-            //执行回调函数，将数据返回
-            callback && callback(results);
-        });
-    });
-};
-module.exports = {
-    query,
-    pool
-}
+
+module.exports = pool;

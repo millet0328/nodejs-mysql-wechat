@@ -1,59 +1,74 @@
 const express = require('express');
 const router = express.Router();
 // 数据库
-let db = require('../../config/mysql');
+let pool = require('../../config/mysql');
 
 /**
- * @api {post} /api/collection 添加商品至我的收藏
+ * @api {post} /collection 添加商品至我的收藏
  * @apiName CollectionAdd
  * @apiGroup Collection
  * @apiPermission user
  *
- * @apiParam {Number} id 商品id.
+ * @apiBody {Number} id 商品id.
  *
- * @apiSampleRequest /api/collection
+ * @apiSampleRequest /collection
  */
-router.post("/", function (req, res) {
+router.post("/", async function (req, res) {
     let { id } = req.body;
     let { openid } = req.user;
     let sql = 'INSERT INTO collection ( uid, goods_id ) VALUES (?,?)';
-    db.query(sql, [openid, id], function (results) {
-        //成功
+    let [{ affectedRows }] = await pool.query(sql, [openid, id]);
+    if (affectedRows === 0) {
         res.json({
-            status: true,
-            msg: "success!",
+            status: false,
+            msg: "添加失败!"
         });
+        return;
+    }
+    res.json({
+        status: true,
+        msg: "添加成功!"
     });
 });
 
 /**
- * @api {delete} /api/collection/:id 取消收藏的商品
+ * @api {delete} /collection/:id 取消收藏的商品
  * @apiName CollectionRemove
  * @apiGroup Collection
  * @apiPermission user
  *
  * @apiParam {Number} id 商品id.
  *
- * @apiSampleRequest /api/collection
+ * @apiSampleRequest /collection
  */
-router.delete("/:id", function (req, res) {
+router.delete("/:id", async function (req, res) {
     let { id } = req.params;
     let { openid } = req.user;
     let sql = 'DELETE FROM collection WHERE goods_id = ? and uid = ?';
-    db.query(sql, [id, openid], function (results) {
-        //成功
+    let [{ affectedRows }] = await pool.query(sql, [id, openid]);
+    // 删除失败
+    if (affectedRows === 0) {
         res.json({
-            status: true,
-            msg: "success!",
+            status: false,
+            msg: "删除失败!",
         });
+        return;
+    }
+    // 删除成功
+    res.json({
+        status: true,
+        msg: "删除成功!",
     });
 });
 
 /**
- * @api {get} /api/collection 获取所有收藏的商品
+ * @api {get} /collection 获取所有收藏的商品
  * @apiName CollectionList
  * @apiGroup Collection
  * @apiPermission user
+ *
+ * @apiQuery { Number } [pagesize=10] 每一页文章数量.
+ * @apiQuery { Number } [pageindex=1] 第几页.
  *
  * @apiSuccess {Number} id 收藏条目id.
  * @apiSuccess {Number} goods_id 商品id.
@@ -63,18 +78,22 @@ router.delete("/:id", function (req, res) {
  * @apiSuccess {Number} marketPrice 市场价格.
  * @apiSuccess {String} img_md 商品图片.
  *
- * @apiSampleRequest /api/collection
+ * @apiSampleRequest /collection
  */
-router.get("/", function (req, res) {
+router.get("/", async function (req, res) {
     let { openid } = req.user;
-    let sql = 'SELECT c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ?';
-    db.query(sql, [openid], function (results) {
-        //成功
-        res.json({
-            status: true,
-            msg: "success!",
-            data: results,
-        });
+    let { pagesize = 10, pageindex = 1 } = req.query;
+    // 计算偏移量
+    pagesize = parseInt(pagesize);
+    const offset = pagesize * (pageindex - 1);
+    let sql = 'SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;';
+    let [results] = await pool.query(sql, [openid, pagesize, offset]);
+    //成功
+    res.json({
+        status: true,
+        msg: "获取成功!",
+        ...results[1][0],
+        data: results[0],
     });
 });
 
