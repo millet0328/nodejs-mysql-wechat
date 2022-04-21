@@ -6,7 +6,12 @@ const upload = multer();
 //图片处理
 const sharp = require('sharp');
 //uuid
-const { v5: uuidv5 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
+
+/**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，登录/注册成功返回的token。
+ */
 
 /**
  * @api {post} /upload/goods 上传商品主图
@@ -14,6 +19,8 @@ const { v5: uuidv5 } = require('uuid');
  * @apiName uploadGoods
  * @apiGroup Upload
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiBody {File} file File文件对象;
  *
@@ -54,7 +61,7 @@ router.post("/goods", upload.single('file'), async function(req, res) {
 		return;
 	}
 	// 生成文件名
-	var filename = uuidv5();
+	var filename = uuidv4();
 	// 储存文件夹
 	var fileFolder = "/images/goods/";
 	//处理图片
@@ -86,6 +93,8 @@ router.post("/goods", upload.single('file'), async function(req, res) {
  * @apiName uploadSlider
  * @apiGroup Upload
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiBody {File} file File文件对象;
  *
@@ -132,7 +141,7 @@ router.post("/slider", upload.single('file'), async function(req, res) {
 		return;
 	}
 	// 生成文件名
-	var filename = uuidv5();
+	var filename = uuidv4();
 	// 储存文件夹
 	var fileFolder = "/images/goods/";
 	// 处理图片
@@ -159,6 +168,8 @@ router.post("/slider", upload.single('file'), async function(req, res) {
  * @apiName UploadEditor
  * @apiGroup Upload
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiBody {File} file File文件对象;
  *
@@ -190,7 +201,7 @@ router.post("/editor", upload.single('file'), async function(req, res) {
 	//扩展名
 	var { format } = await sharp(req.file.buffer).metadata();
 	// 生成文件名
-	var filename = uuidv5();
+	var filename = uuidv4();
 	//储存文件夹
 	var fileFolder = "/images/details/";
 	//处理图片

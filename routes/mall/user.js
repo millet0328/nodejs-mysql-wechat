@@ -7,6 +7,12 @@ const jwt = require("jsonwebtoken");
 let pool = require('../../config/mysql');
 // 微信小程序
 let { appid, appSecret } = require("../../config/wx");
+
+/**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
 /**
  * @api {post} /user/token 换取登录token
  * @apiDescription 微信小程序login之后，获得临时登录凭证code，再使用code换取登录token,请在头部headers中设置Authorization: `Bearer ${token}`,所有请求都必须携带token;
@@ -76,6 +82,8 @@ router.post('/token', async function (req, res) {
  * @apiName userInfoUpload
  * @apiGroup User
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiBody { String } nickName 用户昵称.
  * @apiBody { Number } gender 性别.

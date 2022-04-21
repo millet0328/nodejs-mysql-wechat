@@ -4,10 +4,17 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
+/**
  * @api {post} /cart 添加商品至购物车
  * @apiName AddCart
  * @apiGroup Cart
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiBody {Number} id 商品id;
  * @apiBody {Number} num 商品数量,不能超过库存;
@@ -58,6 +65,8 @@ router.post('/', async function (req, res) {
  * @apiGroup Cart
  * @apiPermission user
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { Number } [pagesize=10] 每一页文章数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
  *
@@ -85,6 +94,8 @@ router.get('/list', async function (req, res) {
  * @apiName DeleteCart
  * @apiGroup Cart
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 购物车条目id;
  *
@@ -115,6 +126,8 @@ router.delete('/:id', async function (req, res) {
  * @apiName IncreaseCart
  * @apiGroup Cart
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 购物车条目id;
  * @apiBody {Number} gid 商品id;
@@ -164,6 +177,8 @@ router.put('/increase/:id', async function (req, res) {
  * @apiName DecreaseCart
  * @apiGroup Cart
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 购物车条目id;
  * @apiBody {Number{1-库存MAX}} num 商品数量;

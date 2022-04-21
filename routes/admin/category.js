@@ -11,6 +11,8 @@ const path = require("path");
  * @apiGroup Category
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { String="flat","tree" } [type="flat"] 返回数据格式。flat--扁平数组；tree--树形结构
  *
  * @apiSampleRequest /category/all
@@ -62,6 +64,8 @@ router.get("/all", async function (req, res) {
  * @apiGroup Category
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiBody {String} name 分类名称.
  * @apiBody {Number} pId 父级id.
  * @apiBody {String} img 分类图片src地址.
@@ -93,6 +97,8 @@ router.post("/", async function (req, res) {
  * @apiName categoryDelete
  * @apiGroup Category
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 分类id.
  *
@@ -163,6 +169,8 @@ router.delete("/:id", async function (req, res) {
  * @apiGroup Category
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiParam {Number} id 分类id.
  * @apiBody {String} name 分类名称.
  * @apiBody {String} img 分类图片src地址.
@@ -196,6 +204,8 @@ router.put("/:id", async function (req, res) {
  * @apiName categorySub
  * @apiGroup Category
  * @apiPermission admin user
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} pId 父级分类id。注：获取一级分类pId = 1，获取根分类pId = 0;
  *

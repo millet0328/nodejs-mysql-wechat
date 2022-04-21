@@ -6,6 +6,11 @@ let pool = require('../../config/mysql');
 const jwt = require("jsonwebtoken");
 
 /**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，登录/注册成功返回的token。
+ */
+
+/**
  * @apiDefine SuccessResponse
  * @apiSuccess { Boolean } status 请求状态.
  * @apiSuccess { String } msg 请求结果信息.
@@ -155,6 +160,8 @@ router.post('/login', async function (req, res) {
  * @apiGroup Admin
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { Number } [pagesize=10] 每一页数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
  *
@@ -186,6 +193,8 @@ router.get("/list", async function (req, res) {
  *
  * @apiExample {js} 参数示例:
  * /admins/3
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 账户id.
  *
@@ -233,6 +242,8 @@ router.delete('/:id', async function (req, res) {
  * @apiGroup Admin
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery {Number} id 账户id.
  *
  * @apiSampleRequest /admins
@@ -241,7 +252,7 @@ router.delete('/:id', async function (req, res) {
 router.get("/", async function (req, res) {
     let { id } = req.query;
     //查询账户数据
-    let sql = `SELECT a.id,a.username,a.fullname,a.email,a.sex,a.avatar,a.tel,r.role_name,r.id AS role FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
+    let sql = `SELECT a.id,a.username,a.fullname,a.email,a.sex,a.avatar,a.tel,r.role_name,r.id AS role_id FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
     let [results] = await pool.query(sql, [id]);
     if (!results.length) {
         res.json({
@@ -267,10 +278,12 @@ router.get("/", async function (req, res) {
  * @apiGroup Admin
  * @apiPermission 超级管理员
  *
+ * @apiUse Authorization
+ *
  * @apiBody { Number } id 管理员id.
  * @apiBody { String } username 用户名.
  * @apiBody { String } fullname 姓名.
- * @apiBody { String } role 角色id.
+ * @apiBody { String } role_id 角色id.
  * @apiBody { String="男","女" } sex 性别.
  * @apiBody { String } tel 手机号码.
  * @apiBody { String } email 邮箱地址.
@@ -280,7 +293,7 @@ router.get("/", async function (req, res) {
  */
 
 router.put("/", async function (req, res) {
-    let { id, username, fullname, role, sex, tel, email, avatar } = req.body;
+    let { id, username, fullname, role_id, sex, tel, email, avatar } = req.body;
     // 获取一个连接
     const connection = await pool.getConnection();
 
@@ -297,7 +310,7 @@ router.put("/", async function (req, res) {
         }
         // 更新角色
         let update_role_sql = 'UPDATE admin_role SET role_id = ? WHERE admin_id = ?';
-        let [{ affectedRows: role_affected_rows }] = await connection.query(update_role_sql, [role, id]);
+        let [{ affectedRows: role_affected_rows }] = await connection.query(update_role_sql, [role_id, id]);
         if (role_affected_rows === 0) {
             await connection.rollback();
             res.json({ status: false, msg: "角色role修改失败！" });
@@ -326,6 +339,8 @@ router.put("/", async function (req, res) {
  * @apiName UpdateAccount
  * @apiGroup Admin
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiBody { String } username 用户名.
  * @apiBody { String } fullname 姓名.

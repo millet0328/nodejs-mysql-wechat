@@ -5,7 +5,7 @@ let pool = require('../../config/mysql');
 
 /**
  * @apiDefine Authorization
- * @apiHeader {String} Authorization 登录或者注册之后返回的token，请在头部headers中设置Authorization: `Bearer ${token}`.
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，登录/注册成功返回的token。
  */
 
 /**
@@ -14,10 +14,10 @@ let pool = require('../../config/mysql');
  * @apiGroup Role
  * @apiPermission 后台系统
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { Number } [pagesize=10] 每一页数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
- *
- * @apiUse Authorization
  *
  * @apiSampleRequest /role/list
  */
@@ -295,6 +295,8 @@ router.post('/menu', async (req, res) => {
  * @apiGroup Role
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { Number } id 角色id。
  *
  * @apiSampleRequest /role/config
@@ -342,6 +344,8 @@ router.get("/config", async function (req, res) {
  * @apiGroup Role
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiBody { Number } role_id 角色id。
  * @apiBody { Number } menu_id 菜单id。
  * @apiSampleRequest /role/menu
@@ -371,6 +375,8 @@ router.post('/menu', async function (req, res) {
  * @apiName DeleteRoleMenu
  * @apiGroup Role
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiParam { Number } role_id 角色id。
  * @apiQuery { Number } menu_id 菜单id。

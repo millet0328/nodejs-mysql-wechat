@@ -4,10 +4,17 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
+/**
  * @api {post} /collection 添加商品至我的收藏
  * @apiName CollectionAdd
  * @apiGroup Collection
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiBody {Number} id 商品id.
  *
@@ -36,6 +43,8 @@ router.post("/", async function (req, res) {
  * @apiName CollectionRemove
  * @apiGroup Collection
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 商品id.
  *
@@ -66,6 +75,8 @@ router.delete("/:id", async function (req, res) {
  * @apiName CollectionList
  * @apiGroup Collection
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiQuery { Number } [pagesize=10] 每一页文章数量.
  * @apiQuery { Number } [pageindex=1] 第几页.

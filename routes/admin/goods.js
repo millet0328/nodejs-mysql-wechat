@@ -4,10 +4,12 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
- * @api {post} /admin/goods 发布新商品
+ * @api {post} /system/goods 发布新商品
  * @apiName goodsRelease
  * @apiGroup Goods
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiBody {Number} cate_1st 一级分类id;
  * @apiBody {Number} cate_2nd 二级分类id;
@@ -27,7 +29,7 @@ let pool = require('../../config/mysql');
  * @apiBody {String} detail 商品详情,一般存储为HTML代码;
  * @apiBody {Number} freight 商品运费;
  *
- * @apiSampleRequest /admin/goods
+ * @apiSampleRequest /system/goods
  */
 
 router.post("/", async function (req, res) {
@@ -50,10 +52,12 @@ router.post("/", async function (req, res) {
     });
 });
 /**
- * @api {put} /admin/goods/:id 编辑商品
+ * @api {put} /system/goods/:id 编辑商品
  * @apiName goodsEdit
  * @apiGroup Goods
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiParam {Number} id 商品id;
  * @apiBody {Number} cate_1st 一级分类id;
@@ -75,9 +79,9 @@ router.post("/", async function (req, res) {
  * @apiBody {Number} freight 商品运费;
  *
  * @apiExample {js} 参数示例:
- * /admin/goods/3
+ * /system/goods/3
  *
- * @apiSampleRequest /admin/goods
+ * @apiSampleRequest /system/goods
  */
 router.put("/:id", async function (req, res) {
     let { id } = req.params;
@@ -99,11 +103,13 @@ router.put("/:id", async function (req, res) {
     });
 });
 /**
- * @api {get} /admin/goods/list 获取商品列表--后台管理系统
+ * @api {get} /system/goods/list 获取商品列表--后台管理系统
  * @apiDescription 具备搜索、分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序
  * @apiName AdminGoodsList
  * @apiGroup Goods
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} [pageSize=4] 一个页有多少个商品;
  * @apiQuery {Number} [pageIndex=1] 第几页;
@@ -115,7 +121,7 @@ router.put("/:id", async function (req, res) {
  * @apiSuccess {Object[]} goods 商品数组.
  * @apiSuccess {Number} total 商品总数.
  *
- * @apiSampleRequest /admin/goods/list
+ * @apiSampleRequest /system/goods/list
  */
 router.get("/list", async function (req, res) {
     let { pageSize = 4, pageIndex = 1, cate_id, cate_level, keyword, sortByPrice } = req.query;
@@ -144,19 +150,21 @@ router.get("/list", async function (req, res) {
     res.json({
         status: true,
         msg: "success!",
-        goods: results[0],
+        data: results[0],
         ...results[1][0],
     });
 });
 /**
- * @api {get} /admin/goods 获取商品详情--后台管理系统
+ * @api {get} /system/goods 获取商品详情--后台管理系统
  * @apiName AdminGoodsDetail
  * @apiGroup Goods
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery {Number} id 商品id;
  *
- * @apiSampleRequest /admin/goods
+ * @apiSampleRequest /system/goods
  */
 router.get("/", async function (req, res) {
     let { id } = req.query;
@@ -170,17 +178,19 @@ router.get("/", async function (req, res) {
     });
 });
 /**
- * @api {delete} /admin/goods/:id 删除商品
+ * @api {delete} /system/goods/:id 删除商品
  * @apiName GoodsDelete
  * @apiGroup Goods
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiParam {Number} id 商品id;
  *
  * @apiExample {js} 参数示例:
- * /admin/goods/3
+ * /system/goods/3
  *
- * @apiSampleRequest /admin/goods
+ * @apiSampleRequest /system/goods
  */
 router.delete("/:id", async function (req, res) {
     let { id } = req.params;

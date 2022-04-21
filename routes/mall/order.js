@@ -4,16 +4,24 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
+/**
  * @api {post} /order/settle 获取"确认订单"页面的数据
  * @apiDescription 点击结算按钮之后传参至"确认订单"，此API返回"确认订单"页面需要的数据，此时订单需要用户确认商品价格、数量、支付金额，收货地址在此页面选择或者修改
  * @apiName SettleOrder
  * @apiGroup Order
  * @apiPermission user
  *
+ * @apiUse Authorization
+ *
  * @apiBody {Number[]} goods 欲购买商品id，格式：[id1,id2,id3];
  *
  * @apiSampleRequest /order/settle
  */
+
 router.post('/settle', async function (req, res) {
     let { goods } = req.body;
     let { openid } = req.user;
@@ -30,12 +38,15 @@ router.post('/settle', async function (req, res) {
         data: { address, goods: results }
     });
 });
+
 /**
  * @api {post} /order/create 提交订单->生成订单
  * @apiDescription 在确认订单页面，提交订单按钮意味着将购物车中的商品转移到订单中，生成新的订单，称之为下单操作
  * @apiName CreateOrder
  * @apiGroup Order
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiBody {Number} payment 支付金额,小数点至2位;
  * @apiBody {Number} addressId 收货地址id;
@@ -45,6 +56,7 @@ router.post('/settle', async function (req, res) {
  *
  * @apiSampleRequest /order/create
  */
+
 router.post('/create', async function (req, res) {
     let { addressId, payment, goodsList } = req.body;
     let { openid } = req.user;
@@ -141,6 +153,7 @@ router.post('/create', async function (req, res) {
         throw error;
     }
 });
+
 /**
  * @api {get} /order/list 获取订单列表
  * @apiDescription 本账户uid中的订单列表，根据订单状态获取列表，具备分页功能
@@ -148,12 +161,15 @@ router.post('/create', async function (req, res) {
  * @apiGroup Order
  * @apiPermission user
  *
+ * @apiUse Authorization
+ *
  * @apiQuery {Number} [pageSize] 一个页有多少个商品,默认4个;
  * @apiQuery {Number} [pageIndex] 第几页,默认1;
  * @apiQuery {Number=0,3,4,5,all} status 订单状态:0-待付款，3-待发货，4-待收货，5-待评价，all-所有状态;
  *
  * @apiSampleRequest /order/list
  */
+
 router.get('/list', async function (req, res) {
     let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
     let { openid } = req.user;
@@ -183,7 +199,7 @@ router.get('/list', async function (req, res) {
     res.json({
         status: true,
         msg: "success!",
-        orders
+        data: orders
     });
 });
 

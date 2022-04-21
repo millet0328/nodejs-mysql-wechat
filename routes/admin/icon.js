@@ -4,11 +4,13 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
- * @api {get} apiBody/admin/icon/list 获取所有element图标
+ * @api {get} /system/icon/list 获取所有element图标
  * @apiDescription 获取系统中的element图标，具备分页功能。
  * @apiName AdminIcon
  * @apiGroup Icon
  * @apiPermission admin
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} [pageSize] 一个页有多少个商品,默认4个;
  * @apiQuery {Number} [pageIndex] 第几页,默认1;
@@ -16,7 +18,7 @@ let pool = require('../../config/mysql');
  * @apiSuccess {Object[]} icons 图标数组.
  * @apiSuccess {Number} total 图标总数.
  *
- * @apiSampleRequest /admin/icon/list
+ * @apiSampleRequest /system/icon/list
  */
 router.get('/list', async function (req, res) {
     let { pageSize = 20, pageIndex = 1 } = req.query;
@@ -30,7 +32,7 @@ router.get('/list', async function (req, res) {
     res.json({
         status: true,
         msg: "获取成功！",
-        icons: results[0],
+        data: results[0],
         ...results[1][0],
     });
 });

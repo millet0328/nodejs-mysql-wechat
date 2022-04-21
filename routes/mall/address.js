@@ -2,11 +2,19 @@ const express = require('express');
 const router = express.Router();
 // 数据库
 let pool = require('../../config/mysql');
+
+/**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
 /**
  * @api {post} /address 添加收货地址
  * @apiName addressAdd
  * @apiGroup Address
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiBody {String} name 收货人姓名.
  * @apiBody {String} tel 电话.
@@ -65,6 +73,8 @@ router.post('/', async function (req, res) {
  * @apiGroup Address
  * @apiPermission user
  *
+ * @apiUse Authorization
+ *
  * @apiParam {Number} id 收货地址id.
  *
  * @apiSampleRequest /address
@@ -90,7 +100,9 @@ router.delete("/:id", async function (req, res) {
  * @apiName addressUpdate
  * @apiGroup Address
  * @apiPermission user
-
+ *
+ * @apiUse Authorization
+ *
  * @apiParam {Number} id 收货地址id.
  * @apiBody {String} name 收货人姓名.
  * @apiBody {String} tel 电话.
@@ -149,6 +161,8 @@ router.put("/:id", async function (req, res) {
  * @apiGroup Address
  * @apiPermission user
  *
+ * @apiUse Authorization
+ *
  * @apiQuery { Number } [pagesize=10] 每一页文章数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
  *
@@ -181,6 +195,8 @@ router.get('/list', async function (req, res) {
  * @apiName addressDetail
  * @apiGroup Address
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} id 收货地址id.
  *

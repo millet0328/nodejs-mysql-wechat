@@ -10,7 +10,12 @@ const upload = multer();
 //图片处理
 const sharp = require('sharp');
 //uuid
-const { v5: uuidv5 } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
+
+/**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
 
 /**
  * @api {post} /upload/common 通用图片上传API
@@ -18,7 +23,9 @@ const { v5: uuidv5 } = require('uuid');
  * @apiName uploadCommon
  * @apiGroup Upload
  * @apiPermission user admin
- * 
+ *
+ * @apiUse Authorization
+ *
  * @apiBody {File} file File文件对象;
  * @apiBody {String="common","avatar"} type 上传类型：avatar--头像上传；common--通用上传；
  * 
@@ -60,7 +67,7 @@ router.post("/common", upload.single('file'), async function(req, res) {
 		return;
 	}
 	// 生成文件名
-	var filename = uuidv5();
+	var filename = uuidv4();
 	//储存文件夹
 	var fileFolder = `/images/${type}/`;
 	//处理图片
@@ -86,7 +93,9 @@ router.post("/common", upload.single('file'), async function(req, res) {
  * @apiName uploadDelete
  * @apiGroup Upload
  * @apiPermission user admin
- * 
+ *
+ * @apiUse Authorization
+ *
  * @apiQuery {String} src 图片文件路径,注意图片路径必须是绝对路径，例：http://localhost:3003/images/path/to/photo.jpg
  *
  * @apiExample {js} 参数示例:

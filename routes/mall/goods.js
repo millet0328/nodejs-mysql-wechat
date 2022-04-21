@@ -4,11 +4,18 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，小程序登录成功code换取的token。
+ */
+
+/**
  * @api {get} /goods/list 获取商品列表--小程序
  * @apiDescription 具备搜索、分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序
  * @apiName GoodsList 获取商品列表
  * @apiGroup Goods
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} [pageSize=4] 一个页有多少个商品;
  * @apiQuery {Number} [pageIndex=1] 第几页;
@@ -50,7 +57,7 @@ router.get("/list", async function (req, res) {
     res.json({
         status: true,
         msg: "获取成功!",
-        goods: results[0],
+        data: results[0],
         ...results[1][0],
     });
 });
@@ -60,6 +67,8 @@ router.get("/list", async function (req, res) {
  * @apiName GoodsDetail
  * @apiGroup Goods
  * @apiPermission user
+ *
+ * @apiUse Authorization
  *
  * @apiQuery {Number} id 商品id;
  *

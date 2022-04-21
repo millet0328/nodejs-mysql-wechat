@@ -4,17 +4,24 @@ const router = express.Router();
 let pool = require('../../config/mysql');
 
 /**
- * @api {get} /admin/order/list 获取所有账户订单列表
+ * @apiDefine Authorization
+ * @apiHeader {String} Authorization 需在请求headers中设置Authorization: `Bearer ${token}`，登录/注册成功返回的token。
+ */
+
+/**
+ * @api {get} /system/order/list 获取所有账户订单列表
  * @apiDescription 获取系统中的订单列表，根据订单状态获取列表，具备分页功能
  * @apiName AdminOrderList
  * @apiGroup Order
  * @apiPermission admin
  *
+ * @apiUse Authorization
+ *
  * @apiQuery {Number} [pageSize=4] 一个页有多少个商品,默认4个;
  * @apiQuery {Number} [pageIndex=1] 第几页,默认1;
  * @apiQuery {Number=0,3,4,5,all} status 订单状态:0-待付款，3-待发货，4-待收货，5-待评价，all-所有状态;
  *
- * @apiSampleRequest /admin/order/list
+ * @apiSampleRequest /system/order/list
  */
 
 router.get('/list', async function (req, res) {

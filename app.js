@@ -9,19 +9,19 @@ const expressJwt = require('express-jwt');
 const cors = require('cors')
 
 let index = require('./routes/index');
-
+//前台
 let order = require('./routes/mall/order');
 let user = require('./routes/mall/user');
 let address = require('./routes/mall/address');
 let goods = require('./routes/mall/goods');
 let cart = require('./routes/mall/cart');
 let userUpload = require('./routes/mall/upload');
-let PCCT = require('./routes/mall/PCCT');
 let collection = require('./routes/mall/collection');
-
+//后台
 let role = require('./routes/admin/role');
 let menu = require('./routes/admin/menu');
 let admin = require('./routes/admin/admin');
+let PCCT = require('./routes/admin/PCCT');
 let category = require('./routes/admin/category');
 let adminGoods = require('./routes/admin/goods');
 let adminUpload = require('./routes/admin/upload');
@@ -50,24 +50,24 @@ app.use(expressJwt({ secret: 'secret', algorithms: ['HS256'] }).unless({
 }));
 
 app.use('/', index);
-
+//前台
 app.use('/address', address);
 app.use('/user', user);
 app.use('/goods', goods);
 app.use('/cart', cart);
 app.use('/order', order);
 app.use('/upload', userUpload);
-app.use('/pcct', PCCT);
 app.use('/collection', collection);
-
+//后台
 app.use('/role', role);
 app.use('/menu', menu);
+app.use('/pcct', PCCT);
 app.use('/admins', admin);
 app.use('/category', category);
-app.use('/admin/goods', adminGoods);
+app.use('/system/goods', adminGoods);
 app.use('/upload', adminUpload);
-app.use('/admin/order', adminOrder);
-app.use('/admin/icon', icon);
+app.use('/system/order', adminOrder);
+app.use('/system/icon', icon);
 
 // 处理401错误
 app.use(function (err, req, res, next) {
