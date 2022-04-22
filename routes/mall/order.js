@@ -143,7 +143,7 @@ router.post('/create', async function (req, res) {
             data: { order_id: insertId }
         });
 
-    } catch (e) {
+    } catch (error) {
         await connection.rollback();
         res.json({
             status: false,

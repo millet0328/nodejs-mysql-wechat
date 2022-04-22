@@ -73,8 +73,11 @@ router.post('/token', async function (req, res) {
                 token: token
             });
         }
-    } catch (e) {
-        console.log(error);
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error,
+        });
     }
 });
 /**

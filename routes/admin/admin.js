@@ -100,7 +100,7 @@ router.post('/register', async function (req, res) {
             msg: "注册成功！",
             data: { token, id: insertId, role: 3 }
         });
-    } catch (e) {
+    } catch (error) {
         await connection.rollback();
         res.json({
             status: false,
@@ -225,7 +225,7 @@ router.delete('/:id', async function (req, res) {
             status: true,
             msg: "删除成功"
         });
-    } catch (e) {
+    } catch (error) {
         await connection.rollback();
         res.json({
             status: false,

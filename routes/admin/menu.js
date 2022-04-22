@@ -239,7 +239,7 @@ router.get("/sub", async (req, res) => {
  *
  * @apiSampleRequest /menu/all
  */
-router.get('/tree', async (req, res) => {
+router.get('/all', async (req, res) => {
     let { type = 'flat' } = req.query;
     // 查询菜单
     let sql = `SELECT m.*, i.name AS 'icon_name' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id ORDER BY menu_order`;
