@@ -160,7 +160,7 @@ router.delete("/:id", async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 /**

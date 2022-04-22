@@ -150,7 +150,7 @@ router.post('/create', async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 

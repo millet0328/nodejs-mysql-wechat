@@ -119,7 +119,7 @@ router.delete('/:id', async (req, res) => {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 
@@ -285,7 +285,7 @@ router.post('/menu', async (req, res) => {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 

@@ -63,7 +63,7 @@ router.post("/", async (req, res) => {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 /**
@@ -126,7 +126,7 @@ router.delete("/:id", async (req, res) => {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 /**

@@ -64,7 +64,7 @@ router.post('/', async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 /**
@@ -81,6 +81,7 @@ router.post('/', async function (req, res) {
  */
 router.delete("/:id", async function (req, res) {
     let { id } = req.params;
+    //TODO 删除默认地址
     let sql = `DELETE FROM address WHERE id = ? `
     let [{ affectedRows }] = await pool.query(sql, [id]);
     if (affectedRows === 0) {
@@ -126,7 +127,7 @@ router.put("/:id", async function (req, res) {
         // 开启事务
         await connection.beginTransaction();
         // 判断是否默认地址，如果是默认地址，其他地址取消默认
-        if (isDefault === '1') {
+        if (isDefault == 1) {
             let update_sql = 'UPDATE address SET isDefault = 0 WHERE uid = ?';
             await connection.query(update_sql, [openid]);
         }
@@ -152,7 +153,7 @@ router.put("/:id", async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 /**
@@ -163,7 +164,7 @@ router.put("/:id", async function (req, res) {
  *
  * @apiUse Authorization
  *
- * @apiQuery { Number } [pagesize=10] 每一页文章数量.
+ * @apiQuery { Number } [pagesize=10] 每一页数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
  *
  * @apiSampleRequest /address/list

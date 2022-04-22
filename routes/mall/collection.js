@@ -78,7 +78,7 @@ router.delete("/:id", async function (req, res) {
  *
  * @apiUse Authorization
  *
- * @apiQuery { Number } [pagesize=10] 每一页文章数量.
+ * @apiQuery { Number } [pagesize=10] 每一页数量.
  * @apiQuery { Number } [pageindex=1] 第几页.
  *
  * @apiSuccess {Number} id 收藏条目id.

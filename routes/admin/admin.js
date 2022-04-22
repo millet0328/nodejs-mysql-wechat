@@ -107,7 +107,7 @@ router.post('/register', async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 
@@ -232,7 +232,7 @@ router.delete('/:id', async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 
@@ -329,7 +329,7 @@ router.put("/", async function (req, res) {
             msg: error.message,
             error,
         });
-        throw error;
+
     }
 });
 
