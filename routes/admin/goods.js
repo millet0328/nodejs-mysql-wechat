@@ -32,24 +32,32 @@ let pool = require('../../config/mysql');
  * @apiSampleRequest /system/goods
  */
 
-router.post("/", async function (req, res) {
-    let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
-    let sql = `INSERT INTO GOODS (cate_1st,cate_2nd,cate_3rd,name,hotPoint,price,marketPrice,cost,discount,inventory,articleNo,img_lg,img_md,slider,brand,detail,freight,create_time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP())`;
-    let [{ insertId, affectedRows }] = await pool.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight]);
-    // 创建失败
-    if (affectedRows === 0) {
+router.post("/", async (req, res) => {
+    try {
+        let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
+        let sql = `INSERT INTO GOODS (cate_1st,cate_2nd,cate_3rd,name,hotPoint,price,marketPrice,cost,discount,inventory,articleNo,img_lg,img_md,slider,brand,detail,freight,create_time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP())`;
+        let [{ insertId, affectedRows }] = await pool.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight]);
+        // 创建失败
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "发布商品失败！"
+            });
+            return;
+        }
+        // 创建成功
+        res.json({
+            status: true,
+            msg: "发布商品成功!",
+            data: { id: insertId }
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "发布商品失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    // 创建成功
-    res.json({
-        status: true,
-        msg: "发布商品成功!",
-        data: { id: insertId }
-    });
 });
 /**
  * @api {put} /system/goods/:id 编辑商品
@@ -83,24 +91,32 @@ router.post("/", async function (req, res) {
  *
  * @apiSampleRequest /system/goods
  */
-router.put("/:id", async function (req, res) {
-    let { id } = req.params;
-    let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
-    let sql = `UPDATE GOODS SET cate_1st = ?,cate_2nd = ?,cate_3rd = ?,name = ?,hotPoint = ?,price = ?,marketPrice = ?,cost = ?,discount = ?,inventory = ?,articleNo = ?,img_lg = ?,img_md = ?,slider = ?,brand = ?,detail = ?,freight = ?,update_time = CURRENT_TIMESTAMP() WHERE id = ?`;
-    let [{ affectedRows }] = await pool.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight, id]);
-    // 修改失败
-    if (affectedRows === 0) {
+router.put("/:id", async (req, res) => {
+    try {
+        let { id } = req.params;
+        let { cate_1st, cate_2nd, cate_3rd = 0, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight } = req.body;
+        let sql = `UPDATE GOODS SET cate_1st = ?,cate_2nd = ?,cate_3rd = ?,name = ?,hotPoint = ?,price = ?,marketPrice = ?,cost = ?,discount = ?,inventory = ?,articleNo = ?,img_lg = ?,img_md = ?,slider = ?,brand = ?,detail = ?,freight = ?,update_time = CURRENT_TIMESTAMP() WHERE id = ?`;
+        let [{ affectedRows }] = await pool.query(sql, [cate_1st, cate_2nd, cate_3rd, name, hotPoint, price, marketPrice, cost, discount, inventory, articleNo, img_lg, img_md, slider, brand, detail, freight, id]);
+        // 修改失败
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "修改失败！"
+            });
+            return;
+        }
+        // 修改成功
+        res.json({
+            status: true,
+            msg: "修改成功!",
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "修改失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    // 修改成功
-    res.json({
-        status: true,
-        msg: "修改成功!",
-    });
 });
 /**
  * @api {get} /system/goods/list 获取商品列表--后台管理系统
@@ -123,36 +139,44 @@ router.put("/:id", async function (req, res) {
  *
  * @apiSampleRequest /system/goods/list
  */
-router.get("/list", async function (req, res) {
-    let { pageSize = 4, pageIndex = 1, cate_id, cate_level, keyword, sortByPrice } = req.query;
-    // 计算偏移量
-    let pagesize = parseInt(pageSize);
-    let offset = pagesize * (pageIndex - 1);
-    // 根据参数，拼接SQL
-    let select_sql = `SELECT SQL_CALC_FOUND_ROWS *, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
-    let cate = [null, 'cate_1st', 'cate_2nd', 'cate_3rd'];
-    if (cate_level) {
-        let cate_name = cate[cate_level];
-        select_sql += ` AND ${cate_name} = ${cate_id}`;
-    }
-    if (keyword) {
-        select_sql += ` AND name LIKE '%${keyword}%'`;
-    }
-    if (sortByPrice) {
-        select_sql += ` ORDER BY price ${sortByPrice}`;
-    } else {
-        select_sql += ` ORDER BY create_time DESC`;
-    }
-    select_sql += ` LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`
-    // 查询商品
-    let [results] = await pool.query(select_sql, [pagesize, offset]);
+router.get("/list", async (req, res) => {
+    try {
+        let { pageSize = 4, pageIndex = 1, cate_id, cate_level, keyword, sortByPrice } = req.query;
+        // 计算偏移量
+        let pagesize = parseInt(pageSize);
+        let offset = pagesize * (pageIndex - 1);
+        // 根据参数，拼接SQL
+        let select_sql = `SELECT SQL_CALC_FOUND_ROWS *, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
+        let cate = [null, 'cate_1st', 'cate_2nd', 'cate_3rd'];
+        if (cate_level) {
+            let cate_name = cate[cate_level];
+            select_sql += ` AND ${cate_name} = ${cate_id}`;
+        }
+        if (keyword) {
+            select_sql += ` AND name LIKE '%${keyword}%'`;
+        }
+        if (sortByPrice) {
+            select_sql += ` ORDER BY price ${sortByPrice}`;
+        } else {
+            select_sql += ` ORDER BY create_time DESC`;
+        }
+        select_sql += ` LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`
+        // 查询商品
+        let [results] = await pool.query(select_sql, [pagesize, offset]);
 
-    res.json({
-        status: true,
-        msg: "success!",
-        data: results[0],
-        ...results[1][0],
-    });
+        res.json({
+            status: true,
+            msg: "success!",
+            data: results[0],
+            ...results[1][0],
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 /**
  * @api {get} /system/goods 获取商品详情--后台管理系统
@@ -166,16 +190,24 @@ router.get("/list", async function (req, res) {
  *
  * @apiSampleRequest /system/goods
  */
-router.get("/", async function (req, res) {
-    let { id } = req.query;
-    let sql = `SELECT * FROM GOODS WHERE id = ?`;
-    let [results] = await pool.query(sql, [id]);
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "获取成功!",
-        data: results[0]
-    });
+router.get("/", async (req, res) => {
+    try {
+        let { id } = req.query;
+        let sql = `SELECT * FROM GOODS WHERE id = ?`;
+        let [results] = await pool.query(sql, [id]);
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "获取成功!",
+            data: results[0]
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 /**
  * @api {delete} /system/goods/:id 删除商品
@@ -192,22 +224,30 @@ router.get("/", async function (req, res) {
  *
  * @apiSampleRequest /system/goods
  */
-router.delete("/:id", async function (req, res) {
-    let { id } = req.params;
-    let sql = `DELETE FROM GOODS WHERE id=?`;
-    let [{ affectedRows }] = await pool.query(sql, [id]);
-    // 删除失败
-    if (affectedRows === 0) {
+router.delete("/:id", async (req, res) => {
+    try {
+        let { id } = req.params;
+        let sql = `DELETE FROM GOODS WHERE id=?`;
+        let [{ affectedRows }] = await pool.query(sql, [id]);
+        // 删除失败
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "删除失败！"
+            });
+            return;
+        }
+        // 删除成功
+        res.json({
+            status: true,
+            msg: "删除成功!"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "删除失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    // 删除成功
-    res.json({
-        status: true,
-        msg: "删除成功!"
-    });
 });
 module.exports = router;

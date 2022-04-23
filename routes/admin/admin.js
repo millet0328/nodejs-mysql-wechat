@@ -52,24 +52,23 @@ const jwt = require("jsonwebtoken");
  */
 
 //TODO 新注册管理员默认无法登陆，需审核通过
-router.post('/register', async function (req, res) {
+router.post('/register', async (req, res) => {
     let { username, password, fullname, sex, tel, email } = req.body;
     // 获取一个连接
     const connection = await pool.getConnection();
-    // 默认头像
-    let defaultAvatar = `${process.env.server}/images/avatar/default.jpg`;
-    // 查询账户是否存在
-    let select_sql = `SELECT * FROM ADMIN WHERE username = ?`;
-    let [results] = await connection.query(select_sql, [username]);
-    if (results.length > 0) {
-        res.json({
-            status: false,
-            msg: "账号已经存在！"
-        });
-        return false;
-    }
-
     try {
+        // 默认头像
+        let defaultAvatar = `${process.env.server}/images/avatar/default.jpg`;
+        // 查询账户是否存在
+        let select_sql = `SELECT * FROM ADMIN WHERE username = ?`;
+        let [results] = await connection.query(select_sql, [username]);
+        if (results.length > 0) {
+            res.json({
+                status: false,
+                msg: "账号已经存在！"
+            });
+            return false;
+        }
         // 开启事务
         await connection.beginTransaction();
         // 创建新账户
@@ -107,7 +106,6 @@ router.post('/register', async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 
@@ -126,32 +124,40 @@ router.post('/register', async function (req, res) {
  * @apiSampleRequest /admins/login
  */
 
-router.post('/login', async function (req, res) {
-    let { username, password } = req.body;
-    let select_sql = `SELECT a.*,r.id AS role FROM ADMIN a LEFT JOIN admin_role ar ON a.id = ar.admin_id LEFT JOIN role r ON r.id = ar.role_id WHERE username = ? AND password = ?`;
-    // 判断账号密码是否错误
-    let [results] = await pool.query(select_sql, [username, password]);
-    // 账号密码错误
-    if (results.length === 0) {
+router.post('/login', async (req, res) => {
+    try {
+        let { username, password } = req.body;
+        let select_sql = `SELECT a.*,r.id AS role FROM ADMIN a LEFT JOIN admin_role ar ON a.id = ar.admin_id LEFT JOIN role r ON r.id = ar.role_id WHERE username = ? AND password = ?`;
+        // 判断账号密码是否错误
+        let [results] = await pool.query(select_sql, [username, password]);
+        // 账号密码错误
+        if (results.length === 0) {
+            res.json({
+                status: false,
+                msg: "账号或者密码错误！"
+            });
+            return false;
+        }
+        // 账号密码正确
+        let { id, role } = results[0];
+        //TODO 记录登陆状态
+
+        // 生成token
+        let payload = { id, username, role, };
+        let token = jwt.sign(payload, 'secret', { expiresIn: '4h' });
+        // 登录成功
+        res.json({
+            status: true,
+            msg: "登录成功！",
+            data: { token, id, role, }
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "账号或者密码错误！"
+            msg: error.message,
+            error,
         });
-        return false;
     }
-    // 账号密码正确
-    let { id, role } = results[0];
-    //TODO 记录登陆状态
-
-    // 生成token
-    let payload = { id, username, role, };
-    let token = jwt.sign(payload, 'secret', { expiresIn: '4h' });
-    // 登录成功
-    res.json({
-        status: true,
-        msg: "登录成功！",
-        data: { token, id, role, }
-    });
 });
 
 /**
@@ -168,21 +174,29 @@ router.post('/login', async function (req, res) {
  * @apiSampleRequest /admins/list
  */
 
-router.get("/list", async function (req, res) {
-    let { pagesize = 10, pageindex = 1 } = req.query;
-    // 计算偏移量
-    pagesize = parseInt(pagesize);
-    const offset = pagesize * (pageindex - 1);
-    //查询账户数据
-    const sql = 'SELECT a.id,a.username,a.fullname,a.sex,a.email,a.avatar,a.tel,r.role_name,r.id AS role_id FROM `admin` AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id LIMIT ? OFFSET ?; SELECT COUNT(*) as total FROM `admin`;';
-    let [results] = await pool.query(sql, [pagesize, offset]);
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "获取成功",
-        ...results[1][0],
-        data: results[0],
-    });
+router.get("/list", async (req, res) => {
+    try {
+        let { pagesize = 10, pageindex = 1 } = req.query;
+        // 计算偏移量
+        pagesize = parseInt(pagesize);
+        const offset = pagesize * (pageindex - 1);
+        //查询账户数据
+        const sql = 'SELECT a.id,a.username,a.fullname,a.sex,a.email,a.avatar,a.tel,r.role_name,r.id AS role_id FROM `admin` AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id LIMIT ? OFFSET ?; SELECT COUNT(*) as total FROM `admin`;';
+        let [results] = await pool.query(sql, [pagesize, offset]);
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "获取成功",
+            ...results[1][0],
+            data: results[0],
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 /**
@@ -201,7 +215,7 @@ router.get("/list", async function (req, res) {
  * @apiSampleRequest /admins
  */
 
-router.delete('/:id', async function (req, res) {
+router.delete('/:id', async (req, res) => {
     let { id } = req.params;
     // 获取一个连接
     const connection = await pool.getConnection();
@@ -232,7 +246,6 @@ router.delete('/:id', async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 
@@ -249,24 +262,32 @@ router.delete('/:id', async function (req, res) {
  * @apiSampleRequest /admins
  */
 
-router.get("/", async function (req, res) {
-    let { id } = req.query;
-    //查询账户数据
-    let sql = `SELECT a.id,a.username,a.fullname,a.email,a.sex,a.avatar,a.tel,r.role_name,r.id AS role_id FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
-    let [results] = await pool.query(sql, [id]);
-    if (!results.length) {
+router.get("/", async (req, res) => {
+    try {
+        let { id } = req.query;
+        //查询账户数据
+        let sql = `SELECT a.id,a.username,a.fullname,a.email,a.sex,a.avatar,a.tel,r.role_name,r.id AS role_id FROM ADMIN AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id WHERE a.id = ?`;
+        let [results] = await pool.query(sql, [id]);
+        if (results.length === 0) {
+            res.json({
+                status: false,
+                msg: "获取失败！"
+            });
+            return false;
+        }
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "获取成功！",
+            data: results[0]
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "获取失败！"
+            msg: error.message,
+            error,
         });
-        return false;
     }
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "获取成功！",
-        data: results[0]
-    });
 });
 
 // TODO 检测用户名是否可用
@@ -292,11 +313,10 @@ router.get("/", async function (req, res) {
  * @apiSampleRequest /admins
  */
 
-router.put("/", async function (req, res) {
+router.put("/", async (req, res) => {
     let { id, username, fullname, role_id, sex, tel, email, avatar } = req.body;
     // 获取一个连接
     const connection = await pool.getConnection();
-
     try {
         // 开启事务
         await connection.beginTransaction();
@@ -329,7 +349,6 @@ router.put("/", async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 
@@ -352,22 +371,30 @@ router.put("/", async function (req, res) {
  * @apiSampleRequest /admins/account
  */
 
-router.put("/account/", async function (req, res) {
-    let { id } = req.user;
-    let { username, fullname, sex, avatar, tel, email } = req.body;
-    let sql = `UPDATE admin SET fullname = ?,sex = ?,avatar = ?,tel = ?,email = ? WHERE id = ?`;
-    let [{ affectedRows }] = await pool.query(sql, [fullname, sex, avatar, tel, email, id]);
-    if (affectedRows === 0) {
+router.put("/account/", async (req, res) => {
+    try {
+        let { id } = req.user;
+        let { username, fullname, sex, avatar, tel, email } = req.body;
+        let sql = `UPDATE admin SET fullname = ?,sex = ?,avatar = ?,tel = ?,email = ? WHERE id = ?`;
+        let [{ affectedRows }] = await pool.query(sql, [fullname, sex, avatar, tel, email, id]);
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "修改失败！"
+            });
+            return;
+        }
+        res.json({
+            status: true,
+            msg: "修改成功！"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "修改失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    res.json({
-        status: true,
-        msg: "修改成功！"
-    });
 });
 
 module.exports = router;

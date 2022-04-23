@@ -22,21 +22,29 @@ let pool = require('../../config/mysql');
  * @apiSampleRequest /order/settle
  */
 
-router.post('/settle', async function (req, res) {
-    let { goods } = req.body;
-    let { openid } = req.user;
-    // 查询默认地址
-    let address_sql = `SELECT * FROM address WHERE uid =? AND isDefault = 1 LIMIT 1`;
-    let [[address]] = await pool.query(address_sql, [openid]);
-    // 欲购买商品
-    let goods_sql = `SELECT g.id,g.name,g.price,g.img_md,c.goods_num FROM goods g JOIN cart c ON g.id = c.goods_id  WHERE c.uid = ? AND c.goods_id IN (?)`;
-    let [results] = await pool.query(goods_sql, [openid, goods]);
-    // 成功
-    res.json({
-        status: true,
-        msg: "获取成功!",
-        data: { address, goods: results }
-    });
+router.post('/settle', async (req, res) => {
+    try {
+        let { goods } = req.body;
+        let { openid } = req.user;
+        // 查询默认地址
+        let address_sql = `SELECT * FROM address WHERE uid =? AND isDefault = 1 LIMIT 1`;
+        let [[address]] = await pool.query(address_sql, [openid]);
+        // 欲购买商品
+        let goods_sql = `SELECT g.id,g.name,g.price,g.img_md,c.goods_num FROM goods g JOIN cart c ON g.id = c.goods_id  WHERE c.uid = ? AND c.goods_id IN (?)`;
+        let [results] = await pool.query(goods_sql, [openid, goods]);
+        // 成功
+        res.json({
+            status: true,
+            msg: "获取成功!",
+            data: { address, goods: results }
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 /**
@@ -57,34 +65,34 @@ router.post('/settle', async function (req, res) {
  * @apiSampleRequest /order/create
  */
 
-router.post('/create', async function (req, res) {
+router.post('/create', async (req, res) => {
     let { addressId, payment, goodsList } = req.body;
     let { openid } = req.user;
-    // 准备查询的商品id,方便使用IN
-    let queryGid = goodsList.map((item) => item.id);
     // 获取一个连接
     const connection = await pool.getConnection();
-    // 查询商品库存
-    let select_sql = 'SELECT inventory FROM goods WHERE id IN (?)';
-    let [results] = connection.query(select_sql, [queryGid]);
-    // 遍历每一个商品是否充足，every碰到第一个为false的，即终止执行
-    let isAllPassed = results.every(function (item, index) {
-        let { id, num } = goodsList[index];
-        let isPassed = item.inventory >= num;
-        if (isPassed === false) {
-            res.json({
-                status: false,
-                msg: `id为${id}的商品，库存不足!`,
-                data: { id },
-            });
-        }
-        return isPassed;
-    });
-    // 库存不足,终止执行
-    if (isAllPassed === false) {
-        return;
-    }
     try {
+        // 准备查询的商品id,方便使用IN
+        let queryGid = goodsList.map((item) => item.id);
+        // 查询商品库存
+        let select_sql = 'SELECT inventory FROM goods WHERE id IN (?)';
+        let [results] = connection.query(select_sql, [queryGid]);
+        // 遍历每一个商品是否充足，every碰到第一个为false的，即终止执行
+        let isAllPassed = results.every(function (item, index) {
+            let { id, num } = goodsList[index];
+            let isPassed = item.inventory >= num;
+            if (isPassed === false) {
+                res.json({
+                    status: false,
+                    msg: `id为${id}的商品，库存不足!`,
+                    data: { id },
+                });
+            }
+            return isPassed;
+        });
+        // 库存不足,终止执行
+        if (isAllPassed === false) {
+            return;
+        }
         // 开启事务
         await connection.beginTransaction();
         // 拼接减库存sql
@@ -150,7 +158,6 @@ router.post('/create', async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 
@@ -170,37 +177,45 @@ router.post('/create', async function (req, res) {
  * @apiSampleRequest /order/list
  */
 
-router.get('/list', async function (req, res) {
-    let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
-    let { openid } = req.user;
-    // 计算偏移量
-    let size = parseInt(pageSize);
-    let offset = size * (pageIndex - 1);
-    // 查询所有订单
-    let order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ? ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
-    // 根据订单状态查询
-    if (status !== 'all') {
-        order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ? AND o.order_state = ${status} ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
-    }
-    let [orders] = await pool.query(order_sql, [openid, size, offset]);
+router.get('/list', async (req, res) => {
+    try {
+        let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
+        let { openid } = req.user;
+        // 计算偏移量
+        let size = parseInt(pageSize);
+        let offset = size * (pageIndex - 1);
+        // 查询所有订单
+        let order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ? ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+        // 根据订单状态查询
+        if (status !== 'all') {
+            order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ? AND o.order_state = ${status} ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+        }
+        let [orders] = await pool.query(order_sql, [openid, size, offset]);
 
-    // 查询订单商品信息
-    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM orders o JOIN order_goods og ON o.id = og.order_id JOIN goods g ON g.id = og.goods_id WHERE o.uid = ?`;
-    if (status !== 'all') {
-        goods_sql += ` AND o.order_state = ${status}`;
+        // 查询订单商品信息
+        let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM orders o JOIN order_goods og ON o.id = og.order_id JOIN goods g ON g.id = og.goods_id WHERE o.uid = ?`;
+        if (status !== 'all') {
+            goods_sql += ` AND o.order_state = ${status}`;
+        }
+        let [goods] = await pool.query(goods_sql, [openid]);
+        // 遍历订单，添加其包含的商品信息，隐藏bug：goods结果可能非常大，可能仅有几条商品被添加。
+        // 解决方案：根据订单id，逐一查询订单包含的商品，隐藏bug：sql查询多次。
+        orders.forEach((order) => {
+            order.goodsList = goods.filter((item) => order.id === item.order_id);
+        });
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: orders
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
     }
-    let [goods] = await pool.query(goods_sql, [openid]);
-    // 遍历订单，添加其包含的商品信息，隐藏bug：goods结果可能非常大，可能仅有几条商品被添加。
-    // 解决方案：根据订单id，逐一查询订单包含的商品，隐藏bug：sql查询多次。
-    orders.forEach((order) => {
-        order.goodsList = goods.filter((item) => order.id === item.order_id);
-    });
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: orders
-    });
 });
 
 module.exports = router;

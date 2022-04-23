@@ -24,35 +24,43 @@ let pool = require('../../config/mysql');
  * @apiSampleRequest /system/order/list
  */
 
-router.get('/list', async function (req, res) {
-    let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
-    // 计算偏移量
-    let size = parseInt(pageSize);
-    let offset = size * (pageIndex - 1);
-    // 查询所有订单
-    let order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
-    // 根据订单状态查询
-    if (status !== 'all') {
-        order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.order_state = ${status} ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
-    }
-    let [orders] = await pool.query(order_sql, [size, offset]);
+router.get('/list', async (req, res) => {
+    try {
+        let { pageSize = 4, pageIndex = 1, status = 'all' } = req.query;
+        // 计算偏移量
+        let size = parseInt(pageSize);
+        let offset = size * (pageIndex - 1);
+        // 查询所有订单
+        let order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+        // 根据订单状态查询
+        if (status !== 'all') {
+            order_sql = `SELECT o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.order_state = ${status} ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+        }
+        let [orders] = await pool.query(order_sql, [size, offset]);
 
-    // 查询订单商品信息
-    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM orders o JOIN order_goods og ON o.id = og.order_id JOIN goods g ON g.id = og.goods_id`;
-    if (status !== 'all') {
-        goods_sql += ` WHERE o.order_state = ${status}`;
+        // 查询订单商品信息
+        let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM orders o JOIN order_goods og ON o.id = og.order_id JOIN goods g ON g.id = og.goods_id`;
+        if (status !== 'all') {
+            goods_sql += ` WHERE o.order_state = ${status}`;
+        }
+        let [goods] = await pool.query(goods_sql, []);
+        // 遍历订单，添加其包含的商品信息，隐藏bug：goods结果可能非常大，可能仅有几条商品被添加。
+        // 解决方案：根据订单id，逐一查询订单包含的商品，隐藏bug：sql查询多次。
+        orders.forEach((order) => {
+            order.goodsList = goods.filter((item) => order.id === item.order_id);
+        });
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: orders,
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
     }
-    let [goods] = await pool.query(goods_sql, []);
-    // 遍历订单，添加其包含的商品信息，隐藏bug：goods结果可能非常大，可能仅有几条商品被添加。
-    // 解决方案：根据订单id，逐一查询订单包含的商品，隐藏bug：sql查询多次。
-    orders.forEach((order) => {
-        order.goodsList = goods.filter((item) => order.id === item.order_id);
-    });
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: orders,
-    });
 });
 module.exports = router;

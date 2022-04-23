@@ -20,21 +20,29 @@ let pool = require('../../config/mysql');
  *
  * @apiSampleRequest /system/icon/list
  */
-router.get('/list', async function (req, res) {
-    let { pageSize = 20, pageIndex = 1 } = req.query;
-    // 计算偏移量
-    let size = parseInt(pageSize);
-    let offset = size * (pageIndex - 1);
+router.get('/list', async (req, res) => {
+    try {
+        let { pageSize = 20, pageIndex = 1 } = req.query;
+        // 计算偏移量
+        let size = parseInt(pageSize);
+        let offset = size * (pageIndex - 1);
 
-    let sql = `SELECT SQL_CALC_FOUND_ROWS * FROM ICON LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`;
-    let [results] = await pool.query(sql, [size, offset]);
-    // 获取成功
-    res.json({
-        status: true,
-        msg: "获取成功！",
-        data: results[0],
-        ...results[1][0],
-    });
+        let sql = `SELECT SQL_CALC_FOUND_ROWS * FROM ICON LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`;
+        let [results] = await pool.query(sql, [size, offset]);
+        // 获取成功
+        res.json({
+            status: true,
+            msg: "获取成功！",
+            data: results[0],
+            ...results[1][0],
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 module.exports = router;

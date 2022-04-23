@@ -23,15 +23,23 @@ let pool = require('../../config/mysql');
  *
  * @apiSampleRequest /pcct/province
  */
-router.get("/province", async function (req, res) {
-    let sql = 'SELECT * FROM province';
-    let [results] = await pool.query(sql, []);
-    //成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: results,
-    });
+router.get("/province", async (req, res) => {
+    try {
+        let sql = 'SELECT * FROM province';
+        let [results] = await pool.query(sql, []);
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: results,
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 /**
@@ -52,16 +60,24 @@ router.get("/province", async function (req, res) {
  *
  * @apiSampleRequest /pcct/city
  */
-router.get("/city", async function (req, res) {
-    let { id } = req.query;
-    let sql = 'SELECT * FROM city WHERE province_id = ?';
-    let [results] = await pool.query(sql, [id]);
-    //成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: results,
-    });
+router.get("/city", async (req, res) => {
+    try {
+        let { id } = req.query;
+        let sql = 'SELECT * FROM city WHERE province_id = ?';
+        let [results] = await pool.query(sql, [id]);
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: results,
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 /**
@@ -82,16 +98,24 @@ router.get("/city", async function (req, res) {
  *
  * @apiSampleRequest /pcct/county
  */
-router.get("/county", async function (req, res) {
-    let { id } = req.query;
-    let sql = 'SELECT * FROM county WHERE city_id = ?';
-    let [results] = await pool.query(sql, [id]);
-    //成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: results,
-    });
+router.get("/county", async (req, res) => {
+    try {
+        let { id } = req.query;
+        let sql = 'SELECT * FROM county WHERE city_id = ?';
+        let [results] = await pool.query(sql, [id]);
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: results,
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 /**
@@ -112,16 +136,24 @@ router.get("/county", async function (req, res) {
  *
  * @apiSampleRequest /pcct/town
  */
-router.get("/town", async function (req, res) {
-    let { id } = req.query;
-    let sql = 'SELECT * FROM town WHERE county_id = ?';
-    let [results] = await pool.query(sql, [id]);
-    //成功
-    res.json({
-        status: true,
-        msg: "success!",
-        data: results,
-    });
+router.get("/town", async (req, res) => {
+    try {
+        let { id } = req.query;
+        let sql = 'SELECT * FROM town WHERE county_id = ?';
+        let [results] = await pool.query(sql, [id]);
+        //成功
+        res.json({
+            status: true,
+            msg: "success!",
+            data: results,
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 module.exports = router;

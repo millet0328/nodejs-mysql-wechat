@@ -63,7 +63,6 @@ router.post("/", async (req, res) => {
             msg: error.message,
             error,
         });
-
     }
 });
 /**
@@ -83,20 +82,20 @@ router.post("/", async (req, res) => {
  */
 router.delete("/:id", async (req, res) => {
     let { id } = req.params;
-    let select_sql = 'SELECT * FROM MENU WHERE pId = ?';
-    // 查询是否有子级菜单
-    let [results] = await pool.query(select_sql, [id]);
-    if (results.length > 0) {
-        res.json({
-            status: false,
-            msg: "拥有子级菜单，不允许删除！"
-        });
-        return;
-    }
-    // 获取一个连接
-    const connection = await pool.getConnection();
-
     try {
+        // 获取一个连接
+        const connection = await pool.getConnection();
+
+        let select_sql = 'SELECT * FROM MENU WHERE pId = ?';
+        // 查询是否有子级菜单
+        let [results] = await connection.query(select_sql, [id]);
+        if (results.length > 0) {
+            res.json({
+                status: false,
+                msg: "拥有子级菜单，不允许删除！"
+            });
+            return;
+        }
         // 开启事务
         await connection.beginTransaction();
         // 删除菜单
@@ -126,7 +125,6 @@ router.delete("/:id", async (req, res) => {
             msg: error.message,
             error,
         });
-
     }
 });
 /**
@@ -150,23 +148,31 @@ router.delete("/:id", async (req, res) => {
  * @apiSampleRequest /menu/
  */
 router.put("/:id", async (req, res) => {
-    let { id } = req.params;
-    let { name, pId, component, path, menu_order } = req.body;
-    let sql = `UPDATE MENU SET name = ?,pId = ?,component = ?, path = ?, menu_order = ? WHERE id = ? `;
-    let [{ affectedRows }] = await pool.query(sql, [name, pId, component, path, menu_order, id]);
-    // 修改失败
-    if (affectedRows === 0) {
+    try {
+        let { id } = req.params;
+        let { name, pId, component, path, menu_order } = req.body;
+        let sql = `UPDATE MENU SET name = ?,pId = ?,component = ?, path = ?, menu_order = ? WHERE id = ? `;
+        let [{ affectedRows }] = await pool.query(sql, [name, pId, component, path, menu_order, id]);
+        // 修改失败
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "更新菜单失败！"
+            });
+            return;
+        }
+        // 修改成功
+        res.json({
+            status: true,
+            msg: "更新菜单成功!"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "更新菜单失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    // 修改成功
-    res.json({
-        status: true,
-        msg: "更新菜单成功!"
-    });
 });
 /**
  * @api {put} /menu/icon/:id 设置菜单图标
@@ -185,23 +191,31 @@ router.put("/:id", async (req, res) => {
  * @apiSampleRequest /menu/icon
  */
 router.put("/icon/:id", async (req, res) => {
-    let { id } = req.params;
-    let { icon_id } = req.body;
-    let sql = `UPDATE MENU SET icon_id = ? WHERE id = ? `;
-    let [{ affectedRows }] = await pool.query(sql, [icon_id, id]);
-    // 修改失败
-    if (affectedRows === 0) {
+    try {
+        let { id } = req.params;
+        let { icon_id } = req.body;
+        let sql = `UPDATE MENU SET icon_id = ? WHERE id = ? `;
+        let [{ affectedRows }] = await pool.query(sql, [icon_id, id]);
+        // 修改失败
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "设置图标失败！"
+            });
+            return;
+        }
+        // 修改成功
+        res.json({
+            status: true,
+            msg: "设置图标成功!"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "设置图标失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    // 修改成功
-    res.json({
-        status: true,
-        msg: "设置图标成功!"
-    });
 });
 /**
  * @api {get} /menu/sub 获取子级菜单
@@ -216,14 +230,22 @@ router.put("/icon/:id", async (req, res) => {
  * @apiSampleRequest /menu/sub
  */
 router.get("/sub", async (req, res) => {
-    let { pId } = req.query;
-    let sql = `SELECT m.*, i.name AS 'icon_name' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id WHERE m.pId = ? ORDER BY m.menu_order`;
-    let [results] = await pool.query(sql, [pId]);
-    res.json({
-        status: true,
-        msg: "获取成功!",
-        data: results
-    });
+    try {
+        let { pId } = req.query;
+        let sql = `SELECT m.*, i.name AS 'icon_name' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id WHERE m.pId = ? ORDER BY m.menu_order`;
+        let [results] = await pool.query(sql, [pId]);
+        res.json({
+            status: true,
+            msg: "获取成功!",
+            data: results
+        });
+    } catch (error) {
+        res.json({
+            status: false,
+            msg: error.message,
+            error,
+        });
+    }
 });
 
 
@@ -240,41 +262,49 @@ router.get("/sub", async (req, res) => {
  * @apiSampleRequest /menu/all
  */
 router.get('/all', async (req, res) => {
-    let { type = 'flat' } = req.query;
-    // 查询菜单
-    let sql = `SELECT m.*, i.name AS 'icon_name' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id ORDER BY menu_order`;
-    let [results] = await pool.query(sql, []);
-    // 扁平数组
-    if (type === 'flat') {
-        res.json({
-            status: true,
-            msg: "获取成功!",
-            data: results
-        });
-        return;
-    }
-    // 树形结构
-    if (type === 'tree') {
-        // 筛选出一级菜单
-        let menu_1st = results.filter((item) => item.pId === 0);
-        // 转换为树形结构--递归函数
-        const parseToTree = function (list) {
-            return list.map((parent) => {
-                let children = results.filter((child) => child.pId === parent.id);
-                if (children.length) {
-                    return { ...parent, children: parseToTree(children) }
-                } else {
-                    return { ...parent }
-                }
+    try {
+        let { type = 'flat' } = req.query;
+        // 查询菜单
+        let sql = `SELECT m.*, i.name AS 'icon_name' FROM MENU m LEFT JOIN ICON i ON m.icon_id = i.id ORDER BY menu_order`;
+        let [results] = await pool.query(sql, []);
+        // 扁平数组
+        if (type === 'flat') {
+            res.json({
+                status: true,
+                msg: "获取成功!",
+                data: results
+            });
+            return;
+        }
+        // 树形结构
+        if (type === 'tree') {
+            // 筛选出一级菜单
+            let menu_1st = results.filter((item) => item.pId === 0);
+            // 转换为树形结构--递归函数
+            const parseToTree = function (list) {
+                return list.map((parent) => {
+                    let children = results.filter((child) => child.pId === parent.id);
+                    if (children.length) {
+                        return { ...parent, children: parseToTree(children) }
+                    } else {
+                        return { ...parent }
+                    }
+                });
+            }
+            // 生成树形菜单
+            let tree_menu = parseToTree(menu_1st);
+            //成功
+            res.json({
+                status: true,
+                msg: "获取成功!",
+                data: tree_menu
             });
         }
-        // 生成树形菜单
-        let tree_menu = parseToTree(menu_1st);
-        //成功
+    } catch (error) {
         res.json({
-            status: true,
-            msg: "获取成功!",
-            data: tree_menu
+            status: false,
+            msg: error.message,
+            error,
         });
     }
 });

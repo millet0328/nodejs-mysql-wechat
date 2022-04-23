@@ -27,7 +27,7 @@ let pool = require('../../config/mysql');
  *
  * @apiSampleRequest /address/
  */
-router.post('/', async function (req, res) {
+router.post('/', async (req, res) => {
     let { name, tel, province, city, county, street, code, isDefault } = req.body;
     let { openid } = req.user;
     // 获取一个连接
@@ -64,7 +64,6 @@ router.post('/', async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 /**
@@ -79,22 +78,30 @@ router.post('/', async function (req, res) {
  *
  * @apiSampleRequest /address
  */
-router.delete("/:id", async function (req, res) {
-    let { id } = req.params;
-    //TODO 删除默认地址
-    let sql = `DELETE FROM address WHERE id = ? `
-    let [{ affectedRows }] = await pool.query(sql, [id]);
-    if (affectedRows === 0) {
+router.delete("/:id", async (req, res) => {
+    try {
+        let { id } = req.params;
+        //TODO 删除默认地址
+        let sql = `DELETE FROM address WHERE id = ? `
+        let [{ affectedRows }] = await pool.query(sql, [id]);
+        if (affectedRows === 0) {
+            res.json({
+                status: false,
+                msg: "删除失败！"
+            });
+            return;
+        }
+        res.json({
+            status: true,
+            msg: "删除成功！"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "删除失败！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    res.json({
-        status: true,
-        msg: "删除成功！"
-    });
 })
 /**
  * @api {put} /address/:id 修改收货地址
@@ -116,7 +123,7 @@ router.delete("/:id", async function (req, res) {
  *
  * @apiSampleRequest /address/
  */
-router.put("/:id", async function (req, res) {
+router.put("/:id", async (req, res) => {
     let { name, tel, province, city, county, street, code, isDefault } = req.body;
     let { id } = req.params;
     let { openid } = req.user;
@@ -129,7 +136,12 @@ router.put("/:id", async function (req, res) {
         // 判断是否默认地址，如果是默认地址，其他地址取消默认
         if (isDefault == 1) {
             let update_sql = 'UPDATE address SET isDefault = 0 WHERE uid = ?';
-            await connection.query(update_sql, [openid]);
+            let [{ affectedRows: default_affected_rows }] = await connection.query(update_sql, [openid]);
+            if (default_affected_rows === 0) {
+                await connection.rollback();
+                res.json({ status: false, msg: "默认地址address设置失败！" });
+                return;
+            }
         }
         // 添加address
         let update_sql = `UPDATE address SET name = ?, tel = ?, province = ?, city = ?, county = ?, street = ?, code = ?, isDefault = ? WHERE id = ?`;
@@ -153,7 +165,6 @@ router.put("/:id", async function (req, res) {
             msg: error.message,
             error,
         });
-
     }
 });
 /**
@@ -169,27 +180,35 @@ router.put("/:id", async function (req, res) {
  *
  * @apiSampleRequest /address/list
  */
-router.get('/list', async function (req, res) {
-    let { openid } = req.user;
-    let { pagesize = 10, pageindex = 1 } = req.query;
-    // 计算偏移量
-    pagesize = parseInt(pagesize);
-    const offset = pagesize * (pageindex - 1);
-    let sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM address WHERE uid = ? LIMIT ? OFFSET ? ;SELECT FOUND_ROWS() as total;';
-    let [results] = await pool.query(sql, [openid, pagesize, offset])
-    if (!results.length) {
+router.get('/list', async (req, res) => {
+    try {
+        let { openid } = req.user;
+        let { pagesize = 10, pageindex = 1 } = req.query;
+        // 计算偏移量
+        pagesize = parseInt(pagesize);
+        const offset = pagesize * (pageindex - 1);
+        let sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM address WHERE uid = ? LIMIT ? OFFSET ? ;SELECT FOUND_ROWS() as total;';
+        let [results] = await pool.query(sql, [openid, pagesize, offset])
+        if (results.length === 0) {
+            res.json({
+                status: false,
+                msg: "暂无收货地址！"
+            });
+            return false;
+        }
+        res.json({
+            status: true,
+            msg: "获取成功！",
+            ...results[1][0],
+            data: results[0],
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "暂无收货地址！"
+            msg: error.message,
+            error,
         });
-        return false;
     }
-    res.json({
-        status: true,
-        msg: "获取成功！",
-        ...results[1][0],
-        data: results[0],
-    });
 });
 /**
  * @api {get} /address 根据id获取收货地址详情
@@ -203,22 +222,30 @@ router.get('/list', async function (req, res) {
  *
  * @apiSampleRequest /address
  */
-router.get("/", async function (req, res) {
-    let { id } = req.query;
-    let sql = `SELECT * FROM address WHERE id = ? `;
-    let [results] = await pool.query(sql, [id]);
-    if (!results.length) {
+router.get("/", async (req, res) => {
+    try {
+        let { id } = req.query;
+        let sql = `SELECT * FROM address WHERE id = ? `;
+        let [results] = await pool.query(sql, [id]);
+        if (results.length === 0) {
+            res.json({
+                status: false,
+                msg: "暂无收货地址信息！"
+            });
+            return;
+        }
+        res.json({
+            status: true,
+            data: results[0],
+            msg: "获取成功！"
+        });
+    } catch (error) {
         res.json({
             status: false,
-            msg: "暂无收货地址信息！"
+            msg: error.message,
+            error,
         });
-        return;
     }
-    res.json({
-        status: true,
-        data: results[0],
-        msg: "获取成功！"
-    });
 });
 
 module.exports = router;
