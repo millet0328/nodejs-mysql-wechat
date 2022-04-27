@@ -24,7 +24,7 @@ let { appid, appSecret } = require("../../config/wx");
  *
  * @apiSampleRequest /user/token
  */
-router.post('/token', async (req, res) => {
+router.post('/token', async function (req, res) {
     let { code } = req.body;
     // 请求微信API
     let url = 'https://api.weixin.qq.com/sns/jscode2session';
@@ -76,8 +76,7 @@ router.post('/token', async (req, res) => {
     } catch (error) {
         res.json({
             status: false,
-            msg: error.message,
-            error,
+            msg: error,
         });
     }
 });
@@ -98,28 +97,16 @@ router.post('/token', async (req, res) => {
  *
  * @apiSampleRequest /user/info
  */
-router.put("/info", async (req, res) => {
-    try {
-        let { nickName, gender, avatarUrl, country, province, city } = req.body;
-        let { openid } = req.user;
-        let sql = `UPDATE user SET nickname = ?, sex = ?, avatar = ?, country = ?, province = ?, city = ? WHERE openid = ?`;
-        let [{ affectedRows }] = await pool.query(sql, [nickName, gender, avatarUrl, country, province, city, openid]);
-        if (affectedRows === 0) {
-            res.json({
-                status: false,
-                msg: "存储信息失败！",
-            })
-        }
+router.put("/info", async function (req, res) {
+    let { nickName, gender, avatarUrl, country, province, city } = req.body;
+    let { openid } = req.user;
+    let sql = `UPDATE user SET nickname = ?, sex = ?, avatar = ?, country = ?, province = ?, city = ? WHERE openid = ?`;
+    let [{ affectedRows }] = await pool.query(sql, [nickName, gender, avatarUrl, country, province, city, openid]);
+    if (affectedRows) {
         res.json({
             status: true,
             msg: "存储信息成功！",
         })
-    } catch (error) {
-        res.json({
-            status: false,
-            msg: error.message,
-            error,
-        });
     }
 });
 

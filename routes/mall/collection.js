@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 // 数据库
 let pool = require('../../config/mysql');
+// 推荐系统
+let ger = require('../../config/ger');
 
 /**
  * @apiDefine Authorization
@@ -20,30 +22,35 @@ let pool = require('../../config/mysql');
  *
  * @apiSampleRequest /collection
  */
-router.post("/", async (req, res) => {
-    try {
-        let { id } = req.body;
-        let { openid } = req.user;
-        let sql = 'INSERT INTO collection ( uid, goods_id ) VALUES (?,?)';
-        let [{ affectedRows }] = await pool.query(sql, [openid, id]);
-        if (affectedRows === 0) {
-            res.json({
-                status: false,
-                msg: "添加失败!"
-            });
-            return;
-        }
-        res.json({
-            status: true,
-            msg: "添加成功!"
-        });
-    } catch (error) {
+router.post("/", async function (req, res) {
+    let { id } = req.body;
+    let { openid } = req.user;
+    // 判断是否已收藏
+    let select_sql = 'SELECT * FROM collection WHERE goods_id = ? AND uid = ?';
+    let [results] = await pool.query(select_sql, [id, openid]);
+    if (results.length > 0) {
         res.json({
             status: false,
-            msg: error.message,
-            error,
+            msg: "已收藏此商品!"
         });
+        return;
     }
+    let insert_sql = 'INSERT INTO collection ( uid, goods_id ) VALUES (?,?)';
+    let [{ affectedRows }] = await pool.query(insert_sql, [openid, id]);
+    if (affectedRows === 0) {
+        res.json({
+            status: false,
+            msg: "收藏失败!"
+        });
+        return;
+    }
+    // 添加浏览事件
+    await ger.events([{ namespace: 'wechat-mall', person: openid, action: 'likes', thing: id, expires_at: '2025-06-06' }]);
+
+    res.json({
+        status: true,
+        msg: "收藏成功!"
+    });
 });
 
 /**
@@ -58,32 +65,24 @@ router.post("/", async (req, res) => {
  *
  * @apiSampleRequest /collection
  */
-router.delete("/:id", async (req, res) => {
-    try {
-        let { id } = req.params;
-        let { openid } = req.user;
-        let sql = 'DELETE FROM collection WHERE goods_id = ? and uid = ?';
-        let [{ affectedRows }] = await pool.query(sql, [id, openid]);
-        // 删除失败
-        if (affectedRows === 0) {
-            res.json({
-                status: false,
-                msg: "删除失败!",
-            });
-            return;
-        }
-        // 删除成功
-        res.json({
-            status: true,
-            msg: "删除成功!",
-        });
-    } catch (error) {
+router.delete("/:id", async function (req, res) {
+    let { id } = req.params;
+    let { openid } = req.user;
+    let sql = 'DELETE FROM collection WHERE goods_id = ? and uid = ?';
+    let [{ affectedRows }] = await pool.query(sql, [id, openid]);
+    // 删除失败
+    if (affectedRows === 0) {
         res.json({
             status: false,
-            msg: error.message,
-            error,
+            msg: "取消收藏失败!",
         });
+        return;
     }
+    // 删除成功
+    res.json({
+        status: true,
+        msg: "取消收藏成功!",
+    });
 });
 
 /**
@@ -107,29 +106,21 @@ router.delete("/:id", async (req, res) => {
  *
  * @apiSampleRequest /collection
  */
-router.get("/", async (req, res) => {
-    try {
-        let { openid } = req.user;
-        let { pagesize = 10, pageindex = 1 } = req.query;
-        // 计算偏移量
-        pagesize = parseInt(pagesize);
-        const offset = pagesize * (pageindex - 1);
-        let sql = 'SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;';
-        let [results] = await pool.query(sql, [openid, pagesize, offset]);
-        //成功
-        res.json({
-            status: true,
-            msg: "获取成功!",
-            ...results[1][0],
-            data: results[0],
-        });
-    } catch (error) {
-        res.json({
-            status: false,
-            msg: error.message,
-            error,
-        });
-    }
+router.get("/", async function (req, res) {
+    let { openid } = req.user;
+    let { pagesize = 10, pageindex = 1 } = req.query;
+    // 计算偏移量
+    pagesize = parseInt(pagesize);
+    const offset = pagesize * (pageindex - 1);
+    let sql = 'SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;';
+    let [results] = await pool.query(sql, [openid, pagesize, offset]);
+    //成功
+    res.json({
+        status: true,
+        msg: "获取成功!",
+        ...results[1][0],
+        data: results[0],
+    });
 });
 
 module.exports = router;

@@ -18,50 +18,42 @@ const path = require("path");
  * @apiSampleRequest /category/all
  */
 
-router.get("/all", async (req, res) => {
-    try {
-        let { type = 'flat' } = req.query;
-        // 查询分类
-        let sql = `SELECT * FROM CATEGORY`;
-        let [results] = await pool.query(sql, []);
-        // 扁平数组
-        if (type === 'flat') {
-            res.json({
-                status: true,
-                msg: "获取成功!",
-                data: results
-            });
-            return;
-        }
-        // 树形结构
-        if (type === 'tree') {
-            // 筛选出一级菜单
-            let cate_1st = results.filter((item) => item.pId === 0);
-            // 转换为树形结构--递归函数
-            const parseToTree = function (list) {
-                return list.map((parent) => {
-                    let children = results.filter((child) => child.pId === parent.id);
-                    if (children.length) {
-                        return { ...parent, children: parseToTree(children) }
-                    } else {
-                        return { ...parent }
-                    }
-                });
-            }
-            // 生成树形菜单
-            let tree_menu = parseToTree(cate_1st);
-            // 返回数据
-            res.json({
-                status: true,
-                msg: "获取成功!",
-                data: tree_menu
-            });
-        }
-    } catch (error) {
+router.get("/all", async function (req, res) {
+    let { type = 'flat' } = req.query;
+    // 查询分类
+    let sql = `SELECT * FROM CATEGORY`;
+    let [results] = await pool.query(sql, []);
+    // 扁平数组
+    if (type === 'flat') {
         res.json({
-            status: false,
-            msg: error.message,
-            error,
+            status: true,
+            msg: "获取成功!",
+            data: results
+        });
+        return;
+    }
+    // 树形结构
+    if (type === 'tree') {
+        // 筛选出一级菜单
+        let cate_1st = results.filter((item) => item.pId === 0);
+        // 转换为树形结构--递归函数
+        const parseToTree = function (list) {
+            return list.map((parent) => {
+                let children = results.filter((child) => child.pId === parent.id);
+                if (children.length) {
+                    return { ...parent, children: parseToTree(children) }
+                } else {
+                    return { ...parent }
+                }
+            });
+        }
+        // 生成树形菜单
+        let tree_menu = parseToTree(cate_1st);
+        // 返回数据
+        res.json({
+            status: true,
+            msg: "获取成功!",
+            data: tree_menu
         });
     }
 });
@@ -81,32 +73,24 @@ router.get("/all", async (req, res) => {
  *
  * @apiSampleRequest /category
  */
-router.post("/", async (req, res) => {
-    try {
-        let { name, pId, level, img } = req.body;
-        let sql = `INSERT INTO CATEGORY (name,pId,level,img) VALUES (?,?,?,?)`;
-        let [{ insertId, affectedRows }] = await pool.query(sql, [name, pId, level, img]);
-        // 添加失败
-        if (affectedRows === 0) {
-            res.json({
-                status: false,
-                msg: "添加失败！",
-            });
-            return;
-        }
-        // 添加成功
-        res.json({
-            status: true,
-            msg: "添加成功！",
-            data: { id: insertId }
-        });
-    } catch (error) {
+router.post("/", async function (req, res) {
+    let { name, pId, level, img } = req.body;
+    let sql = `INSERT INTO CATEGORY (name,pId,level,img) VALUES (?,?,?,?)`;
+    let [{ insertId, affectedRows }] = await pool.query(sql, [name, pId, level, img]);
+    // 添加失败
+    if (affectedRows === 0) {
         res.json({
             status: false,
-            msg: error.message,
-            error,
+            msg: "添加失败！",
         });
+        return;
     }
+    // 添加成功
+    res.json({
+        status: true,
+        msg: "添加成功！",
+        data: { id: insertId }
+    });
 });
 /**
  * @api {delete} /category/:id 删除分类
@@ -123,7 +107,7 @@ router.post("/", async (req, res) => {
  *
  * @apiSampleRequest /category
  */
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async function (req, res) {
     let { id } = req.params;
     // 获取一个连接
     const connection = await pool.getConnection();
@@ -176,6 +160,7 @@ router.delete("/:id", async (req, res) => {
             msg: error.message,
             error,
         });
+
     }
 });
 /**
@@ -195,32 +180,24 @@ router.delete("/:id", async (req, res) => {
  *
  * @apiSampleRequest /category
  */
-router.put("/:id", async (req, res) => {
-    try {
-        let { id } = req.params;
-        let { name, img } = req.body;
-        let sql = `UPDATE CATEGORY SET name = ?, img = ? WHERE id = ?`;
-        let [{ affectedRows }] = await pool.query(sql, [name, img, id]);
-        // 修改失败
-        if (affectedRows === 0) {
-            res.json({
-                status: false,
-                msg: "修改失败！"
-            });
-            return;
-        }
-        // 修改成功
-        res.json({
-            status: true,
-            msg: "修改成功!"
-        });
-    } catch (error) {
+router.put("/:id", async function (req, res) {
+    let { id } = req.params;
+    let { name, img } = req.body;
+    let sql = `UPDATE CATEGORY SET name = ?, img = ? WHERE id = ?`;
+    let [{ affectedRows }] = await pool.query(sql, [name, img, id]);
+    // 修改失败
+    if (affectedRows === 0) {
         res.json({
             status: false,
-            msg: error.message,
-            error,
+            msg: "修改失败！"
         });
+        return;
     }
+    // 修改成功
+    res.json({
+        status: true,
+        msg: "修改成功!"
+    });
 });
 /**
  * @api {get} /category/sub 获取子级分类
@@ -234,24 +211,16 @@ router.put("/:id", async (req, res) => {
  *
  * @apiSampleRequest /category/sub
  */
-router.get("/sub", async (req, res) => {
-    try {
-        let { pId } = req.query;
-        let sql = `SELECT * FROM CATEGORY WHERE pId = ?`;
-        let [results] = await pool.query(sql, [pId]);
-        //成功
-        res.json({
-            status: true,
-            msg: "success!",
-            data: results
-        });
-    } catch (error) {
-        res.json({
-            status: false,
-            msg: error.message,
-            error,
-        });
-    }
+router.get("/sub", async function (req, res) {
+    let { pId } = req.query;
+    let sql = `SELECT * FROM CATEGORY WHERE pId = ?`;
+    let [results] = await pool.query(sql, [pId]);
+    //成功
+    res.json({
+        status: true,
+        msg: "success!",
+        data: results
+    });
 });
 
 module.exports = router;
