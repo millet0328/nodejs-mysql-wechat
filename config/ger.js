@@ -2,7 +2,7 @@
 let g = require('ger');
 // 创建数据库连接
 let knex = g.knex({
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
         host: 'localhost',
         port: 3306,
