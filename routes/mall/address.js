@@ -201,10 +201,14 @@ router.get('/list', async function (req, res) {
     // 计算偏移量
     pagesize = parseInt(pagesize);
     const offset = pagesize * (pageindex - 1);
+    // 查找地址
+    let select_sql = 'SELECT * FROM address WHERE uid = ? ORDER BY isDefault DESC LIMIT ? OFFSET ?';
+    let [address] = await pool.query(select_sql, [openid, pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM address WHERE uid = ?`;
+    let [total] = await pool.query(total_sql, []);
 
-    let sql = 'SELECT SQL_CALC_FOUND_ROWS * FROM address WHERE uid = ? ORDER BY isDefault DESC LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;';
-    let [results] = await pool.query(sql, [openid, pagesize, offset])
-    if (!results.length) {
+    if (!address.length) {
         res.json({
             status: false,
             msg: "暂无收货地址！"
@@ -214,8 +218,8 @@ router.get('/list', async function (req, res) {
     res.json({
         status: true,
         msg: "获取成功！",
-        ...results[1][0],
-        data: results[0],
+        data: address,
+        ...total[0],
     });
 });
 /**

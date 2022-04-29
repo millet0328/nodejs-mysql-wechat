@@ -11,36 +11,90 @@ let ger = require('../../config/ger');
  */
 
 /**
- * @api {get} /recommend 获取所有推荐的商品
- * @apiName RecommendList
+ * @api {get} /recommend/user 根据账户行为推荐商品
+ * @apiName RecommendForUser
  * @apiGroup Recommend
  * @apiPermission user
  *
  * @apiUse Authorization
  *
- * @apiQuery { Number } [pagesize=10] 每一页数量.
- * @apiQuery { Number } [pageindex=1] 第几页.
- *
- * @apiSuccess {Number} goods_id 商品id.
+ * @apiSuccess {Number} id 商品id.
  * @apiSuccess {String} name 商品名称.
  * @apiSuccess {String} hotPoint 卖点.
  * @apiSuccess {Number} price 价格.
- * @apiSuccess {Number} marketPrice 市场价格.
  * @apiSuccess {String} img_md 商品图片.
  *
- * @apiSampleRequest /recommend
+ * @apiSampleRequest /recommend/user
  */
-router.get("/", async function (req, res) {
+router.get("/user", async (req, res) => {
     let { openid } = req.user;
     let { pagesize = 10, pageindex = 1 } = req.query;
-    //TODO 返回推荐商品数据
-    let results = await ger.recommendations_for_person('wechat-mall', openid, { actions: { likes: 1 } });
-    console.log(results)
-    //成功
+    // TODO 无法支持分页功能，需要修改底层依赖GER
+    // 可能没有推荐商品，数组为空，如果数组为空，返回最新发布的商品
+    let { recommendations } = await ger.recommendations_for_person('wechat-mall', openid, { actions: { likes: 2, watch: 1 } });
+    let goods_id = recommendations.map((item) => item.thing);
+    // 有可能没有任何推荐
+    let select_sql = `SELECT id, name, price, img_md, hotPoint FROM goods`;
+    if (recommendations.length > 0) {
+        select_sql += ` WHERE id in (${goods_id})`;
+    }
+    // 查询商品信息
+    let [goods] = await pool.query(select_sql, []);
+    // 融合上面的数据
+    let recommend_goods = recommendations.map((record) => {
+        let results = goods.find((element) => element.id == record.thing)
+        return { ...results, ...record }
+    })
+    // 获取成功
     res.json({
         status: true,
         msg: "获取成功!",
-        data: results,
+        data: recommend_goods,
+    });
+});
+
+/**
+ * @api {get} /recommend/goods 根据商品推荐相似商品
+ * @apiName RecommendForGoods
+ * @apiGroup Recommend
+ * @apiPermission user
+ *
+ * @apiUse Authorization
+ *
+ * @apiQuery { Number } id 商品id.
+ *
+ * @apiSuccess {Number} id 商品id.
+ * @apiSuccess {String} name 商品名称.
+ * @apiSuccess {String} hotPoint 卖点.
+ * @apiSuccess {Number} price 价格.
+ * @apiSuccess {String} img_md 商品图片.
+ *
+ * @apiSampleRequest /recommend/goods
+ */
+router.get("/goods", async (req, res) => {
+    let { pagesize = 10, pageindex = 1, id } = req.query;
+    // TODO 无法支持分页功能，需要修改底层依赖GER
+    // 计算推荐商品
+    let { recommendations } = await ger.recommendations_for_thing('wechat-mall', id, { actions: { likes: 2, watch: 1 } });
+    let goods_id = recommendations.map((item) => item.thing);
+    // 可能没有推荐商品，数组为空，如果数组为空，返回最新发布的商品
+    let select_sql = `SELECT id, name, price, img_md, hotPoint FROM goods`;
+    if (recommendations.length > 0) {
+        select_sql += ` WHERE id in (${goods_id})`;
+    }
+    select_sql += ` ORDER BY create_time DESC`
+    // 查询商品信息
+    let [goods] = await pool.query(select_sql, []);
+    // 融合上面的数据
+    let recommend_goods = recommendations.map((record) => {
+        let results = goods.find((element) => element.id == record.thing)
+        return { ...results, ...record }
+    })
+    // 获取成功
+    res.json({
+        status: true,
+        msg: "获取成功!",
+        data: recommend_goods,
     });
 });
 

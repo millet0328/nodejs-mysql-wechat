@@ -45,7 +45,7 @@ router.post("/", async function (req, res) {
         return;
     }
     // 添加浏览事件
-    await ger.events([{ namespace: 'wechat-mall', person: openid, action: 'likes', thing: id, expires_at: '2025-06-06' }]);
+    await ger.events([{ namespace: 'wechat-mall', person: openid, action: 'likes', thing: id, expires_at: ger.expires_date }]);
 
     res.json({
         status: true,
@@ -112,14 +112,18 @@ router.get("/", async function (req, res) {
     // 计算偏移量
     pagesize = parseInt(pagesize);
     const offset = pagesize * (pageindex - 1);
-    let sql = 'SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;';
-    let [results] = await pool.query(sql, [openid, pagesize, offset]);
+
+    let select_sql = 'SELECT c.id, c.goods_id, g.name, g.hotPoint, g.price, g.marketPrice, g.img_md FROM collection c JOIN goods g ON c.goods_id = g.id WHERE uid = ? LIMIT ? OFFSET ?';
+    let [collections] = await pool.query(select_sql, [openid, pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM collection WHERE uid = ?`;
+    let [total] = await pool.query(total_sql, [openid]);
     //成功
     res.json({
         status: true,
         msg: "获取成功!",
-        ...results[1][0],
-        data: results[0],
+        data: collections,
+        ...total[0],
     });
 });
 

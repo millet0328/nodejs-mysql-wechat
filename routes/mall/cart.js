@@ -78,15 +78,18 @@ router.get('/list', async function (req, res) {
     // 计算偏移量
     pagesize = parseInt(pagesize);
     const offset = pagesize * (pageindex - 1);
-
-    let sql = `SELECT SQL_CALC_FOUND_ROWS c.id, c.goods_id, g.img_md AS img, g.name, g.price, c.goods_num FROM cart c JOIN goods g ON c.goods_id = g.id WHERE c.uid = ? LIMIT ? OFFSET ?; SELECT FOUND_ROWS() as total;`;
-    let [results] = await pool.query(sql, [openid, pagesize, offset]);
+    // 购物车商品
+    let goods_sql = `SELECT c.id, c.goods_id, g.img_md AS img, g.name, g.price, c.goods_num FROM cart c JOIN goods g ON c.goods_id = g.id WHERE c.uid = ? LIMIT ? OFFSET ?`;
+    let [goods] = await pool.query(goods_sql, [openid, pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM cart WHERE uid = ?`;
+    let [total] = await pool.query(total_sql, [openid]);
     //成功
     res.json({
         status: true,
         msg: "获取成功!",
-        ...results[1][0],
-        data: results[0],
+        ...total[0],
+        data: goods,
     });
 });
 /**

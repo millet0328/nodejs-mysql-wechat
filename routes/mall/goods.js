@@ -38,7 +38,7 @@ router.get("/list", async function (req, res) {
     let pagesize = parseInt(pageSize);
     let offset = pagesize * (pageIndex - 1);
     // 根据参数，拼接SQL
-    let select_sql = `SELECT SQL_CALC_FOUND_ROWS id, name, price, img_md, hotPoint FROM GOODS WHERE 1 = 1`
+    let select_sql = `SELECT id, name, price, img_md, hotPoint FROM GOODS WHERE 1 = 1`
     let cate = [null, 'cate_1st', 'cate_2nd', 'cate_3rd'];
     if (cate_level) {
         let cate_name = cate[cate_level];
@@ -52,15 +52,18 @@ router.get("/list", async function (req, res) {
     } else {
         select_sql += ` ORDER BY create_time DESC`;
     }
-    select_sql += ` LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`
+    select_sql += ` LIMIT ? OFFSET ?`
     // 查询商品
-    let [results] = await pool.query(select_sql, [pagesize, offset]);
+    let [goods] = await pool.query(select_sql, [pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM GOODS`;
+    let [total] = await pool.query(total_sql, []);
 
     res.json({
         status: true,
         msg: "获取成功!",
-        data: results[0],
-        ...results[1][0],
+        data: goods,
+        ...total[0],
     });
 });
 
@@ -88,9 +91,9 @@ router.get("/detail", async function (req, res) {
     // 判断是否已收藏
     goods.isCollected = collections.length > 0;
     // 添加浏览事件
-    await ger.events([{ namespace: 'wechat-mall', person: openid, action: 'likes', thing: id, expires_at: '2025-06-06' }]);
+    await ger.events([{ namespace: 'wechat-mall', person: openid, action: 'watch', thing: id, expires_at: ger.expires_date }]);
 
-    //成功
+    //获取成功
     res.json({
         status: true,
         msg: "获取成功!",

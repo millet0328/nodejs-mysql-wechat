@@ -177,24 +177,24 @@ router.get('/list', async function (req, res) {
     let size = parseInt(pageSize);
     let offset = size * (pageIndex - 1);
     // 查询订单信息
-    let order_sql = `SELECT SQL_CALC_FOUND_ROWS o.id, o.create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ?`;
+    let order_sql = `SELECT o.id, DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') AS create_time, o.payment, os.text AS status FROM orders o JOIN order_status os ON o.order_state = os.CODE WHERE o.uid = ?`;
     // 附加订单状态查询
     if (status !== 'all') {
         order_sql += ` AND o.order_state = ${status}`;
     }
     // 按照创建时间排序
-    order_sql += ` ORDER BY o.create_time DESC LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`;
-
-    let [[orders, total]] = await pool.query(order_sql, [openid, size, offset]);
-
+    order_sql += ` ORDER BY o.create_time DESC LIMIT ? OFFSET ?`;
+    let [orders] = await pool.query(order_sql, [openid, size, offset]);
+    // 查询订单总数
+    let total_sql = `SELECT COUNT(*) AS total FROM orders WHERE uid = ?`;
+    let [total] = await pool.query(total_sql, [openid]);
     // 查询订单商品信息
-    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price FROM order_goods og JOIN goods g ON g.id = og.goods_id WHERE og.order_id = ?`;
-
+    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM ( SELECT id FROM orders WHERE uid = ? ORDER BY create_time DESC LIMIT ? OFFSET ? ) AS o JOIN order_goods og ON og.order_id = o.id JOIN goods g ON g.id = og.goods_id`;
+    let [goods] = await pool.query(goods_sql, [openid, size, offset]);
     // 循环遍历给订单数组添加订单商品信息
-    for (const order of orders) {
-        let [goods] = await pool.query(goods_sql, [order.id]);
-        order.goodsList = goods;
-    }
+    orders.forEach((order) => {
+        order.goodsList = goods.filter((item) => item.order_id === order.id);
+    });
     // 获取成功
     res.json({
         status: true,

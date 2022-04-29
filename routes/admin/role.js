@@ -27,15 +27,19 @@ router.get('/list', async (req, res) => {
     // 计算偏移量
     pagesize = parseInt(pagesize);
     let offset = pagesize * (pageindex - 1);
-    // 查询
-    let sql = `SELECT id, role_name AS name FROM role LIMIT ? OFFSET ?; SELECT COUNT(*) as total FROM role`;
-    let [results] = await pool.query(sql, [pagesize, offset]);
+    // 查询角色
+    let select_sql = `SELECT id, role_name AS name FROM role LIMIT ? OFFSET ?`;
+    let [roles] = await pool.query(select_sql, [pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM role`;
+    let [total] = await pool.query(total_sql, []);
+
     // 获取成功
     res.json({
         status: true,
         msg: "获取成功！",
-        ...results[1][0],
-        data: results[0],
+        data: roles,
+        ...total[0],
     });
 });
 

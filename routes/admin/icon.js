@@ -25,15 +25,18 @@ router.get('/list', async function (req, res) {
     // 计算偏移量
     let size = parseInt(pageSize);
     let offset = size * (pageIndex - 1);
-
-    let sql = `SELECT SQL_CALC_FOUND_ROWS * FROM ICON LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`;
-    let [results] = await pool.query(sql, [size, offset]);
+    // 查找图标
+    let select_sql = `SELECT * FROM ICON LIMIT ? OFFSET ?`;
+    let [icons] = await pool.query(select_sql, [size, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM ICON`;
+    let [total] = await pool.query(total_sql, []);
     // 获取成功
     res.json({
         status: true,
         msg: "获取成功！",
-        data: results[0],
-        ...results[1][0],
+        data: icons,
+        ...total[0],
     });
 });
 

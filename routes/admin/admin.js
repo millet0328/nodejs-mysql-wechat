@@ -174,14 +174,17 @@ router.get("/list", async function (req, res) {
     pagesize = parseInt(pagesize);
     const offset = pagesize * (pageindex - 1);
     //查询账户数据
-    const sql = 'SELECT a.id,a.username,a.fullname,a.sex,a.email,a.avatar,a.tel,r.role_name,r.id AS role_id FROM `admin` AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id LIMIT ? OFFSET ?; SELECT COUNT(*) as total FROM `admin`;';
-    let [results] = await pool.query(sql, [pagesize, offset]);
+    const select_sql = 'SELECT a.id,a.username,a.fullname,a.sex,a.email,a.avatar,a.tel,r.role_name,r.id AS role_id FROM `admin` AS a LEFT JOIN admin_role AS ar ON a.id = ar.admin_id LEFT JOIN role AS r ON r.id = ar.role_id LIMIT ? OFFSET ?';
+    let [admins] = await pool.query(select_sql, [pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM admin`;
+    let [total] = await pool.query(total_sql, []);
     // 获取成功
     res.json({
         status: true,
         msg: "获取成功",
-        ...results[1][0],
-        data: results[0],
+        data: admins,
+        ...total[0],
     });
 });
 

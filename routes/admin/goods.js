@@ -130,7 +130,7 @@ router.get("/list", async function (req, res) {
     let offset = pagesize * (pageIndex - 1);
     // TODO 约束返回字段，增加分类字段
     // 根据参数，拼接SQL
-    let select_sql = `SELECT SQL_CALC_FOUND_ROWS *, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
+    let select_sql = `SELECT *, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS create_time FROM GOODS WHERE 1 = 1`
     let cate = [null, 'cate_1st', 'cate_2nd', 'cate_3rd'];
     if (cate_level) {
         let cate_name = cate[cate_level];
@@ -144,15 +144,18 @@ router.get("/list", async function (req, res) {
     } else {
         select_sql += ` ORDER BY create_time DESC`;
     }
-    select_sql += ` LIMIT ? OFFSET ?;SELECT FOUND_ROWS() as total;`
-    // 查询商品
-    let [results] = await pool.query(select_sql, [pagesize, offset]);
+    select_sql += ` LIMIT ? OFFSET ?`;
+    // 查询商品信息
+    let [goods] = await pool.query(select_sql, [pagesize, offset]);
+    // 计算总数
+    let total_sql = `SELECT COUNT(*) as total FROM GOODS`;
+    let [total] = await pool.query(total_sql, []);
 
     res.json({
         status: true,
         msg: "success!",
-        data: results[0],
-        ...results[1][0],
+        data: goods,
+        ...total[0],
     });
 });
 /**
