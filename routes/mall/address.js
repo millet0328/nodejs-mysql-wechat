@@ -206,7 +206,7 @@ router.get('/list', async function (req, res) {
     let [address] = await pool.query(select_sql, [openid, pagesize, offset]);
     // 计算总数
     let total_sql = `SELECT COUNT(*) as total FROM address WHERE uid = ?`;
-    let [total] = await pool.query(total_sql, []);
+    let [total] = await pool.query(total_sql, [openid]);
 
     if (!address.length) {
         res.json({
