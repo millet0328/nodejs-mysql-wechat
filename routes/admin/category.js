@@ -138,14 +138,15 @@ router.delete("/:id", async function (req, res) {
         // 查询分类图片
         let check_img_sql = `SELECT img FROM category WHERE id = ?`;
         let [results] = await connection.query(check_img_sql, [id]);
-        let { img } = results[0];
         // 有分类图片，物理删除
-        if (img) {
+        if (results.length > 0) {
+            // 计算真实路径
+            let { img } = results[0];
             let src = img.replace(/.+\/images/, "./images");
             let realPath = path.resolve(__dirname, '../../public/', src);
+            // 物理删除
             await fs.unlink(realPath);
         }
-
         // 一切顺利，提交事务
         await connection.commit();
         // 创建成功
