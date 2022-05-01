@@ -124,6 +124,18 @@ router.delete("/:id", async function (req, res) {
             });
             return;
         }
+        // 查询分类图片
+        let check_img_sql = `SELECT img FROM category WHERE id = ?`;
+        let [results] = await connection.query(check_img_sql, [id]);
+        let { img } = results[0];
+        // 有分类图片，物理删除
+        if (img) {
+            // 计算真实路径
+            let src = img.replace(/.+\/images/, "./images");
+            let realPath = path.resolve(__dirname, '../../public/', src);
+            // 物理删除
+            await fs.unlink(realPath);
+        }
         // 删除分类
         let delete_sql = `DELETE FROM CATEGORY WHERE id = ?`;
         let [{ affectedRows }] = await connection.query(delete_sql, [id]);
@@ -134,18 +146,6 @@ router.delete("/:id", async function (req, res) {
                 msg: "删除分类失败！"
             });
             return;
-        }
-        // 查询分类图片
-        let check_img_sql = `SELECT img FROM category WHERE id = ?`;
-        let [results] = await connection.query(check_img_sql, [id]);
-        // 有分类图片，物理删除
-        if (results.length > 0) {
-            // 计算真实路径
-            let { img } = results[0];
-            let src = img.replace(/.+\/images/, "./images");
-            let realPath = path.resolve(__dirname, '../../public/', src);
-            // 物理删除
-            await fs.unlink(realPath);
         }
         // 一切顺利，提交事务
         await connection.commit();
