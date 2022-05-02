@@ -51,7 +51,7 @@ app.use(cors({ credentials: true, origin: /^((https|http|ftp|rtsp|mms)?:\/\/)[^\
 
 // 使用中间件验证token合法性，除了这些地址，其他的URL都需要验证
 app.use(expressJwt({ secret: 'secret', algorithms: ['HS256'] }).unless({
-    path: ['/', '/user/token', '/admins/register', '/admins/login']
+    path: ['/', /\/images\/*/, '/user/token', '/admins/register', '/admins/login']
 }));
 
 app.use('/', index);
@@ -75,6 +75,11 @@ app.use('/upload', adminUpload);
 app.use('/seller/order', adminOrder);
 app.use('/system/icon', icon);
 
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    next(createError(404));
+});
+
 // 处理401错误
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
@@ -85,10 +90,6 @@ app.use(function (err, req, res, next) {
     } else {
         next(err);
     }
-});
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
 });
 
 // error handler
