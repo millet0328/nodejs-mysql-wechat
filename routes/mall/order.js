@@ -187,9 +187,17 @@ router.get('/list', async function (req, res) {
     let [orders] = await pool.query(order_sql, [openid, size, offset]);
     // 查询订单总数
     let total_sql = `SELECT COUNT(*) AS total FROM orders WHERE uid = ?`;
+    // 附加订单状态查询
+    if (status !== 'all') {
+        total_sql += ` AND order_state = ${status}`;
+    }
     let [total] = await pool.query(total_sql, [openid]);
     // 查询订单商品信息
-    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM ( SELECT id FROM orders WHERE uid = ? ORDER BY create_time DESC LIMIT ? OFFSET ? ) AS o JOIN order_goods og ON og.order_id = o.id JOIN goods g ON g.id = og.goods_id`;
+    let goods_sql = `SELECT g.id, g.name, g.img_md, og.goods_num, og.goods_price, og.order_id FROM ( SELECT id FROM orders WHERE uid = ?`;
+    if (status !== 'all') {
+        goods_sql += ` AND order_state = ${status}`;
+    }
+    goods_sql += ` ORDER BY create_time DESC LIMIT ? OFFSET ? ) AS o JOIN order_goods og ON og.order_id = o.id JOIN goods g ON g.id = og.goods_id`;
     let [goods] = await pool.query(goods_sql, [openid, size, offset]);
     // 循环遍历给订单数组添加订单商品信息
     orders.forEach((order) => {

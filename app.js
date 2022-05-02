@@ -4,7 +4,7 @@ let path = require('path')
 let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 // 处理 async error
-// require('express-async-errors');
+require('express-async-errors');
 // JSON WEB TOKEN
 const expressJwt = require('express-jwt');
 // CORS

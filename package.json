@@ -24,14 +24,12 @@
     "mysql2": "^2.3.3",
     "pug": "^3.0.2",
     "sharp": "^0.30.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "cross-env": "^7.0.3"
   },
   "apidoc": {
     "name": "商城API文档",
     "title": "商城API文档",
     "description": "admin--用于后台管理系统，user--用于小程序"
-  },
-  "devDependencies": {
-    "cross-env": "^7.0.3"
   }
 }
