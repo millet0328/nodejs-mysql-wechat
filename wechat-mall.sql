@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : app
+ Source Server         : mysql
  Source Server Type    : MySQL
- Source Server Version : 80020
+ Source Server Version : 80028
  Source Host           : localhost:3306
  Source Schema         : wechat-mall
 
  Target Server Type    : MySQL
- Target Server Version : 80020
+ Target Server Version : 80028
  File Encoding         : 65001
 
- Date: 14/10/2020 14:46:26
+ Date: 05/05/2022 09:47:29
 */
 
 SET NAMES utf8mb4;
@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE `address`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
@@ -31,9 +31,9 @@ CREATE TABLE `address`  (
   `county` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '县区',
   `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '详细地址',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
-  `isDefault` int(0) NULL DEFAULT 1 COMMENT '是否默认',
+  `isDefault` int NULL DEFAULT 1 COMMENT '是否默认',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of address
@@ -41,18 +41,20 @@ CREATE TABLE `address`  (
 INSERT INTO `address` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄渤', '15863008280', '山东省', '青岛市', '李沧区', '重庆中路873号', '262621', 0);
 INSERT INTO `address` VALUES (2, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄小米', '15863008280', '湖南省', '长沙市', '芙蓉区', '重庆中路', '266200', 0);
 INSERT INTO `address` VALUES (3, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '张艺兴', '15863008280', '湖北省', '武汉市', '江岸区', '南京路', '266221', 0);
-INSERT INTO `address` VALUES (4, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '罗志祥', '15863008280', '山东省', '济南市', '历下区', '宜昌路', '266221', 0);
+INSERT INTO `address` VALUES (4, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '罗志祥', '15863008280', '江苏省', '南京市', '玄武区', '宜昌路', '266221', 0);
 INSERT INTO `address` VALUES (5, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '欧阳靖', '15194250468', '广东省', '广州市', '海珠区', '崇景路', '266000', 0);
 INSERT INTO `address` VALUES (6, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '黄晓明', '15194250468', '广东省', '广州市', '荔湾区', '鞍山路', '266000', 0);
 INSERT INTO `address` VALUES (7, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '赵薇', '15194250468', '广东省', '广州市', '海珠区', '重庆路', '266000', 0);
-INSERT INTO `address` VALUES (8, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '林心如', '15194250468', '广东省', '广州市', '海珠区', '重庆路', '266000', 1);
+INSERT INTO `address` VALUES (8, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '林心如', '15194250468', '广东省', '广州市', '海珠区', '重庆路', '266000', 0);
+INSERT INTO `address` VALUES (10, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', '张帆', '13475829262', '山东省', '济南市', '历下区', '忠孝东路', '266200', 1);
+INSERT INTO `address` VALUES (9, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', '爱新觉罗', '13475829262', '广东省', '广州市', '海珠区', '酒精发酵', '266220', 1);
 
 -- ----------------------------
 -- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
   `fullname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
@@ -60,9 +62,9 @@ CREATE TABLE `admin`  (
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/images/avatar/default.jpg' COMMENT '头像',
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号码',
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '注册邮箱',
-  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
-  `login_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '登录时间',
-  `login_count` bigint(0) NOT NULL DEFAULT 1 COMMENT '登录次数',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '登录时间',
+  `login_count` bigint NOT NULL DEFAULT 1 COMMENT '登录次数',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
@@ -77,9 +79,9 @@ INSERT INTO `admin` VALUES (2, 'moz', '123456', '黄小米', '女', 'http://loca
 -- ----------------------------
 DROP TABLE IF EXISTS `admin_role`;
 CREATE TABLE `admin_role`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `admin_id` int(0) NULL DEFAULT NULL COMMENT '用户id',
-  `role_id` int(0) NULL DEFAULT NULL COMMENT '角色id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `admin_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `role_id` int NULL DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = FIXED;
 
@@ -94,33 +96,32 @@ INSERT INTO `admin_role` VALUES (2, 2, 2);
 -- ----------------------------
 DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
-  `goods_id` int(0) NOT NULL COMMENT '商品id',
-  `goods_num` int(0) NOT NULL COMMENT '商品数量',
-  `status` tinyint(0) NULL DEFAULT 1 COMMENT '1-正常，0-禁用，-1-删除',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `goods_id` int NOT NULL COMMENT '商品id',
+  `goods_num` int NOT NULL COMMENT '商品数量',
+  `status` tinyint NULL DEFAULT 1 COMMENT '1-正常，0-禁用，-1-删除',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = FIXED;
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车' ROW_FORMAT = FIXED;
 
 -- ----------------------------
 -- Records of cart
 -- ----------------------------
-INSERT INTO `cart` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 37, 3, 1, '2020-08-27 23:13:50', '2020-08-27 23:17:21');
 
 -- ----------------------------
 -- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '名称',
-  `pId` int(0) NOT NULL COMMENT '父级id',
-  `level` int(0) NULL DEFAULT NULL COMMENT '层级',
+  `pId` int NOT NULL COMMENT '父级id',
+  `level` int NULL DEFAULT NULL COMMENT '层级',
   `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 136 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 139 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
@@ -266,7 +267,7 @@ INSERT INTO `category` VALUES (135, '显示器', 123, NULL, '');
 -- ----------------------------
 DROP TABLE IF EXISTS `city`;
 CREATE TABLE `city`  (
-  `_id` int(0) NOT NULL DEFAULT 0,
+  `_id` int NOT NULL DEFAULT 0,
   `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `city_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `province_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -625,24 +626,32 @@ INSERT INTO `city` VALUES (343, '自治区直辖县级行政区划', '6590000000
 -- ----------------------------
 DROP TABLE IF EXISTS `collection`;
 CREATE TABLE `collection`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户id',
-  `goods_id` int(0) NULL DEFAULT NULL COMMENT '商品id',
+  `goods_id` int NULL DEFAULT NULL COMMENT '商品id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户收藏商品' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户收藏商品' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of collection
 -- ----------------------------
 INSERT INTO `collection` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 15);
 INSERT INTO `collection` VALUES (2, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 38);
+INSERT INTO `collection` VALUES (3, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 37);
+INSERT INTO `collection` VALUES (4, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 36);
+INSERT INTO `collection` VALUES (5, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 35);
+INSERT INTO `collection` VALUES (6, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 29);
+INSERT INTO `collection` VALUES (7, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 17);
+INSERT INTO `collection` VALUES (8, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 35);
+INSERT INTO `collection` VALUES (9, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 25);
+INSERT INTO `collection` VALUES (10, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 31);
 
 -- ----------------------------
 -- Table structure for county
 -- ----------------------------
 DROP TABLE IF EXISTS `county`;
 CREATE TABLE `county`  (
-  `_id` int(0) NOT NULL DEFAULT 0,
+  `_id` int NOT NULL DEFAULT 0,
   `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `county_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `city_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -3936,63 +3945,136 @@ INSERT INTO `county` VALUES (3281, '五家渠市', '659004000000', '659000000000
 INSERT INTO `county` VALUES (3282, '铁门关市', '659006000000', '659000000000');
 
 -- ----------------------------
+-- Table structure for events
+-- ----------------------------
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE `events`  (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `person` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `action` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `thing` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` timestamp(3) NOT NULL,
+  `expires_at` timestamp(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 55 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of events
+-- ----------------------------
+INSERT INTO `events` VALUES (1, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'likes', '37', '2022-04-25 16:37:31.727', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (2, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '35', '2022-04-25 16:41:17.144', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (3, '1', 'likes', '35', '2022-04-25 16:41:21.338', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (4, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'likes', '29', '2022-04-25 16:41:58.885', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (5, '2', 'likes', '29', '2022-04-25 16:42:00.924', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (6, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'likes', '17', '2022-04-25 17:09:09.739', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (7, '1', 'likes', '17', '2022-04-25 17:09:12.788', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (8, '2', 'likes', '37', '2022-04-25 17:37:17.123', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (9, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '30', '2022-04-25 17:37:37.118', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (10, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'likes', '31', '2022-04-25 17:37:40.152', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (11, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'likes', '37', '2022-04-26 05:07:29.087', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (12, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'likes', '35', '2022-04-26 05:07:32.377', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (13, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'watch', '35', '2022-04-26 05:07:34.560', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (14, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'watch', '25', '2022-04-26 05:07:54.965', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (15, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'likes', '25', '2022-04-26 05:07:58.339', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (16, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'watch', '31', '2022-04-26 05:15:23.736', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (17, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'likes', '31', '2022-04-26 05:15:25.338', '2025-06-05 16:00:00.000');
+INSERT INTO `events` VALUES (18, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-28 05:13:55.543', '2023-04-27 16:00:00.000');
+INSERT INTO `events` VALUES (19, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 02:37:10.366', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (20, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:14:38.988', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (21, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:18:18.007', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (22, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:18:29.501', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (23, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:19:09.639', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (24, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:19:21.627', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (25, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:20:21.867', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (26, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:21:29.733', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (27, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:21:46.424', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (28, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:21:51.773', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (29, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:22:47.838', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (30, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:24:07.416', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (31, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:25:06.068', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (32, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:26:38.723', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (33, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:26:56.650', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (34, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:26:59.636', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (35, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:27:29.239', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (36, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:27:45.614', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (37, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:28:11.785', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (38, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:28:32.715', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (39, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '38', '2022-04-29 03:31:39.208', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (40, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:31:43.631', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (41, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '37', '2022-04-29 03:31:48.633', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (42, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '36', '2022-04-29 03:31:51.289', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (43, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '35', '2022-04-29 03:31:56.758', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (44, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '34', '2022-04-29 03:32:03.159', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (45, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '33', '2022-04-29 03:32:07.986', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (46, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '32', '2022-04-29 03:32:12.189', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (47, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '31', '2022-04-29 03:32:17.801', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (48, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '17', '2022-04-29 03:32:31.857', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (49, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '18', '2022-04-29 03:32:44.672', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (50, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '15', '2022-04-29 03:33:10.874', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (51, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '18', '2022-04-29 03:33:22.359', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (52, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '15', '2022-04-29 03:33:32.496', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (53, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '16', '2022-04-29 03:33:47.141', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (54, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '16', '2022-04-29 03:33:53.535', '2023-04-28 16:00:00.000');
+INSERT INTO `events` VALUES (55, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'watch', '15', '2022-04-29 03:41:56.539', '2023-04-28 16:00:00.000');
+
+-- ----------------------------
 -- Table structure for goods
 -- ----------------------------
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `cate_1st` int(0) NOT NULL COMMENT '一级分类id',
-  `cate_2nd` int(0) NOT NULL COMMENT '二级分类id',
-  `cate_3rd` int(0) NULL DEFAULT NULL COMMENT '三级分类id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cate_1st` int NOT NULL COMMENT '一级分类id',
+  `cate_2nd` int NOT NULL COMMENT '二级分类id',
+  `cate_3rd` int NULL DEFAULT NULL COMMENT '三级分类id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品名称',
   `hotPoint` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品热点描述',
   `price` decimal(10, 2) NOT NULL COMMENT '商品价格',
   `marketPrice` decimal(10, 2) NOT NULL COMMENT '市场价',
   `cost` decimal(10, 2) NOT NULL COMMENT '成本价',
   `discount` decimal(10, 0) NULL DEFAULT NULL COMMENT '折扣',
-  `inventory` int(0) NOT NULL COMMENT '库存',
-  `articleNo` varchar(255) NOT NULL COMMENT '货号',
+  `inventory` int NOT NULL COMMENT '库存',
+  `articleNo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '货号',
   `img_lg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图-720',
   `img_md` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品主图-360',
   `slider` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品轮播图片',
   `brand` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品品牌',
   `detail` varchar(5000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '商品详情',
   `freight` decimal(10, 0) NULL DEFAULT 0 COMMENT '商品运费',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 39 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES (15, 18, 123, 132, '机械师F117荣耀版 游戏本七代i7-7700HQ/GTX1050Ti 4G独显游戏本笔记本电脑', '【9月20号0:00首发，预约享12期免息特权，仅此一天】【鎏金3D金属A壳】【1677万色RGB背光键盘】【IPS雾面屏】', 6999.00, 7500.00, 6000.00, 9, 998, 1, 'http://localhost:3003/images/goods/b5dcffe0-e7b0-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/b5dcffe0-e7b0-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/b7604480-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/b8fc6850-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/ba1615b0-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/bb5a5580-e7b0-11e8-8eb5-2933d116d7fc_720.jpg', '机械师', '<p><img src=\"http://localhost:3003/images/details/c7c5f5e0-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/c999a470-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cba81210-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ce3bdc50-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ef071800-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f0bcde50-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f2c44710-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f4ba98d0-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 09:59:57', '2020-07-22 23:39:18');
-INSERT INTO `goods` VALUES (16, 18, 123, 135, '【京东配送】AOC C2791VHE/WS 27英寸 1800R曲率 VA广视角 家用电竞双实力 不闪屏曲面显示器', '1800R曲率 VA广视角 家用电竞双实力 不闪屏曲面显示器', 1249.00, 1500.00, 1000.00, 8, 998, 2, 'http://localhost:3003/images/goods/93016550-e7b1-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/93016550-e7b1-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/948ebc10-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/95d9d9b0-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/96e3a890-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/98a6dc60-e7b1-11e8-8eb5-2933d116d7fc_720.jpg', 'AOC', '<p><img src=\"http://localhost:3003/images/details/a1e7c9b0-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/a3afdf80-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a55af770-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a7204e20-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a89fe940-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/aa1a0620-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:04:52', '2020-07-22 23:39:40');
-INSERT INTO `goods` VALUES (17, 18, 123, 131, '京天（KOTIN）第八代i5 8400/GTX1050Ti 4GD独显吃鸡游戏组装机DIY台式组装电脑主机', '更“芯”换代，升级配置，请联系客服。', 4599.00, 5000.00, 4000.00, 9, 1000, 3, 'http://localhost:3003/images/goods/0bda9730-e7b2-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/0bda9730-e7b2-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/0f6d5ae0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/10eccef0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/11f628a0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg', '京天', '<p><img src=\"http://localhost:3003/images/details/201879b0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/219a85d0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/232df710-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/24f326b0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/266f8d80-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/28101e20-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/29d12f10-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2c030330-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:08:31', '2020-07-22 23:40:14');
-INSERT INTO `goods` VALUES (18, 18, 123, 132, '惠普(HP) 幽灵Spectre x360 13.3英寸超轻薄翻转笔记本', '13.9mm超薄！全金属！360°翻转触控！窄边框！带手写触控笔！（SSD FHD 触控屏 黑金版）', 8499.00, 9000.00, 6000.00, 9, 1000, 4, 'http://localhost:3003/images/goods/f56613b0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/f56613b0-e7b3-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/f6df6d40-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f828b620-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f92083a0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/fa6d00d0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/fbd6a', 'HP', '<p><img src=\"http://localhost:3003/images/details/4a8f9220-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/4cda6c80-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/4f0a1dc0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/50ccb550-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/52886f10-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/554b86b0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/57857120-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/59596dd0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:31:26', '2020-07-22 23:40:37');
-INSERT INTO `goods` VALUES (19, 3, 62, 74, '【5折抢购】CH新款潮流短袖T恤衫学生休闲假两件日系韩版潮修身纯色短T恤男', '限时抢购经典假两件纯棉纯色T恤衫，潮男必备！ ！ ！', 49.00, 60.00, 20.00, 8, 1000, 5, 'http://localhost:3003/images/goods/a37041a0-e7b5-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/a37041a0-e7b5-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/a4bdf750-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a66e1850-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a76b3d00-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a8b4fb10-e7b5-11e8-8eb5-2933d116d7fc_720.jpg', 'CH', '<p><img src=\"http://localhost:3003/images/details/b110df90-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/b298b810-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b41fa630-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b59926d0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b7cca8a0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b90af500-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/baba2ba0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/bd659c90-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:34:06', '2020-07-22 23:22:52');
-INSERT INTO `goods` VALUES (24, 3, 62, 76, '幸福时光男装2017新款秋冬新款格子衬衫韩版休闲C35', 'C35', 89.00, 120.00, 20.00, 7, 1000, 6, 'http://localhost:3003/images/goods/0b78fcf0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/0b78fcf0-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/0cd35cd0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/0e1b9440-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/0f4c9a30-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/109f31e0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', '幸福时光', '<p><img src=\"http://localhost:3003/images/details/1a3ff270-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/1b9dfbd0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1d630460-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1f1cc250-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2091d620-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2210adf0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/242758f0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/25b30200-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/27f773c0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2a3a37d0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2c0bc380-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2dea6e90-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:44:30', '2020-07-22 23:21:46');
-INSERT INTO `goods` VALUES (25, 3, 60, 64, '探路者Toread男装棉T恤-TAJF81937-C27X', '', 65.00, 80.00, 20.00, 8, 992, 7, 'http://localhost:3003/images/goods/9c360ee0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/9c360ee0-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/9dd47ca0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/9f6f19d0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a0bea440-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a1be39f0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', '探路者', '<p><img src=\"http://localhost:3003/images/details/ac04fe80-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/ad9dee00-e7b7-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/af0f3140-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b07fd840-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b258b6f0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b3c147a0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b52fcbc0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b719e880-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:48:13', '2020-07-22 23:22:23');
-INSERT INTO `goods` VALUES (26, 2, 29, 53, 'AIRTEX亚特户外男女防晒衣轻薄透气弹力皮肤风衣夹克长款外套M2169&W2170', '弹力面料 防晒轻簿 中长款', 259.00, 300.00, 100.00, 9, 992, 8, 'http://localhost:3003/images/goods/ef53fb50-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/ef53fb50-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/f0a6e120-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f1f13b70-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f2e119b0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f41a0ee0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'AIRTEX', '<p><img src=\"http://localhost:3003/images/details/03eb2160-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/05a83ab0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/06e638f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/08607ce0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/0a104fc0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/0bb43bc0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1f121e80-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2121c4a0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/246e5790-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/26c0fa20-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/28c3cf00-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:51:24', '2020-07-22 23:20:45');
-INSERT INTO `goods` VALUES (27, 15, 120, 122, '永久（FOREVER）自行车24速山地车26寸转把双碟刹男女式学生单车 猎狐T01-A', '温馨提示：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收，需客户承担运费\n每天14：30前发货，客服在线时间9点-17点\n★【11月12日-15日返场购车领券满399-30 另加送骑行手电 评价还送二重礼包】', 599.00, 700.00, 300.00, 9, 1000, 9, 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/6f328260-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/708a9850-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/7160d410-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/73521cc0-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '永久', '<p><img src=\"http://localhost:3003/images/details/7a82c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/7bd78240-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7d807750-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7eb1a450-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/80547ee0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/81b60ab0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/837ce800-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/85267950-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:53:56', '2020-07-22 23:31:53');
-INSERT INTO `goods` VALUES (28, 15, 120, 122, '凤凰 高碳钢破风设计21速钳型刹越野学生车弯把公路车自行车', '用户需知：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收商品，由用户自行承担退回所产生的运费！！！', 768.00, 900.00, 350.00, 9, 1000, 10, 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/b8042c00-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/b95d5360-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/ba73a560-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '凤凰', '<p><img src=\"http://localhost:3003/images/details/c11f8ff0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/c2d667b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c47857e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c5d1cd60-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c7597ed0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ca644dd0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cbf9e1f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cd84c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cef4d270-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d1a684f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d3d090e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d5f93d40-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d8684170-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/db0867c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/defc1020-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e18b6d90-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e47c24e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f472c0c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:57:06', '2020-07-22 23:31:37');
-INSERT INTO `goods` VALUES (29, 2, 24, 30, '法式桔梗碎花连衣裙女夏小清新复古方领泡泡袖小个子2020夏装新款', '', 219.00, 429.00, 100.00, 5, 1000, 241254, 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_360.jpeg', 'http://localhost:3003/images/goods/0fc08010-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/12acca90-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/151d2e50-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/174ae3c0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/1a30c5a0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'Hyliangpin', '<p><img src=\"http://localhost:3003/images/details/96e84320-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/d3f47770-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/19fd8b30-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/1ea34580-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-07-22 23:15:43', '2020-07-22 23:18:44');
-INSERT INTO `goods` VALUES (30, 2, 24, 30, '大码女装2020夏装新款微胖妹妹mm仙女中长款雪纺显瘦遮肚子连衣裙', '', 299.00, 399.00, 150.00, 7, 1000, 124564, 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_720.png', 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_360.png', 'http://localhost:3003/images/goods/1c4e89f0-dbee-11ea-8858-c992a1c4bc0e_720.png,http://localhost:3003/images/goods/1fe12690-dbee-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/22fee150-dbee-11ea-8858-c992a1c4bc0e_720.jpeg', '韩风', '<p><img src=\"http://localhost:3003/images/details/27fc5890-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/2c0c6290-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:19:14', NULL);
-INSERT INTO `goods` VALUES (31, 2, 24, 30, '2020夏季新款女装胖mm大码气质显瘦方领泡泡袖高腰雪纺波点连衣裙', '', 116.00, 200.00, 40.00, 6, 1000, 21, 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/bb98aac0-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/c017a330-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ccdd2360-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', '布拉格', '<p><img src=\"http://localhost:3003/images/details/d3e81de0-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/dae6bc50-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/ea52f280-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-08-12 00:37:38', NULL);
-INSERT INTO `goods` VALUES (32, 2, 24, 30, '方领连衣裙2020夏新款职场ol气质系带收腰a字裙女', '', 287.00, 420.00, 120.00, 7, 1000, 45, 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/369d2ba0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/3c3dc0b0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/4070e310-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', '粉领', '<p><img src=\"http://localhost:3003/images/details/46cd2700-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/4c2f7a90-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/532c4440-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:47:52', NULL);
-INSERT INTO `goods` VALUES (33, 2, 24, 30, '夏季气质性感v领连衣裙纯色泡泡袖连衣裙中长款收腰显瘦连衣裙', '', 689.00, 1200.00, 100.00, 6, 1000, 48, 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/02430030-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/09cffbf0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/10c6f940-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'UC', '<p><img src=\"http://localhost:3003/images/details/16dd81a0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/20eb34d0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:00:37', NULL);
-INSERT INTO `goods` VALUES (34, 2, 24, 30, '复古温柔赫本风优雅方领丝绒连衣裙', '', 199.00, 289.00, 60.00, 7, 1000, 78, 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/712cdc50-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/77662ef0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/7d0d0590-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'WEMEN', '<p><img src=\"http://localhost:3003/images/details/83dad000-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/8a9cdaa0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/90830430-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:03:45', NULL);
-INSERT INTO `goods` VALUES (35, 2, 24, 30, '阔色小紫薯复古方领连衣裙2020夏新款韩版复古盘扣格纹裙子女', '', 99.00, 152.00, 20.00, 7, 1000, 79, 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/fe583c00-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0525b850-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0a2fd9c0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'CC', '<p><img src=\"http://localhost:3003/images/details/10ffee20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/157b3d10-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/190eeb20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:07:25', NULL);
-INSERT INTO `goods` VALUES (36, 2, 24, 30, '方领连衣裙2020夏新款韩版格纹裙子', '', 269.00, 350.00, 100.00, 8, 1000, 98, 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/c8047ff0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/caf202f0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ce90d490-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'Lisa', '<p><img src=\"http://localhost:3003/images/details/d3bc1290-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/d7cd7c20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:13:01', NULL);
-INSERT INTO `goods` VALUES (37, 2, 24, 30, '梵希2020夏季新款复古方领泡泡袖开叉短袖连衣裙收腰仙女裙小白裙', '', 389.00, 659.00, 200.00, 6, 1000, 758, 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/84e72500-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/8a653df0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', '梵希', '<p><img src=\"http://localhost:3003/images/details/9fbec9a0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/a446e9d0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a889eab0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:18:26', NULL);
-INSERT INTO `goods` VALUES (38, 2, 24, 30, '蜜搭 新款复古收腰桔梗初恋裙 夏法式方领绿色泡泡袖中长款连衣裙 158', '', 98.00, 189.00, 35.00, 5, 1000, 258, 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/00176640-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/04569690-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg', '蜜芽', '<p><img src=\"http://localhost:3003/images/details/0aabae90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/0f139c90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/13071de0-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:21:44', NULL);
+INSERT INTO `goods` VALUES (15, 18, 123, 132, '机械师F117荣耀版 游戏本七代i7-7700HQ/GTX1050Ti 4G独显游戏本笔记本电脑', '【9月20号0:00首发，预约享12期免息特权，仅此一天】【鎏金3D金属A壳】【1677万色RGB背光键盘】【IPS雾面屏】', 6999.00, 7500.00, 6000.00, 9, 998, '1', 'http://localhost:3003/images/goods/b5dcffe0-e7b0-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/b5dcffe0-e7b0-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/b7604480-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/b8fc6850-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/ba1615b0-e7b0-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/bb5a5580-e7b0-11e8-8eb5-2933d116d7fc_720.jpg', '机械师', '<p><img src=\"http://localhost:3003/images/details/c7c5f5e0-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/c999a470-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cba81210-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ce3bdc50-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ef071800-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f0bcde50-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f2c44710-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f4ba98d0-e7b0-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 09:59:57', '2020-07-22 23:39:18');
+INSERT INTO `goods` VALUES (16, 18, 123, 135, '【京东配送】AOC C2791VHE/WS 27英寸 1800R曲率 VA广视角 家用电竞双实力 不闪屏曲面显示器', '1800R曲率 VA广视角 家用电竞双实力 不闪屏曲面显示器', 1249.00, 1500.00, 1000.00, 8, 998, '2', 'http://localhost:3003/images/goods/93016550-e7b1-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/93016550-e7b1-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/948ebc10-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/95d9d9b0-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/96e3a890-e7b1-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/98a6dc60-e7b1-11e8-8eb5-2933d116d7fc_720.jpg', 'AOC', '<p><img src=\"http://localhost:3003/images/details/a1e7c9b0-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/a3afdf80-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a55af770-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a7204e20-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a89fe940-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/aa1a0620-e7b1-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:04:52', '2020-07-22 23:39:40');
+INSERT INTO `goods` VALUES (17, 18, 123, 131, '京天（KOTIN）第八代i5 8400/GTX1050Ti 4GD独显吃鸡游戏组装机DIY台式组装电脑主机', '更“芯”换代，升级配置，请联系客服。', 4599.00, 5000.00, 4000.00, 9, 1000, '3', 'http://localhost:3003/images/goods/0bda9730-e7b2-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/0bda9730-e7b2-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/0f6d5ae0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/10eccef0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/11f628a0-e7b2-11e8-8eb5-2933d116d7fc_720.jpg', '京天', '<p><img src=\"http://localhost:3003/images/details/201879b0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/219a85d0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/232df710-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/24f326b0-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/266f8d80-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/28101e20-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/29d12f10-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2c030330-e7b2-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:08:31', '2020-07-22 23:40:14');
+INSERT INTO `goods` VALUES (18, 18, 123, 132, '惠普(HP) 幽灵Spectre x360 13.3英寸超轻薄翻转笔记本', '13.9mm超薄！全金属！360°翻转触控！窄边框！带手写触控笔！（SSD FHD 触控屏 黑金版）', 8499.00, 9000.00, 6000.00, 9, 1000, '4', 'http://localhost:3003/images/goods/f56613b0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/f56613b0-e7b3-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/f6df6d40-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f828b620-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f92083a0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/fa6d00d0-e7b3-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/fbd6a', 'HP', '<p><img src=\"http://localhost:3003/images/details/4a8f9220-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/4cda6c80-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/4f0a1dc0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/50ccb550-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/52886f10-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/554b86b0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/57857120-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/59596dd0-e7b5-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:31:26', '2020-07-22 23:40:37');
+INSERT INTO `goods` VALUES (19, 3, 62, 74, '【5折抢购】CH新款潮流短袖T恤衫学生休闲假两件日系韩版潮修身纯色短T恤男', '限时抢购经典假两件纯棉纯色T恤衫，潮男必备！ ！ ！', 49.00, 60.00, 20.00, 8, 1000, '5', 'http://localhost:3003/images/goods/a37041a0-e7b5-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/a37041a0-e7b5-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/a4bdf750-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a66e1850-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a76b3d00-e7b5-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a8b4fb10-e7b5-11e8-8eb5-2933d116d7fc_720.jpg', 'CH', '<p><img src=\"http://localhost:3003/images/details/b110df90-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/b298b810-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b41fa630-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b59926d0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b7cca8a0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b90af500-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/baba2ba0-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/bd659c90-e7b5-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:34:06', '2020-07-22 23:22:52');
+INSERT INTO `goods` VALUES (24, 3, 62, 76, '幸福时光男装2017新款秋冬新款格子衬衫韩版休闲C35', 'C35', 89.00, 120.00, 20.00, 7, 1000, '6', 'http://localhost:3003/images/goods/0b78fcf0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/0b78fcf0-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/0cd35cd0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/0e1b9440-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/0f4c9a30-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/109f31e0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', '幸福时光', '<p><img src=\"http://localhost:3003/images/details/1a3ff270-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/1b9dfbd0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1d630460-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1f1cc250-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2091d620-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2210adf0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/242758f0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/25b30200-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/27f773c0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2a3a37d0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2c0bc380-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2dea6e90-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:44:30', '2020-07-22 23:21:46');
+INSERT INTO `goods` VALUES (25, 3, 60, 64, '探路者Toread男装棉T恤-TAJF81937-C27X', '', 65.00, 80.00, 20.00, 8, 991, '7', 'http://localhost:3003/images/goods/9c360ee0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/9c360ee0-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/9dd47ca0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/9f6f19d0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a0bea440-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/a1be39f0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', '探路者', '<p><img src=\"http://localhost:3003/images/details/ac04fe80-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/ad9dee00-e7b7-11e8-8eb5-2933d116d7fc.png\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/af0f3140-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b07fd840-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b258b6f0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b3c147a0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b52fcbc0-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/b719e880-e7b7-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:48:13', '2020-07-22 23:22:23');
+INSERT INTO `goods` VALUES (26, 2, 29, 53, 'AIRTEX亚特户外男女防晒衣轻薄透气弹力皮肤风衣夹克长款外套M2169&W2170', '弹力面料 防晒轻簿 中长款', 259.00, 300.00, 100.00, 9, 992, '8', 'http://localhost:3003/images/goods/ef53fb50-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/ef53fb50-e7b7-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/f0a6e120-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f1f13b70-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f2e119b0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/f41a0ee0-e7b7-11e8-8eb5-2933d116d7fc_720.jpg', 'AIRTEX', '<p><img src=\"http://localhost:3003/images/details/03eb2160-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/05a83ab0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/06e638f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/08607ce0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/0a104fc0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/0bb43bc0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/1f121e80-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/2121c4a0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/246e5790-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/26c0fa20-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/28c3cf00-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:51:24', '2020-07-22 23:20:45');
+INSERT INTO `goods` VALUES (27, 15, 120, 122, '永久（FOREVER）自行车24速山地车26寸转把双碟刹男女式学生单车 猎狐T01-A', '温馨提示：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收，需客户承担运费\n每天14：30前发货，客服在线时间9点-17点\n★【11月12日-15日返场购车领券满399-30 另加送骑行手电 评价还送二重礼包】', 599.00, 700.00, 300.00, 9, 1000, '9', 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/6de67a60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/6f328260-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/708a9850-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/7160d410-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/73521cc0-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '永久', '<p><img src=\"http://localhost:3003/images/details/7a82c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/7bd78240-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7d807750-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/7eb1a450-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/80547ee0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/81b60ab0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/837ce800-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/85267950-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:53:56', '2020-07-22 23:31:53');
+INSERT INTO `goods` VALUES (28, 15, 120, 122, '凤凰 高碳钢破风设计21速钳型刹越野学生车弯把公路车自行车', '用户需知：新疆西藏地区暂不支持配送，自行车属大件商品，如人为原因拒收商品，由用户自行承担退回所产生的运费！！！', 768.00, 900.00, 350.00, 9, 1000, '10', 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', 'http://localhost:3003/images/goods/b63efc60-e7b8-11e8-8eb5-2933d116d7fc_360.jpg', 'http://localhost:3003/images/goods/b8042c00-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/b95d5360-e7b8-11e8-8eb5-2933d116d7fc_720.jpg,http://localhost:3003/images/goods/ba73a560-e7b8-11e8-8eb5-2933d116d7fc_720.jpg', '凤凰', '<p><img src=\"http://localhost:3003/images/details/c11f8ff0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/c2d667b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c47857e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c5d1cd60-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/c7597ed0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/ca644dd0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cbf9e1f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cd84c7b0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/cef4d270-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d1a684f0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d3d090e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d5f93d40-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/d8684170-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/db0867c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/defc1020-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e18b6d90-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/e47c24e0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/f472c0c0-e7b8-11e8-8eb5-2933d116d7fc.jpg\" style=\"max-width: 100%;\"><br></p>', 0, '2018-11-14 10:57:06', '2020-07-22 23:31:37');
+INSERT INTO `goods` VALUES (29, 2, 24, 30, '法式桔梗碎花连衣裙女夏小清新复古方领泡泡袖小个子2020夏装新款', '', 219.00, 429.00, 100.00, 5, 1000, '241254', 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'http://localhost:3003/images/goods/08a04fe0-cc2d-11ea-a0c3-4166efc6fb01_360.jpeg', 'http://localhost:3003/images/goods/0fc08010-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/12acca90-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/151d2e50-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/174ae3c0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg,http://localhost:3003/images/goods/1a30c5a0-cc2d-11ea-a0c3-4166efc6fb01_720.jpeg', 'Hyliangpin', '<p><img src=\"http://localhost:3003/images/details/96e84320-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/d3f47770-cc2d-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/19fd8b30-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/1ea34580-cc2e-11ea-a0c3-4166efc6fb01.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-07-22 23:15:43', '2020-07-22 23:18:44');
+INSERT INTO `goods` VALUES (30, 2, 24, 30, '大码女装2020夏装新款微胖妹妹mm仙女中长款雪纺显瘦遮肚子连衣裙', '', 299.00, 399.00, 150.00, 7, 1000, '124564', 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_720.png', 'http://localhost:3003/images/goods/172bd770-dbee-11ea-8858-c992a1c4bc0e_360.png', 'http://localhost:3003/images/goods/1c4e89f0-dbee-11ea-8858-c992a1c4bc0e_720.png,http://localhost:3003/images/goods/1fe12690-dbee-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/22fee150-dbee-11ea-8858-c992a1c4bc0e_720.jpeg', '韩风', '<p><img src=\"http://localhost:3003/images/details/27fc5890-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/2c0c6290-dbee-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:19:14', NULL);
+INSERT INTO `goods` VALUES (31, 2, 24, 30, '2020夏季新款女装胖mm大码气质显瘦方领泡泡袖高腰雪纺波点连衣裙', '', 116.00, 200.00, 40.00, 6, 999, '21', 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/b4bef970-dbf0-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/bb98aac0-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/c017a330-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ccdd2360-dbf0-11ea-8858-c992a1c4bc0e_720.jpeg', '布拉格', '<p><img src=\"http://localhost:3003/images/details/d3e81de0-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"></p><p><img src=\"http://localhost:3003/images/details/dae6bc50-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p><p><img src=\"http://localhost:3003/images/details/ea52f280-dbf0-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><br></p>', 0, '2020-08-12 00:37:38', NULL);
+INSERT INTO `goods` VALUES (32, 2, 24, 30, '方领连衣裙2020夏新款职场ol气质系带收腰a字裙女', '', 287.00, 420.00, 120.00, 7, 1000, '45', 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/3021c6f0-dbf2-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/369d2ba0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/3c3dc0b0-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/4070e310-dbf2-11ea-8858-c992a1c4bc0e_720.jpeg', '粉领', '<p><img src=\"http://localhost:3003/images/details/46cd2700-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/4c2f7a90-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/532c4440-dbf2-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 00:47:52', NULL);
+INSERT INTO `goods` VALUES (33, 2, 24, 30, '夏季气质性感v领连衣裙纯色泡泡袖连衣裙中长款收腰显瘦连衣裙', '', 689.00, 1200.00, 100.00, 6, 1000, '48', 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f8d07b90-dbf3-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/02430030-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/09cffbf0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/10c6f940-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'UC', '<p><img src=\"http://localhost:3003/images/details/16dd81a0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/20eb34d0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:00:37', NULL);
+INSERT INTO `goods` VALUES (34, 2, 24, 30, '复古温柔赫本风优雅方领丝绒连衣裙', '', 199.00, 289.00, 60.00, 7, 1000, '78', 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/6afe5f20-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/712cdc50-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/77662ef0-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/7d0d0590-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'WEMEN', '<p><img src=\"http://localhost:3003/images/details/83dad000-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/8a9cdaa0-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/90830430-dbf4-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:03:45', NULL);
+INSERT INTO `goods` VALUES (35, 2, 24, 30, '阔色小紫薯复古方领连衣裙2020夏新款韩版复古盘扣格纹裙子女', '', 99.00, 152.00, 20.00, 7, 998, '79', 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/f9d65d60-dbf4-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/fe583c00-dbf4-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0525b850-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/0a2fd9c0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'CC', '<p><img src=\"http://localhost:3003/images/details/10ffee20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/157b3d10-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/190eeb20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:07:25', NULL);
+INSERT INTO `goods` VALUES (36, 2, 24, 30, '方领连衣裙2020夏新款韩版格纹裙子', '', 269.00, 350.00, 100.00, 8, 1000, '98', 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/c4867cc0-dbf5-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/c8047ff0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/caf202f0-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/ce90d490-dbf5-11ea-8858-c992a1c4bc0e_720.jpeg', 'Lisa', '<p><img src=\"http://localhost:3003/images/details/d3bc1290-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/d7cd7c20-dbf5-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:13:01', NULL);
+INSERT INTO `goods` VALUES (37, 2, 24, 30, '梵希2020夏季新款复古方领泡泡袖开叉短袖连衣裙收腰仙女裙小白裙', '', 389.00, 659.00, 200.00, 6, 998, '758', 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/8025cc60-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/84e72500-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/8a653df0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', '梵希', '<p><img src=\"http://localhost:3003/images/details/9fbec9a0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/a446e9d0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/a889eab0-dbf6-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:18:26', NULL);
+INSERT INTO `goods` VALUES (38, 2, 24, 30, '蜜搭 新款复古收腰桔梗初恋裙 夏法式方领绿色泡泡袖中长款连衣裙 158', '', 98.00, 189.00, 35.00, 5, 999, '258', 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_720.jpeg', 'http://localhost:3003/images/goods/fa05bfe0-dbf6-11ea-8858-c992a1c4bc0e_360.jpeg', 'http://localhost:3003/images/goods/00176640-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg,http://localhost:3003/images/goods/04569690-dbf7-11ea-8858-c992a1c4bc0e_720.jpeg', '蜜芽', '<p><img src=\"http://localhost:3003/images/details/0aabae90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width:100%;\"><img src=\"http://localhost:3003/images/details/0f139c90-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><img src=\"http://localhost:3003/images/details/13071de0-dbf7-11ea-8858-c992a1c4bc0e.jpeg\" style=\"max-width: 100%;\"><br></p>', 0, '2020-08-12 01:21:44', NULL);
 
 -- ----------------------------
 -- Table structure for icon
 -- ----------------------------
 DROP TABLE IF EXISTS `icon`;
 CREATE TABLE `icon`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标名称',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 281 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
@@ -4286,9 +4368,9 @@ INSERT INTO `icon` VALUES (280, 'ice-cream-round');
 -- ----------------------------
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '菜单id',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '菜单id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名称',
-  `pId` int(0) NULL DEFAULT NULL COMMENT '父级id',
+  `pId` int NULL DEFAULT NULL COMMENT '父级id',
   `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组件名称',
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接url',
   `menu_order` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示顺序',
@@ -4319,8 +4401,8 @@ INSERT INTO `menu` VALUES (14, '菜单权限', 6, NULL, '/auth/menu', '6002', NU
 -- ----------------------------
 DROP TABLE IF EXISTS `order_address`;
 CREATE TABLE `order_address`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `order_id` int(0) NOT NULL COMMENT '订单id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL COMMENT '订单id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
   `tel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省',
@@ -4329,7 +4411,7 @@ CREATE TABLE `order_address`  (
   `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '街道',
   `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮编',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '收货地址' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of order_address
@@ -4337,21 +4419,23 @@ CREATE TABLE `order_address`  (
 INSERT INTO `order_address` VALUES (20, 7, '黄小米', '15863008280', '山东', '青岛', '崂山', '滨海大道', '2006601');
 INSERT INTO `order_address` VALUES (21, 6, '黄小米', '15863008280', '山东', '青岛', '崂山', '滨海大道', '2006601');
 INSERT INTO `order_address` VALUES (22, 16, '黄小米', '15863008280', '山东', '青岛', '崂山', '滨海大道', '2006601');
+INSERT INTO `order_address` VALUES (23, 17, '欧阳靖', '15194250468', '广东省', '广州市', '海珠区', '崇景路', '266000');
+INSERT INTO `order_address` VALUES (24, 18, '张帆', '13475829262', '山东省', '济南市', '历下区', '忠孝东路', '266200');
 
 -- ----------------------------
 -- Table structure for order_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `order_goods`;
 CREATE TABLE `order_goods`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `order_id` int(0) NOT NULL COMMENT '订单id',
-  `goods_id` int(0) NULL DEFAULT NULL COMMENT '商品id',
-  `goods_num` int(0) NULL DEFAULT NULL COMMENT '商品数量',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL COMMENT '订单id',
+  `goods_id` int NULL DEFAULT NULL COMMENT '商品id',
+  `goods_num` int NULL DEFAULT NULL COMMENT '商品数量',
   `goods_price` double(20, 2) NULL DEFAULT NULL COMMENT '商品价格',
-  `status` tinyint(0) NULL DEFAULT 1 COMMENT '0-禁用，1-正常，-1-删除',
-  `update_time` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  `status` tinyint NULL DEFAULT 1 COMMENT '0-禁用，1-正常，-1-删除',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单-商品表' ROW_FORMAT = FIXED;
+) ENGINE = MyISAM AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单-商品表' ROW_FORMAT = FIXED;
 
 -- ----------------------------
 -- Records of order_goods
@@ -4362,14 +4446,20 @@ INSERT INTO `order_goods` VALUES (10, 6, 15, 1, 6999.00, 1, '2018-11-21 20:34:28
 INSERT INTO `order_goods` VALUES (9, 6, 16, 2, 1249.00, 1, '2018-11-21 20:34:28');
 INSERT INTO `order_goods` VALUES (13, 16, 25, 1, 65.00, 1, '2018-11-23 15:52:56');
 INSERT INTO `order_goods` VALUES (14, 16, 26, 1, 259.00, 1, '2018-11-23 15:52:56');
+INSERT INTO `order_goods` VALUES (15, 17, 37, 2, 389.00, 1, '2022-04-24 17:19:41');
+INSERT INTO `order_goods` VALUES (16, 17, 35, 1, 99.00, 1, '2022-04-24 17:19:41');
+INSERT INTO `order_goods` VALUES (17, 17, 38, 1, 98.00, 1, '2022-04-24 17:19:41');
+INSERT INTO `order_goods` VALUES (18, 17, 31, 1, 116.00, 1, '2022-04-24 17:19:41');
+INSERT INTO `order_goods` VALUES (19, 18, 25, 1, 65.00, 1, '2022-04-26 13:15:03');
+INSERT INTO `order_goods` VALUES (20, 18, 35, 1, 99.00, 1, '2022-04-26 13:15:03');
 
 -- ----------------------------
 -- Table structure for order_status
 -- ----------------------------
 DROP TABLE IF EXISTS `order_status`;
 CREATE TABLE `order_status`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `code` tinyint(0) NULL DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` tinyint NULL DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `text` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -4394,40 +4484,42 @@ INSERT INTO `order_status` VALUES (10, 8, 'ORDER_CLOSED', '订单关闭');
 -- ----------------------------
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户id',
   `payment` double(20, 2) NULL DEFAULT NULL COMMENT '支付金额',
-  `payment_type` tinyint(0) NULL DEFAULT NULL COMMENT '1-在线支付，1-货到付款',
-  `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
+  `payment_type` tinyint NULL DEFAULT NULL COMMENT '1-在线支付，1-货到付款',
+  `pay_time` datetime NULL DEFAULT NULL COMMENT '支付时间',
   `ship_fee` double(20, 2) NULL DEFAULT NULL COMMENT '邮费',
-  `ship_time` datetime(0) NULL DEFAULT NULL COMMENT '发货时间',
+  `ship_time` datetime NULL DEFAULT NULL COMMENT '发货时间',
   `ship_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递公司',
   `ship_number` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号',
-  `received_time` datetime(0) NULL DEFAULT NULL COMMENT '收货时间',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `finish_time` datetime(0) NULL DEFAULT NULL COMMENT '交易完成时间',
-  `close_time` datetime(0) NULL DEFAULT NULL COMMENT '交易关闭时间',
-  `order_state` int(0) NULL DEFAULT 0 COMMENT '状态字典',
-  `status` tinyint(0) NULL DEFAULT 1 COMMENT '1-正常，0-禁用，-1-删除',
-  `refund_state` tinyint(0) NULL DEFAULT NULL COMMENT '退款状态',
-  `comment_state` tinyint(0) NULL DEFAULT NULL COMMENT '评论状态',
+  `received_time` datetime NULL DEFAULT NULL COMMENT '收货时间',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `finish_time` datetime NULL DEFAULT NULL COMMENT '交易完成时间',
+  `close_time` datetime NULL DEFAULT NULL COMMENT '交易关闭时间',
+  `order_state` int NULL DEFAULT 0 COMMENT '状态字典',
+  `status` tinyint NULL DEFAULT 1 COMMENT '1-正常，0-禁用，-1-删除',
+  `refund_state` tinyint NULL DEFAULT NULL COMMENT '退款状态',
+  `comment_state` tinyint NULL DEFAULT NULL COMMENT '评论状态',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES (7, '1', 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-22 09:59:58', NULL, NULL, NULL, 0, 1, NULL, NULL);
-INSERT INTO `orders` VALUES (6, '1', 3500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-21 20:34:28', NULL, NULL, NULL, 0, 1, NULL, NULL);
-INSERT INTO `orders` VALUES (16, '2', 5000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-23 15:52:56', NULL, NULL, NULL, 1, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (7, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 2000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-22 09:59:58', NULL, NULL, NULL, 4, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (6, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 3500.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-21 20:34:28', NULL, NULL, NULL, 3, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (16, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 5000.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2018-11-23 15:52:56', NULL, NULL, NULL, 1, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (17, 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 1091.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-04-24 17:19:34', NULL, NULL, NULL, 0, 1, NULL, NULL);
+INSERT INTO `orders` VALUES (18, 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 164.00, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2022-04-26 13:15:03', NULL, NULL, NULL, 0, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for province
 -- ----------------------------
 DROP TABLE IF EXISTS `province`;
 CREATE TABLE `province`  (
-  `_id` int(0) NOT NULL DEFAULT 0,
+  `_id` int NOT NULL DEFAULT 0,
   `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `province_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`_id`) USING BTREE
@@ -4473,7 +4565,7 @@ INSERT INTO `province` VALUES (31, '新疆维吾尔自治区', '650000000000');
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '角色id',
   `role_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名称',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
@@ -4493,9 +4585,9 @@ INSERT INTO `role` VALUES (6, '仓库人员');
 -- ----------------------------
 DROP TABLE IF EXISTS `role_menu`;
 CREATE TABLE `role_menu`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
-  `role_id` int(0) NULL DEFAULT NULL COMMENT '角色id',
-  `menu_id` int(0) NULL DEFAULT NULL COMMENT '权限id',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `role_id` int NULL DEFAULT NULL COMMENT '角色id',
+  `menu_id` int NULL DEFAULT NULL COMMENT '权限id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 58 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = FIXED;
 
@@ -4545,7 +4637,7 @@ INSERT INTO `role_menu` VALUES (57, 4, 12);
 -- ----------------------------
 DROP TABLE IF EXISTS `town`;
 CREATE TABLE `town`  (
-  `_id` int(0) NOT NULL DEFAULT 0,
+  `_id` int NOT NULL DEFAULT 0,
   `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `town_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `county_id` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -47940,7 +48032,7 @@ INSERT INTO `town` VALUES (43379, '双丰镇', '659006101000', '659006000000');
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
-  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '昵称',
   `sex` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '男' COMMENT '性别 0：未知、1：男、2：女',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT './images/avatar/default.jpg' COMMENT '头像',
@@ -47951,11 +48043,12 @@ CREATE TABLE `user`  (
   `openid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '小程序唯一标示id',
   `session_key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会话密钥',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (3, '紫风', '1', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '中国', '山东', '青岛', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'SgRA/mb1PhM3r6pHznCiIA==');
+INSERT INTO `user` VALUES (1, '紫风', '0', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83ersiaibpEqVs2Id31CMSTyA4BDxKKib2ayvUx1lwFJeIDGSmCJaXfxPKem9cIiaDoiaBFf3Th733UCOOlg/132', NULL, '', '', '', 'oShUg5dO2dJN7gjezrL3CvBOoHP0', 'oD7GWS/kPEZzaS1kpgyf3A==');
+INSERT INTO `user` VALUES (2, '对舞染笙语', '0', 'https://thirdwx.qlogo.cn/mmopen/vi_32/BXyK2cxpS70oxvhFYcgGktHPoEpQiaF5Hg4IG0e5G3NBFhEa93wyibFGAh2use2pt8CKtib3cPkdm2k2cpaaBSiblA/132', NULL, '', '', '', 'oShUg5aFqBz5Tr_cTiulioIs7nA4', 'hde6dSzgrvQxZMYNi/FRvg==');
 
 SET FOREIGN_KEY_CHECKS = 1;
