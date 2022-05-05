@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 // 文件模块
-const fs = require('fs');
+const fs = require('fs/promises');
 // 文件路径
 const path = require('path');
 //文件传输
