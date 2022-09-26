@@ -73,7 +73,7 @@ router.post('/register', async function (req, res) {
         // 开启事务
         await connection.beginTransaction();
         // 创建新账户
-        let insert_admin_sql = 'INSERT INTO admin (username, password, fullname, sex, tel, email, avatar) VALUES (?,?,?,?,?,?,?)';
+        let insert_admin_sql = 'INSERT INTO admin (username, password, fullname, sex, tel, email, avatar, create_time) VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())';
         let [{ insertId, affectedRows: admin_affected_rows }] = await connection.query(insert_admin_sql, [username, password, fullname, sex, tel, email, defaultAvatar]);
         if (admin_affected_rows === 0) {
             await connection.rollback();
@@ -102,12 +102,11 @@ router.post('/register', async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,
         });
-
     }
 });
 
@@ -230,7 +229,7 @@ router.delete('/:id', async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,
@@ -327,7 +326,7 @@ router.put("/", async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,

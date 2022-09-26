@@ -28,9 +28,9 @@ let menu = require('./routes/admin/menu');
 let admin = require('./routes/admin/admin');
 let PCCT = require('./routes/admin/PCCT');
 let category = require('./routes/admin/category');
-let adminGoods = require('./routes/admin/goods');
+let sellerGoods = require('./routes/admin/goods');
 let adminUpload = require('./routes/admin/upload');
-let adminOrder = require('./routes/admin/order');
+let sellerOrder = require('./routes/admin/order');
 let icon = require('./routes/admin/icon');
 
 let app = express()
@@ -70,9 +70,9 @@ app.use('/menu', menu);
 app.use('/pcct', PCCT);
 app.use('/admins', admin);
 app.use('/category', category);
-app.use('/seller/goods', adminGoods);
+app.use('/seller/goods', sellerGoods);
 app.use('/upload', adminUpload);
-app.use('/seller/order', adminOrder);
+app.use('/seller/order', sellerOrder);
 app.use('/system/icon', icon);
 
 // catch 404 and forward to error handler

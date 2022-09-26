@@ -80,7 +80,7 @@ router.post("/goods", upload.single('file'), async function(req, res) {
 			mdImg: process.env.server + fileFolder + filename + '_360.' + format,
 		});
 	} catch (error) {
-		res.json({
+		res.status(500).json({
 			status: false,
 			msg: error,
 		});
@@ -156,7 +156,7 @@ router.post("/slider", upload.single('file'), async function(req, res) {
 			src: process.env.server + fileFolder + filename + '_720.' + format,
 		});
 	} catch (error) {
-		res.json({
+		res.status(500).json({
 			status: false,
 			msg: error,
 		});

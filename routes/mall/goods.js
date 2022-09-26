@@ -12,7 +12,7 @@ let ger = require('../../config/ger');
 
 /**
  * @api {get} /goods/list 获取商品列表--小程序
- * @apiDescription 具备搜索、分页功能，3个分类id参数至多能传1个，默认按照商品创建时间升序排序
+ * @apiDescription 具备搜索、分页功能，默认按照商品创建时间升序排序
  * @apiName GoodsList 获取商品列表
  * @apiGroup Goods
  * @apiPermission user

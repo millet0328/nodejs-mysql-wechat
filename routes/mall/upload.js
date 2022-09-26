@@ -33,6 +33,7 @@ const { v4: uuidv4 } = require('uuid');
  *
  * @apiSuccess {String} src 返回图片地址.
  */
+
 router.post("/common", upload.single('file'), async (req, res) => {
     //上传类型
     let { type } = req.body;
@@ -80,7 +81,7 @@ router.post("/common", upload.single('file'), async (req, res) => {
             src: process.env.server + fileFolder + filename + '.' + format
         });
     } catch (error) {
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error,
         });
@@ -115,7 +116,7 @@ router.delete('/', async (req, res) => {
         });
         return;
     }
-
+    //计算真实路径
     src = src.replace(/.+\/images/, "./images");
     let realPath = path.resolve(__dirname, '../../public/', src);
     // 物理删除

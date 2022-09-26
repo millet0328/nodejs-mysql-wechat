@@ -145,7 +145,7 @@ router.post('/create', async function (req, res) {
 
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,

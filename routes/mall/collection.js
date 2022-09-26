@@ -22,6 +22,7 @@ let ger = require('../../config/ger');
  *
  * @apiSampleRequest /collection
  */
+
 router.post("/", async function (req, res) {
     let { id } = req.body;
     let { openid } = req.user;

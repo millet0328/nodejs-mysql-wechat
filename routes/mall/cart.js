@@ -16,22 +16,22 @@ let pool = require('../../config/mysql');
  *
  * @apiUse Authorization
  *
- * @apiBody {Number} id 商品id;
+ * @apiBody {Number} gid 商品id;
  * @apiBody {Number} num 商品数量,不能超过库存;
  *
  * @apiSampleRequest /cart
  */
 router.post('/', async function (req, res) {
-    let { id, num } = req.body;
+    let { gid, num } = req.body;
     let { openid } = req.user;
     // 检查购物车是否已经有此商品
     let select_sql = `SELECT * FROM cart WHERE goods_id = ? AND uid = ?`;
-    let [results] = await pool.query(select_sql, [id, openid]);
+    let [results] = await pool.query(select_sql, [gid, openid]);
 
     // 没有此商品,插入新纪录
     if (results.length <= 0) {
         let insert_sql = `INSERT INTO cart ( uid , goods_id , goods_num , create_time ) VALUES ( ?, ?, ?,CURRENT_TIMESTAMP())`;
-        let [{ affectedRows }] = await pool.query(insert_sql, [openid, id, num]);
+        let [{ affectedRows }] = await pool.query(insert_sql, [openid, gid, num]);
         if (affectedRows === 0) {
             res.json({
                 status: false,
@@ -44,7 +44,7 @@ router.post('/', async function (req, res) {
     // 已有此商品，增加数量
     if (results.length > 0) {
         let update_sql = `UPDATE cart SET goods_num = goods_num + ? WHERE goods_id = ? AND uid = ?`;
-        let [{ affectedRows }] = await pool.query(update_sql, [num, id, openid]);
+        let [{ affectedRows }] = await pool.query(update_sql, [num, gid, openid]);
         if (affectedRows === 0) {
             res.json({
                 status: false,
@@ -72,6 +72,7 @@ router.post('/', async function (req, res) {
  *
  * @apiSampleRequest /cart/list
  */
+
 router.get('/list', async function (req, res) {
     let { openid } = req.user;
     let { pagesize = 10, pageindex = 1 } = req.query;
@@ -106,8 +107,8 @@ router.get('/list', async function (req, res) {
  */
 router.delete('/:id', async function (req, res) {
     let { id } = req.params;
-    let sql = `DELETE FROM cart WHERE id = ?`;
 
+    let sql = `DELETE FROM cart WHERE id = ?`;
     let [{ affectedRows }] = await pool.query(sql, [id]);
     // 删除失败
     if (affectedRows === 0) {
@@ -134,13 +135,13 @@ router.delete('/:id', async function (req, res) {
  *
  * @apiParam {Number} id 购物车条目id;
  * @apiBody {Number} gid 商品id;
- * @apiBody {Number{1-库存MAX}} num 商品数量;
+ * @apiParam {Number{1-库存MAX}} [num=1] 增加的数量;
  *
  * @apiSampleRequest /cart/increase
  */
 router.put('/increase/:id', async function (req, res) {
     let { id } = req.params;
-    let { gid, num } = req.body;
+    let { gid, num = 1 } = req.body;
 
     // 购物车商品数量
     let cart_sql = 'SELECT goods_num FROM cart WHERE id = ?';
@@ -184,13 +185,13 @@ router.put('/increase/:id', async function (req, res) {
  * @apiUse Authorization
  *
  * @apiParam {Number} id 购物车条目id;
- * @apiBody {Number{1-库存MAX}} num 商品数量;
+ * @apiParam {Number{1-库存MAX}} [num=1] 减少的数量;
  *
  * @apiSampleRequest /cart/decrease
  */
 router.put('/decrease/:id', async function (req, res) {
     let { id } = req.params;
-    let { num } = req.body;
+    let { num = 1 } = req.body;
     let sql = `UPDATE cart SET goods_num = goods_num - ? WHERE id = ?`;
     let [{ affectedRows }] = await pool.query(sql, [num, id]);
     // 更新失败

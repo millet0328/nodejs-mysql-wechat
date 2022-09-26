@@ -74,7 +74,7 @@ router.post('/token', async function (req, res) {
             });
         }
     } catch (error) {
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error,
         });

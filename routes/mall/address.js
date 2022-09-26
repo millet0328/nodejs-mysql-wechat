@@ -37,7 +37,7 @@ router.post('/', async function (req, res) {
         // 开启事务
         await connection.beginTransaction();
         // 判断是否默认地址，如果是默认地址，其他地址取消默认
-        if (isDefault == 1) {
+        if (isDefault === '1') {
             let update_sql = 'UPDATE address SET isDefault = 0 WHERE uid = ?';
             await connection.query(update_sql, [openid]);
         }
@@ -59,12 +59,11 @@ router.post('/', async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,
         });
-
     }
 });
 /**
@@ -87,6 +86,7 @@ router.delete("/:id", async function (req, res) {
     // 判断是否默认地址
     let select_sql = 'SELECT * FROM `address` WHERE id = ?';
     let [[address]] = await connection.query(select_sql, [id]);
+
     try {
         // 开启事务
         await connection.beginTransaction();
@@ -112,15 +112,12 @@ router.delete("/:id", async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,
         });
     }
-
-
-
 })
 /**
  * @api {put} /address/:id 修改收货地址
@@ -153,11 +150,11 @@ router.put("/:id", async function (req, res) {
         // 开启事务
         await connection.beginTransaction();
         // 判断是否默认地址，如果是默认地址，其他地址取消默认
-        if (isDefault == 1) {
+        if (isDefault === '1') {
             let update_sql = 'UPDATE address SET isDefault = 0 WHERE uid = ?';
             await connection.query(update_sql, [openid]);
         }
-        // 添加address
+        // 修改address
         let update_sql = `UPDATE address SET name = ?, tel = ?, province = ?, city = ?, county = ?, street = ?, code = ?, isDefault = ? WHERE id = ?`;
         let [{ affectedRows: address_affected_rows }] = await connection.query(update_sql, [name, tel, province, city, county, street, code, isDefault, id]);
         if (address_affected_rows === 0) {
@@ -174,14 +171,14 @@ router.put("/:id", async function (req, res) {
         });
     } catch (error) {
         await connection.rollback();
-        res.json({
+        res.status(500).json({
             status: false,
             msg: error.message,
             error,
         });
-
     }
 });
+
 /**
  * @api {get} /address/list 获取收货地址列表
  * @apiName addressList
@@ -195,6 +192,7 @@ router.put("/:id", async function (req, res) {
  *
  * @apiSampleRequest /address/list
  */
+
 router.get('/list', async function (req, res) {
     let { openid } = req.user;
     let { pagesize = 10, pageindex = 1 } = req.query;
